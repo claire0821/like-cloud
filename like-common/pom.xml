@@ -6,7 +6,7 @@
     <!-- 父工程 -->
     <parent>
         <groupId>org.mdd</groupId>
-        <artifactId>likeadmin-java</artifactId>
+        <artifactId>likeadmin-cloud</artifactId>
         <version>1.0.0</version>
     </parent>
 
