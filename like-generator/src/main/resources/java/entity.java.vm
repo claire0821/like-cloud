@@ -1,0 +1,36 @@
+package ${packageName}.common.entity.${moduleName};
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
+
+import java.io.Serializable;
+#foreach ($column in $columns)
+#if ($column.javaType.equals("BigDecimal"))
+import java.math.BigDecimal;
+#end
+#end
+
+#set($isAuthor = !$authorName.equals(""))
+/**
+ * ${functionName}实体
+#if($isAuthor)
+ * @author ${authorName}
+#end
+ */
+@Data
+public class ${EntityName} implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+ #foreach ($column in $columns)
+    #if($notesType.equals("top"))
+    // ${column.columnComment}
+    #end
+    #if($column.isPk)
+    @TableId(value="${column.columnName}", type= IdType.AUTO)
+    #end
+    private ${column.javaType} ${column.javaField}; #if($notesType.equals("right"))// ${column.columnComment}#end
+ #end
+
+}

@@ -1,0 +1,10 @@
+/.idea
+/.vscode
+/target/
+/likeadmin-java.iml
+
+# Project exclude paths
+/like-admin/target/
+/like-common/target/
+/like-front/target/
+/like-generator/target/
