@@ -50,6 +50,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--使bootstrap.yml生效-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
         <!-- log4j2依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

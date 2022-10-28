@@ -20,7 +20,8 @@ public class AdminConfig {
     // 免登录验证
     public static String[] notLoginUri = new String[]{
             "system:login",         // 登录接口
-            "common:index:config"   // 配置接口
+            "common:index:config",   // 配置接口
+            "config:get"   // 配置接口
     };
 
     // 免权限验证
