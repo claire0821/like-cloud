@@ -17,11 +17,19 @@
 
     <!-- 项目管理 -->
     <dependencies>
-        <!-- 公共依赖 -->
         <dependency>
-            <groupId>org.mdd</groupId>
-            <artifactId>like-common</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!-- 公共依赖 -->
+<!--        <dependency>-->
+<!--            <groupId>org.mdd</groupId>-->
+<!--            <artifactId>like-common</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.mdd</groupId>
             <artifactId>like-generator</artifactId>

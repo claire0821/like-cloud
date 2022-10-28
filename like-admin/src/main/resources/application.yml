@@ -10,6 +10,8 @@ server:
 spring:
   profiles:
     active: dev
+  application:
+    name: like-admin
   mvc:
     static-path-pattern: /api/static/**
   # 数据源配置
