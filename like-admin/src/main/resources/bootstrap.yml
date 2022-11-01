@@ -14,8 +14,13 @@ spring:
         file-extension: yaml #指定yaml格式的配置
 #        group: DEV_GROUP
 #        namespace: 7d8f0f5a-6a53-4785-9686-dd460158e5d4
-
-
+    sentinel:
+      transport:
+        dashboard: localhost:8080 #配置Sentinel dashboard地址
+        port: 8719
+feign:
+  sentinel:
+    enabled: true
 # ${spring.application.name}-${spring.profile.active}.${spring.cloud.nacos.config.file-extension}
 # nacos-config-client-dev.yaml
 
