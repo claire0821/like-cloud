@@ -1,16 +1,16 @@
-package ${packageName}.admin.controller.${moduleName};
+package ${packageName}.${subPackageName}.controller;
 
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;
 #end
 import ${packageName}.admin.config.aop.Log;
-import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
-import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
+import ${packageName}.${subPackageName}.service.I${EntityName}Service;
+import ${packageName}.${subPackageName}.validate.${EntityName}Param;
 #if($table.genTpl.equals("crud"))
 import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
+import ${packageName}.${subPackageName}.vo.${EntityName}ListVo;
 #end
-import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.${subPackageName}.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.AjaxResult;
 #if($table.genTpl.equals("crud"))
 import ${packageName}.common.core.PageResult;
@@ -72,7 +72,7 @@ public class ${EntityName}Controller {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public Object detail(@Validated @IDMust() @RequestParam("id") Long id) {
         ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
         return AjaxResult.success(detail);
     }

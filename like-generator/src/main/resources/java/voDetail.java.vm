@@ -1,4 +1,4 @@
-package ${packageName}.admin.vo.${moduleName};
+package ${packageName}.product.vo;
 
 import lombok.Data;
 

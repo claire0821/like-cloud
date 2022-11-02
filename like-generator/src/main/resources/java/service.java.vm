@@ -1,12 +1,12 @@
-package ${packageName}.admin.service.${moduleName};
+package ${packageName}.product.service;
 
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;
 #end
 import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.${subPackageName}.validate.${EntityName}Param;
+import ${packageName}.${subPackageName}.vo.${EntityName}ListVo;
+import ${packageName}.${subPackageName}.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
 
 import java.util.Map;
@@ -54,7 +54,7 @@ public interface I${EntityName}Service {
      * @param id 主键ID
      * @return ${EntityName}
      */
-    ${EntityName}DetailVo detail(Integer id);
+    ${EntityName}DetailVo detail(Long id);
 
     /**
      * ${functionName}新增
@@ -84,6 +84,6 @@ public interface I${EntityName}Service {
      #end
      * @param id 主键ID
      */
-    void del(Integer id);
+    void del(Long id);
 
 }

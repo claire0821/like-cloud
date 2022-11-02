@@ -58,7 +58,8 @@ public class GenUtil {
         if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_STR, columnType) ||
                 GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)) {
             String columnLength = GenUtil.getColumnLength(column.getColumnType());
-            String htmlType = Integer.parseInt(columnLength) >= 500 || GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType)
+
+            String htmlType = GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_TEXT, columnType) || Integer.parseInt(columnLength) >= 500
                     ? HtmlConstants.HTML_TEXTAREA
                     : HtmlConstants.HTML_INPUT;
             column.setHtmlType(htmlType);

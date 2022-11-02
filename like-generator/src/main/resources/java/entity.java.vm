@@ -1,4 +1,4 @@
-package ${packageName}.common.entity.${moduleName};
+package ${packageName}.${subPackageName}.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

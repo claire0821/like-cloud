@@ -1,4 +1,4 @@
-package ${packageName}.admin.service.${moduleName}.impl;
+package ${packageName}.product.service.impl;
 
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;
@@ -7,14 +7,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import ${packageName}.admin.service.${moduleName}.I${EntityName}Service;
+import ${packageName}.${subPackageName}.service.I${EntityName}Service;
 import ${packageName}.admin.validate.common.PageParam;
-import ${packageName}.admin.validate.${moduleName}.${EntityName}Param;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}ListVo;
-import ${packageName}.admin.vo.${moduleName}.${EntityName}DetailVo;
+import ${packageName}.${subPackageName}.validate.${EntityName}Param;
+import ${packageName}.${subPackageName}.vo.${EntityName}ListVo;
+import ${packageName}.${subPackageName}.vo.${EntityName}DetailVo;
 import ${packageName}.common.core.PageResult;
-import ${packageName}.common.entity.${moduleName}.${EntityName};
-import ${packageName}.common.mapper.${moduleName}.${EntityName}Mapper;
+import ${packageName}.${subPackageName}.entity.${EntityName};
+import ${packageName}.${subPackageName}.mapper.${EntityName}Mapper;
 import ${packageName}.common.utils.ArrayUtil;
 import ${packageName}.common.utils.TimeUtil;
 import ${packageName}.common.utils.UrlUtil;
@@ -169,7 +169,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         $listFields.contains("delete_time") || $listFields.contains("start_time") ||
         $listFields.contains("end_time") || $listFields.contains("image") ||
         $listFields.contains("avatar") || $listFields.contains("logo") ||
-        $listFields.contains("img"))
+        $listFields.contains("img") || $listFields.contains("id"))
         #set($filter = true)
         #if(!$isJoin)
         List<${EntityName}ListVo> list = new LinkedList<>();
@@ -264,7 +264,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      * @return ${EntityName}
      */
     @Override
-    public ${EntityName}DetailVo detail(Integer id) {
+    public ${EntityName}DetailVo detail(Long id) {
         ${EntityName} model = ${entityName}Mapper.selectOne(
                 new QueryWrapper<${EntityName}>()
                     .eq("${primaryField}", id)
@@ -384,7 +384,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
      * @param id 主键ID
      */
     @Override
-    public void del(Integer id) {
+    public void del(Long id) {
         ${EntityName} model = ${entityName}Mapper.selectOne(
                 new QueryWrapper<${EntityName}>()
                     .eq("${primaryField}", id)

@@ -5,11 +5,15 @@ public class GenConfig {
     // 基础包名
     public static String packageName = "com.mdd";
 
+    public static String subPackageName = "product";
+
     // 后台应用
     public static String adminPackage   = "like-admin/src/main/java/com/mdd/admin";
 
     // 公共应用
     public static String commonPackage = "like-common/src/main/java/com/mdd/common";
+
+    public static String productPackage = "like-product/src/main/java/com/mdd/product";
 
     // 是否去除表前缀
     public static Boolean isRemoveTablePrefix = true;
