@@ -1,9 +1,9 @@
 package com.mdd.product.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.product.service.IPmsAttrGroupService;
 import com.mdd.product.validate.PmsAttrGroupParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.vo.PmsAttrGroupListVo;
 import com.mdd.product.vo.PmsAttrGroupDetailVo;
 import com.mdd.common.core.AjaxResult;

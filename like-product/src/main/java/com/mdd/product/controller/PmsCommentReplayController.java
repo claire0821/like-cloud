@@ -1,9 +1,9 @@
 package com.mdd.product.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.product.service.IPmsCommentReplayService;
 import com.mdd.product.validate.PmsCommentReplayParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.vo.PmsCommentReplayListVo;
 import com.mdd.product.vo.PmsCommentReplayDetailVo;
 import com.mdd.common.core.AjaxResult;

@@ -1,10 +1,10 @@
 package com.mdd.product.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.product.entity.PmsCategory;
 import com.mdd.product.service.IPmsCategoryService;
 import com.mdd.product.validate.PmsCategoryParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.vo.PmsCategoryListVo;
 import com.mdd.product.vo.PmsCategoryDetailVo;
 import com.mdd.common.core.AjaxResult;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * 商品三级分类管理
  */
 @RestController
-@RequestMapping("api/category")
+@RequestMapping("api/product/category")
 public class PmsCategoryController {
 
     @Resource
@@ -54,8 +54,33 @@ public class PmsCategoryController {
         //组装父子结构
         final List<PmsCategory> level1Menu = pmsCategories.stream().filter(category ->
             category.getParentCid() == 0
-        ).collect(Collectors.toList());
+        ).map((menu) -> {
+            menu.setChilren(getChildrens(menu,pmsCategories));
+            return menu;
+        }).sorted((menu1,menu2) -> {
+            return (menu1.getSort() == null ? 0 : menu1.getSort()) - (menu2.getSort() == null ? 0 : menu2.getSort());
+        }).collect(Collectors.toList());
         return AjaxResult.success(level1Menu);
+    }
+
+    /**
+     * 递归查找所有菜单的子菜单
+     * @param root
+     * @param all
+     * @return
+     */
+    private List<PmsCategory> getChildrens(PmsCategory root, List<PmsCategory> all) {
+        final List<PmsCategory> collect = all.stream().filter(category -> {
+            return category.getParentCid().equals(root.getCatId());
+        }).map(category -> {
+            //找子菜单
+            category.setChilren(getChildrens(category,all));
+            return category;
+        }).sorted((menu1, menu2) -> {
+            //菜单排序
+            return (menu1.getSort() == null ? 0 : menu1.getSort()) - (menu2.getSort() == null ? 0 : menu2.getSort());
+        }).collect(Collectors.toList());
+        return collect;
     }
 
     /**

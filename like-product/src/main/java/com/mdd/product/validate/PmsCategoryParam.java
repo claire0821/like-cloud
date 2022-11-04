@@ -1,6 +1,6 @@
 package com.mdd.product.validate;
 
-import com.mdd.admin.validate.BaseParam;
+import com.mdd.common.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.EqualsAndHashCode;
@@ -31,15 +31,15 @@ public class PmsCategoryParam extends BaseParam {
 
     @NotNull(message = "catLevel参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "catLevel参数值不能少于0", groups = {create.class, update.class})
-    private Long catLevel;
+    private Integer catLevel;
 
     @NotNull(message = "showStatus参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "showStatus参数值不能少于0", groups = {create.class, update.class})
-    private Long showStatus;
+    private Integer showStatus;
 
     @NotNull(message = "sort参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "sort参数值不能少于0", groups = {create.class, update.class})
-    private Long sort;
+    private Integer sort;
 
     @NotNull(message = "icon参数缺失", groups = {create.class, update.class})
     @Length(max = 255, message = "icon参数不能超出255个字符", groups = {create.class, update.class})
@@ -51,6 +51,6 @@ public class PmsCategoryParam extends BaseParam {
 
     @NotNull(message = "productCount参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "productCount参数值不能少于0", groups = {create.class, update.class})
-    private Long productCount;
+    private Integer productCount;
 
 }

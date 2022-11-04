@@ -1,6 +1,6 @@
 package com.mdd.product.service;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.PmsAttrGroupParam;
 import com.mdd.product.vo.PmsAttrGroupListVo;
 import com.mdd.product.vo.PmsAttrGroupDetailVo;

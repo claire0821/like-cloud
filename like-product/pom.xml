@@ -49,10 +49,6 @@
         <!-- 公共依赖 -->
         <dependency>
             <groupId>org.mdd</groupId>
-            <artifactId>like-admin</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mdd</groupId>
             <artifactId>like-common</artifactId>
         </dependency>
     </dependencies>

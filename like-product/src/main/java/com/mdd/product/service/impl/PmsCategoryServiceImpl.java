@@ -3,9 +3,10 @@ package com.mdd.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.product.service.IPmsCategoryService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.PmsCategoryParam;
 import com.mdd.product.vo.PmsCategoryListVo;
 import com.mdd.product.vo.PmsCategoryDetailVo;
@@ -161,5 +162,4 @@ public class PmsCategoryServiceImpl implements IPmsCategoryService {
 
         pmsCategoryMapper.delete(new QueryWrapper<PmsCategory>().eq("cat_id", id));
     }
-
 }

@@ -1,6 +1,6 @@
 package com.mdd.product.validate;
 
-import com.mdd.admin.validate.BaseParam;
+import com.mdd.common.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.EqualsAndHashCode;

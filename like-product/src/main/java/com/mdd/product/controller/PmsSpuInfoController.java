@@ -1,9 +1,9 @@
 package com.mdd.product.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.product.service.IPmsSpuInfoService;
 import com.mdd.product.validate.PmsSpuInfoParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.vo.PmsSpuInfoListVo;
 import com.mdd.product.vo.PmsSpuInfoDetailVo;
 import com.mdd.common.core.AjaxResult;

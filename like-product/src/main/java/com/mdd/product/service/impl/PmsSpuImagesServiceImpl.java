@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.product.service.IPmsSpuImagesService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.PmsSpuImagesParam;
 import com.mdd.product.vo.PmsSpuImagesListVo;
 import com.mdd.product.vo.PmsSpuImagesDetailVo;

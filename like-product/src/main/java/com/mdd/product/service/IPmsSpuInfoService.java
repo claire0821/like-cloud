@@ -1,6 +1,6 @@
 package com.mdd.product.service;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.PmsSpuInfoParam;
 import com.mdd.product.vo.PmsSpuInfoListVo;
 import com.mdd.product.vo.PmsSpuInfoDetailVo;
