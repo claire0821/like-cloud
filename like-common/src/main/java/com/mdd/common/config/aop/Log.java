@@ -1,4 +1,4 @@
-package com.mdd.admin.config.aop;
+package com.mdd.common.config.aop;
 
 import java.lang.annotation.*;
 

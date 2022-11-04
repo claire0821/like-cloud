@@ -1,4 +1,4 @@
-package com.mdd.admin.validate;
+package com.mdd.common.validate;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
