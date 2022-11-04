@@ -8,3 +8,5 @@
 /like-common/target/
 /like-front/target/
 /like-generator/target/
+
+**/target/

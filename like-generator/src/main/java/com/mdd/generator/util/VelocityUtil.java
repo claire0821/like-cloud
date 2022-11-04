@@ -146,42 +146,42 @@ public class VelocityUtil {
 
         if (template.contains("mapper.java.vm")) {
 //            fileName = StringUtil.format("java/{}/mapper/{}/{}Mapper.java", GenConfig.commonPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/mapper/{}Mapper.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/mapper/{}Mapper.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("entity.java.vm")) {
 //            fileName = StringUtil.format("java/{}/entity/{}/{}.java", GenConfig.commonPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/entity/{}.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/entity/{}.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("service.java.vm")) {
 //            fileName = StringUtil.format("java/{}/service/{}/I{}Service.java", GenConfig.adminPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/service/I{}Service.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/service/I{}Service.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("serviceImpl.java.vm")) {
 //            fileName = StringUtil.format("java/{}/service/{}/impl/{}ServiceImpl.java", GenConfig.adminPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/service/impl/{}ServiceImpl.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/service/impl/{}ServiceImpl.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("controller.java.vm")) {
 //            fileName = StringUtil.format("java/{}/controller/{}/{}Controller.java", GenConfig.adminPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/controller/{}Controller.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/controller/{}Controller.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("validate.java.vm")) {
 //            fileName = StringUtil.format("java/{}/validate/{}/{}Param.java", GenConfig.adminPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/validate/{}Param.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/validate/{}Param.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("voList.java.vm")) {
 //            fileName = StringUtil.format("java/{}/vo/{}/{}ListVo.java", GenConfig.adminPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/vo/{}ListVo.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/vo/{}ListVo.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("voDetail.java.vm")) {
 //            fileName = StringUtil.format("java/{}/vo/{}/{}DetailVo.java", GenConfig.adminPackage, moduleName, entityName);
-            fileName = StringUtil.format("java/{}/vo/{}DetailVo.java", GenConfig.productPackage, entityName);
+            fileName = StringUtil.format("java/{}/vo/{}DetailVo.java", GenConfig.modulepackage, entityName);
         }
 
         else if (template.contains("vue/api.ts.vm")) {

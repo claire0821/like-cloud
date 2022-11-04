@@ -3,8 +3,6 @@ package com.mdd.admin.service.channel;
 import com.mdd.admin.validate.channel.ChannelH5Param;
 import com.mdd.admin.vo.channel.ChannelH5Vo;
 
-import java.util.Map;
-
 /**
  * H5渠道设置服务接口类
  */

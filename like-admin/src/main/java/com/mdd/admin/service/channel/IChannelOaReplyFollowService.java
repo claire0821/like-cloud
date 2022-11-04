@@ -5,8 +5,6 @@ import com.mdd.admin.validate.common.PageParam;
 import com.mdd.admin.vo.channel.ChannelOaReplyVo;
 import com.mdd.common.core.PageResult;
 
-import java.util.List;
-
 /**
  * 公众号关注回复服务接口类
  */

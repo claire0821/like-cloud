@@ -1,4 +1,4 @@
-package ${packageName}.product.service;
+package ${packageName}.${subPackageName}.service;
 
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;

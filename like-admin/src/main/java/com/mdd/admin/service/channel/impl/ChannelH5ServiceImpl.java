@@ -4,10 +4,8 @@ import com.mdd.admin.service.channel.IChannelH5Service;
 import com.mdd.admin.validate.channel.ChannelH5Param;
 import com.mdd.admin.vo.channel.ChannelH5Vo;
 import com.mdd.common.utils.ConfigUtil;
-import com.mdd.common.utils.RequestUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**

@@ -6,7 +6,6 @@ import com.mdd.admin.vo.channel.ChannelWxVo;
 import com.mdd.common.utils.ConfigUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**

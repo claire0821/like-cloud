@@ -3,7 +3,6 @@ package com.mdd.admin.service.channel;
 import com.alibaba.fastjson.JSONArray;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 公众号菜单服务接口类

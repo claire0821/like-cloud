@@ -1,4 +1,4 @@
-package ${packageName}.product.mapper;
+package ${packageName}.${subPackageName}.mapper;
 
 import ${packageName}.common.core.basics.IBaseMapper;
 import ${packageName}.${subPackageName}.entity.${EntityName};

@@ -1,4 +1,4 @@
-package ${packageName}.product.validate;
+package ${packageName}.${subPackageName}.validate;
 
 import ${packageName}.admin.validate.BaseParam;
 import ${packageName}.common.validator.annotation.IDMust;

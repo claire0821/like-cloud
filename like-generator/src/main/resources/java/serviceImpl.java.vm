@@ -1,4 +1,4 @@
-package ${packageName}.product.service.impl;
+package ${packageName}.${subPackageName}.service.impl;
 
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;
@@ -169,7 +169,7 @@ public class ${EntityName}ServiceImpl implements I${EntityName}Service {
         $listFields.contains("delete_time") || $listFields.contains("start_time") ||
         $listFields.contains("end_time") || $listFields.contains("image") ||
         $listFields.contains("avatar") || $listFields.contains("logo") ||
-        $listFields.contains("img") || $listFields.contains("id"))
+        $listFields.contains("img") || $listFields.contains("id") || true)
         #set($filter = true)
         #if(!$isJoin)
         List<${EntityName}ListVo> list = new LinkedList<>();

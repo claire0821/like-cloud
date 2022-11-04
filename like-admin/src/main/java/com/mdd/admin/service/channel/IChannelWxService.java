@@ -3,8 +3,6 @@ package com.mdd.admin.service.channel;
 import com.mdd.admin.validate.channel.ChannelWxParam;
 import com.mdd.admin.vo.channel.ChannelWxVo;
 
-import java.util.Map;
-
 /**
  * 微信开放平台设置服务接口类
  */

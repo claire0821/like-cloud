@@ -3,8 +3,6 @@ package com.mdd.admin.service.channel;
 import com.mdd.admin.validate.channel.ChannelMpParam;
 import com.mdd.admin.vo.channel.ChannelMpVo;
 
-import java.util.Map;
-
 /**
  * 微信小程序渠道服务接口类
  */
