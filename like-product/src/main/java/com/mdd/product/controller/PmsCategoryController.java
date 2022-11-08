@@ -1,6 +1,7 @@
 package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.validate.BaseParam;
 import com.mdd.product.entity.PmsCategory;
 import com.mdd.product.service.IPmsCategoryService;
 import com.mdd.product.validate.PmsCategoryParam;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,7 +57,7 @@ public class PmsCategoryController {
         final List<PmsCategory> level1Menu = pmsCategories.stream().filter(category ->
             category.getParentCid() == 0
         ).map((menu) -> {
-            menu.setChilren(getChildrens(menu,pmsCategories));
+            menu.setChildren(getChildrens(menu,pmsCategories));
             return menu;
         }).sorted((menu1,menu2) -> {
             return (menu1.getSort() == null ? 0 : menu1.getSort()) - (menu2.getSort() == null ? 0 : menu2.getSort());
@@ -74,7 +76,7 @@ public class PmsCategoryController {
             return category.getParentCid().equals(root.getCatId());
         }).map(category -> {
             //找子菜单
-            category.setChilren(getChildrens(category,all));
+            category.setChildren(getChildrens(category,all));
             return category;
         }).sorted((menu1, menu2) -> {
             //菜单排序
@@ -124,13 +126,21 @@ public class PmsCategoryController {
     /**
      * 商品三级分类删除
      *
-     * @param pmsCategoryParam 参数
+     * @param cateIds 参数
      * @return Object
      */
     @Log(title = "商品三级分类删除")
     @PostMapping("/del")
-    public Object del(@Validated(value = PmsCategoryParam.delete.class) @RequestBody PmsCategoryParam pmsCategoryParam) {
-        iPmsCategoryService.del(pmsCategoryParam.getCatId());
+    public Object del(@Validated(value = PmsCategoryParam.delete.class) @RequestBody Long[] cateIds) {
+//        iPmsCategoryService.del(pmsCategoryParam.getCatId());
+        iPmsCategoryService.removeMenuByIds(Arrays.asList(cateIds));
+        return AjaxResult.success();
+    }
+
+    @Log(title = "更新节点")
+    @PostMapping("/update/sort")
+    public Object updateSort(@RequestBody PmsCategory[] categorys) {
+        iPmsCategoryService.updateBatchById(Arrays.asList(categorys));
         return AjaxResult.success();
     }
 

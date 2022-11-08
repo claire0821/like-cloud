@@ -1,5 +1,6 @@
 package com.mdd.product.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.entity.PmsCategory;
 import com.mdd.product.validate.PmsCategoryParam;
@@ -13,7 +14,7 @@ import java.util.Map;
 /**
  * 商品三级分类服务接口类
  */
-public interface IPmsCategoryService {
+public interface IPmsCategoryService extends IService<PmsCategory> {
 
     /**
      * 商品三级分类列表
@@ -58,4 +59,5 @@ public interface IPmsCategoryService {
      */
     void del(Long id);
 
+    void removeMenuByIds(List<Long> asList);
 }

@@ -35,7 +35,7 @@ public class PmsBrandParam extends BaseParam {
 
     @NotNull(message = "showStatus参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "showStatus参数值不能少于0", groups = {create.class, update.class})
-    private Long showStatus;
+    private Integer showStatus;
 
     @NotNull(message = "firstLetter参数缺失", groups = {create.class, update.class})
     @Length(max = 1, message = "firstLetter参数不能超出1个字符", groups = {create.class, update.class})
@@ -43,6 +43,6 @@ public class PmsBrandParam extends BaseParam {
 
     @NotNull(message = "sort参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "sort参数值不能少于0", groups = {create.class, update.class})
-    private Long sort;
+    private Integer sort;
 
 }

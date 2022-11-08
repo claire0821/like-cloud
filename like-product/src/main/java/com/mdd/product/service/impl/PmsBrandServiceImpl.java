@@ -3,6 +3,7 @@ package com.mdd.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.product.service.IPmsBrandService;
 import com.mdd.common.validate.PageParam;
@@ -27,7 +28,7 @@ import java.util.*;
  * 品牌实现类
  */
 @Service
-public class PmsBrandServiceImpl implements IPmsBrandService {
+public class PmsBrandServiceImpl extends ServiceImpl<PmsBrandMapper,PmsBrand> implements IPmsBrandService {
         
     @Resource
     PmsBrandMapper pmsBrandMapper;
@@ -62,7 +63,8 @@ public class PmsBrandServiceImpl implements IPmsBrandService {
         for(PmsBrand item : iPage.getRecords()) {
             PmsBrandListVo vo = new PmsBrandListVo();
             BeanUtils.copyProperties(item, vo);
-            vo.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()));
+            vo.setLogo(item.getLogo());
+//            vo.setLogo(UrlUtil.toAbsoluteUrl(item.getLogo()));
             list.add(vo);
         }
 
@@ -99,7 +101,8 @@ public class PmsBrandServiceImpl implements IPmsBrandService {
     public void add(PmsBrandParam pmsBrandParam) {
         PmsBrand model = new PmsBrand();
         model.setName(pmsBrandParam.getName());
-        model.setLogo(UrlUtil.toRelativeUrl(pmsBrandParam.getLogo()));
+//        model.setLogo(UrlUtil.toRelativeUrl(pmsBrandParam.getLogo()));
+        model.setLogo(pmsBrandParam.getLogo());
         model.setDescript(pmsBrandParam.getDescript());
         model.setShowStatus(pmsBrandParam.getShowStatus());
         model.setFirstLetter(pmsBrandParam.getFirstLetter());

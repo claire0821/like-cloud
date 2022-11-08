@@ -1,6 +1,8 @@
 package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.product.entity.PmsBrand;
+import com.mdd.product.entity.PmsCategory;
 import com.mdd.product.service.IPmsBrandService;
 import com.mdd.product.validate.PmsBrandParam;
 import com.mdd.common.validate.PageParam;
@@ -13,13 +15,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
  * 品牌管理
  */
 @RestController
-@RequestMapping("api/brand")
+@RequestMapping("api/product/brand")
 public class PmsBrandController {
 
     @Resource
@@ -89,4 +92,15 @@ public class PmsBrandController {
         return AjaxResult.success();
     }
 
+    /**
+     * 更新显示状态
+     * @param brands
+     * @return
+     */
+    @Log(title = "更新显示状态")
+    @PostMapping("/update/status")
+    public Object updateStatus(@RequestBody PmsBrand brands) {
+        iPmsBrandService.updateBatchById(Arrays.asList(brands));
+        return AjaxResult.success();
+    }
 }

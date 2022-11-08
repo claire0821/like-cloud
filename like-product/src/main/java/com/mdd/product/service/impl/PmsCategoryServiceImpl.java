@@ -1,6 +1,8 @@
 package com.mdd.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,12 +25,13 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * 商品三级分类实现类
  */
 @Service
-public class PmsCategoryServiceImpl implements IPmsCategoryService {
+public class PmsCategoryServiceImpl extends ServiceImpl<PmsCategoryMapper, PmsCategory> implements IPmsCategoryService {
         
     @Resource
     PmsCategoryMapper pmsCategoryMapper;
@@ -162,4 +165,12 @@ public class PmsCategoryServiceImpl implements IPmsCategoryService {
 
         pmsCategoryMapper.delete(new QueryWrapper<PmsCategory>().eq("cat_id", id));
     }
+
+    @Override
+    public void removeMenuByIds(List<Long> asList) {
+        //TODO 逻辑删除
+        pmsCategoryMapper.deleteBatchIds(asList);
+    }
+
+
 }

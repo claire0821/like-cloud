@@ -1,6 +1,8 @@
 package com.mdd.product.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.product.entity.PmsBrand;
 import com.mdd.product.validate.PmsBrandParam;
 import com.mdd.product.vo.PmsBrandListVo;
 import com.mdd.product.vo.PmsBrandDetailVo;
@@ -11,7 +13,7 @@ import java.util.Map;
 /**
  * 品牌服务接口类
  */
-public interface IPmsBrandService {
+public interface IPmsBrandService extends IService<PmsBrand> {
 
     /**
      * 品牌列表
