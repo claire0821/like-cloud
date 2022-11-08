@@ -1,7 +1,7 @@
 package com.mdd.admin.controller.system;
 
 import com.mdd.admin.service.system.ISystemAuthPostService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthPostParam;
 import com.mdd.admin.vo.system.SystemAuthPostVo;
 import com.mdd.common.core.AjaxResult;

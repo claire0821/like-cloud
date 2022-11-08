@@ -1,9 +1,9 @@
 package com.mdd.coupon.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.coupon.service.ISmsCouponHistoryService;
 import com.mdd.coupon.validate.SmsCouponHistoryParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.coupon.vo.SmsCouponHistoryListVo;
 import com.mdd.coupon.vo.SmsCouponHistoryDetailVo;
 import com.mdd.common.core.AjaxResult;

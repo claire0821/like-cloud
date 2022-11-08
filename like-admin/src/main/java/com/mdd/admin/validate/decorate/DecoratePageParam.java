@@ -1,6 +1,6 @@
 package com.mdd.admin.validate.decorate;
 
-import com.mdd.admin.validate.BaseParam;
+import com.mdd.common.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

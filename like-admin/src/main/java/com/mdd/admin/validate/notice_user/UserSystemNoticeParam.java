@@ -1,6 +1,6 @@
 package com.mdd.admin.validate.notice_user;
 
-import com.mdd.admin.validate.BaseParam;
+import com.mdd.common.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

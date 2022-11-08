@@ -1,9 +1,9 @@
 package com.mdd.admin.controller.article;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.article.IArticleCategoryService;
 import com.mdd.admin.validate.article.CategoryParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.article.ArticleCateVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;

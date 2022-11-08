@@ -1,6 +1,6 @@
 package com.mdd.admin.validate.system;
 
-import com.mdd.admin.validate.BaseParam;
+import com.mdd.common.validate.BaseParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

@@ -1,9 +1,9 @@
 package com.mdd.admin.controller.system;
 
 import com.mdd.admin.LikeAdminThreadLocal;
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.system.ISystemAuthAdminService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthAdminParam;
 import com.mdd.admin.vo.system.SystemAuthAdminVo;
 import com.mdd.admin.vo.system.SystemAuthSelfVo;

@@ -1,7 +1,7 @@
 package com.mdd.admin.controller.setting;
 
 import com.mdd.admin.service.setting.ISettingDictTypeService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.setting.DictTypeParam;
 import com.mdd.admin.vo.setting.SettingDictTypeVo;
 import com.mdd.common.core.AjaxResult;

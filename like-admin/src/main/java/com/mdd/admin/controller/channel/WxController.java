@@ -1,6 +1,6 @@
 package com.mdd.admin.controller.channel;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.channel.IChannelWxService;
 import com.mdd.admin.validate.channel.ChannelWxParam;
 import com.mdd.admin.vo.channel.ChannelWxVo;

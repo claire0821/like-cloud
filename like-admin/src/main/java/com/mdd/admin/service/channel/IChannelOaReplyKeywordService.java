@@ -1,7 +1,7 @@
 package com.mdd.admin.service.channel;
 
 import com.mdd.admin.validate.channel.ChannelOaReplyParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.channel.ChannelOaReplyVo;
 import com.mdd.common.core.PageResult;
 

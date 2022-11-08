@@ -1,10 +1,10 @@
 package com.mdd.admin.controller.common;
 
 import com.alibaba.fastjson.JSONArray;
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.common.IAlbumService;
 import com.mdd.admin.validate.common.AlbumParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.album.AlbumVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;

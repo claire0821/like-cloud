@@ -1,9 +1,9 @@
 package com.mdd.member.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.member.service.IUmsMemberLevelService;
 import com.mdd.member.validate.UmsMemberLevelParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.member.vo.UmsMemberLevelListVo;
 import com.mdd.member.vo.UmsMemberLevelDetailVo;
 import com.mdd.common.core.AjaxResult;

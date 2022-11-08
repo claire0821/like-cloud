@@ -1,9 +1,9 @@
 package com.mdd.coupon.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.coupon.service.ISmsSkuLadderService;
 import com.mdd.coupon.validate.SmsSkuLadderParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.coupon.vo.SmsSkuLadderListVo;
 import com.mdd.coupon.vo.SmsSkuLadderDetailVo;
 import com.mdd.common.core.AjaxResult;

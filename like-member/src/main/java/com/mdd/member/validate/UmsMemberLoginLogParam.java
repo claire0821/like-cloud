@@ -1,8 +1,7 @@
 package com.mdd.member.validate;
 
-import com.mdd.admin.validate.BaseParam;
+import com.mdd.common.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
-import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;

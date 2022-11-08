@@ -1,11 +1,11 @@
 package com.mdd.member.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.member.entity.UmsMember;
 import com.mdd.member.feign.CouponFeignService;
 import com.mdd.member.service.IUmsMemberService;
 import com.mdd.member.validate.UmsMemberParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.member.vo.UmsMemberListVo;
 import com.mdd.member.vo.UmsMemberDetailVo;
 import com.mdd.common.core.AjaxResult;

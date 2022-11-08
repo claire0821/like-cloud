@@ -24,7 +24,7 @@ public class AdminConfig {
             "config:get",   // 配置接口
             "umsmember:coupons",   // 配置接口
             "smscoupon:member:list",   // 配置接口
-            "category:list:tree"   // 配置接口
+            "product:category:list:tree"   // 配置接口
     };
 
     // 免权限验证

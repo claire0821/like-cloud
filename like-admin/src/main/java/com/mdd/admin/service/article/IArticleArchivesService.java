@@ -1,7 +1,7 @@
 package com.mdd.admin.service.article;
 
 import com.mdd.admin.validate.article.ArticleParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.article.ArticleDetailVo;
 import com.mdd.admin.vo.article.ArticleListVo;
 import com.mdd.common.core.PageResult;

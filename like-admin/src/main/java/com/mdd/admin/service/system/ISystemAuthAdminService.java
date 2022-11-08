@@ -1,6 +1,6 @@
 package com.mdd.admin.service.system;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthAdminParam;
 import com.mdd.admin.vo.system.SystemAuthAdminVo;
 import com.mdd.admin.vo.system.SystemAuthSelfVo;

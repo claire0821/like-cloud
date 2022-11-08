@@ -1,6 +1,6 @@
 package com.mdd.coupon.service;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.coupon.validate.SmsMemberPriceParam;
 import com.mdd.coupon.vo.SmsMemberPriceListVo;
 import com.mdd.coupon.vo.SmsMemberPriceDetailVo;

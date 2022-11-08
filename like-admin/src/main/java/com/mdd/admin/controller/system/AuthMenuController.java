@@ -2,7 +2,7 @@ package com.mdd.admin.controller.system;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mdd.admin.LikeAdminThreadLocal;
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.system.ISystemAuthMenuService;
 import com.mdd.admin.validate.system.SystemAuthMenuParam;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;

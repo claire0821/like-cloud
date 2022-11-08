@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.admin.service.notice_user.IUserSystemNoticeService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.notice_user.UserSystemNoticeParam;
 import com.mdd.admin.vo.notice_user.UserSystemNoticeListVo;
 import com.mdd.admin.vo.notice_user.UserSystemNoticeDetailVo;

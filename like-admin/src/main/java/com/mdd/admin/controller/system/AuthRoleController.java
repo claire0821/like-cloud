@@ -1,8 +1,8 @@
 package com.mdd.admin.controller.system;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.system.ISystemAuthRoleService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthRoleParam;
 import com.mdd.admin.vo.system.SystemAuthRoleVo;
 import com.mdd.common.core.AjaxResult;

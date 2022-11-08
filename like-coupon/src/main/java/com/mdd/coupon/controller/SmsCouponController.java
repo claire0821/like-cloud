@@ -1,10 +1,10 @@
 package com.mdd.coupon.controller;
 
-import com.mdd.admin.config.aop.Log;
+import com.mdd.common.config.aop.Log;
 import com.mdd.coupon.entity.SmsCoupon;
 import com.mdd.coupon.service.ISmsCouponService;
 import com.mdd.coupon.validate.SmsCouponParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.coupon.vo.SmsCouponListVo;
 import com.mdd.coupon.vo.SmsCouponDetailVo;
 import com.mdd.common.core.AjaxResult;
@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.Map;
 
 /**

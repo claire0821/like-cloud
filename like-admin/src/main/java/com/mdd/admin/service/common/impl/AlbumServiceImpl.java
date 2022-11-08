@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mdd.admin.service.common.IAlbumService;
 import com.mdd.admin.validate.common.AlbumParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.album.AlbumCateVo;
 import com.mdd.admin.vo.album.AlbumVo;
 import com.mdd.common.config.GlobalConfig;

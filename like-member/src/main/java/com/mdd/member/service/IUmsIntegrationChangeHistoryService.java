@@ -1,6 +1,6 @@
 package com.mdd.member.service;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.member.validate.UmsIntegrationChangeHistoryParam;
 import com.mdd.member.vo.UmsIntegrationChangeHistoryListVo;
 import com.mdd.member.vo.UmsIntegrationChangeHistoryDetailVo;

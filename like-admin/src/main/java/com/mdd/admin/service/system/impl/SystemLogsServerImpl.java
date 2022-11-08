@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.service.system.ISystemLogsServer;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.system.LogLoginVo;
 import com.mdd.admin.vo.system.LogOperateVo;
 import com.mdd.common.config.GlobalConfig;

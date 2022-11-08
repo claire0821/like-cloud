@@ -2,7 +2,7 @@ package com.mdd.admin.controller.user;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.user.IUserService;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;

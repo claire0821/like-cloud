@@ -1,6 +1,6 @@
 package com.mdd.admin.service.user;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.PageResult;
 

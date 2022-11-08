@@ -2,7 +2,7 @@ package com.mdd.admin.service.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.mdd.admin.validate.common.AlbumParam;
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.album.AlbumVo;
 import com.mdd.common.core.PageResult;
 

@@ -1,6 +1,6 @@
 package com.mdd.coupon.service;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.coupon.validate.SmsSeckillSkuNoticeParam;
 import com.mdd.coupon.vo.SmsSeckillSkuNoticeListVo;
 import com.mdd.coupon.vo.SmsSeckillSkuNoticeDetailVo;

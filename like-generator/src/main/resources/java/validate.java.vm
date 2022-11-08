@@ -1,6 +1,6 @@
 package ${packageName}.${subPackageName}.validate;
 
-import ${packageName}.admin.validate.BaseParam;
+import ${packageName}.common.validate.BaseParam;
 import ${packageName}.common.validator.annotation.IDMust;
 import ${packageName}.common.validator.annotation.IntegerContains;
 import lombok.EqualsAndHashCode;

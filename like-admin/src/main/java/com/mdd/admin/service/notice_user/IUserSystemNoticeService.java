@@ -1,6 +1,6 @@
 package com.mdd.admin.service.notice_user;
 
-import com.mdd.admin.validate.common.PageParam;
+import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.notice_user.UserSystemNoticeParam;
 import com.mdd.admin.vo.notice_user.UserSystemNoticeListVo;
 import com.mdd.admin.vo.notice_user.UserSystemNoticeDetailVo;

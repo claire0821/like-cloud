@@ -3,7 +3,7 @@ package ${packageName}.${subPackageName}.controller;
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;
 #end
-import ${packageName}.admin.config.aop.Log;
+import ${packageName}.common.config.aop.Log;
 import ${packageName}.${subPackageName}.service.I${EntityName}Service;
 import ${packageName}.${subPackageName}.validate.${EntityName}Param;
 #if($table.genTpl.equals("crud"))
