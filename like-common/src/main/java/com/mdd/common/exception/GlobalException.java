@@ -80,7 +80,7 @@ public class GlobalException {
      * 拦截JSON参数校验
      */
     @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)//校验
     @ResponseBody
     public AjaxResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();

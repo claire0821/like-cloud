@@ -30,7 +30,8 @@ public class GlobalConfig {
     public static String publicPrefix = "api/uploads";
 
     // 上传映射目录
-    public static String uploadDirectory = "/www/uploads/likeadmin-java/";
+//    public static String uploadDirectory = "/www/uploads/likeadmin-java/";
+    public static String uploadDirectory = "Y:/uploads/";
 
     // 上传图片限制
     public static Integer uploadImageSize = 1024 * 1024 * 10;
