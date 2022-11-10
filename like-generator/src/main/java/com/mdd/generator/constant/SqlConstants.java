@@ -12,7 +12,25 @@ public class SqlConstants {
     public static final String[] COLUMN_TYPE_TIME = {"datetime", "time", "date", "timestamp"};
 
     /** 数据库数字类型 */
-    public static final String[] COLUMN_TYPE_NUMBER = {"tinyint", "smallint", "mediumint", "int", "number", "integer", "bit", "bigint", "float", "double", "decimal"};
+    public static final String[] COLUMN_TYPE_NUMBER = {"tinyint", "tinyint unsigned", "smallint", "smallint unsigned", "mediumint", "mediumint unsigned", "int", "int unsigned", "number", "integer","integer unsigned", "bigint", "float", "double", "decimal"};
+
+    /** 数据库数字类型转换为java Integer */
+    public static final String[] COLUMN_TYPE_NUMBER_INT = {"tinyint", "tinyint unsigned", "smallint", "smallint unsigned", "mediumint", "mediumint unsigned", "int", "int unsigned", "number", "integer","integer unsigned"};
+
+    /** 数据库数字类型转换为java Long */
+    public static final String[] COLUMN_TYPE_NUMBER_LONG = {"bigint","bigint unsigned"};
+
+    /** 数据库数字类型转换为java Float */
+    public static final String[] COLUMN_TYPE_NUMBER_FLOAT = {"float"};
+
+    /** 数据库数字类型转换为java Double */
+    public static final String[] COLUMN_TYPE_NUMBER_DOUBLE = {"double"};
+
+    /** 数据库数字类型转换为java BigDecimal */
+    public static final String[] COLUMN_TYPE_NUMBER_BIGDECIMAL = {"decimal"};
+
+    /** 数据库数字类型转换为java Boolean */
+    public static final String[] COLUMN_TYPE_BOOL = {"bit"};
 
     /** 时间日期字段名 */
     public static final String[] COLUMN_TIME_NAME = {"create_time", "update_time", "delete_time", "start_time", "end_time"};

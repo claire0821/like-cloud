@@ -89,6 +89,7 @@ public class VelocityUtil {
         velocityContext.put("detailFields", detailFields);
         velocityContext.put("dictFields", dictFields);
         velocityContext.put("isSearch", isSearch);
+        velocityContext.put("pk", table.getPk());//主键
         return velocityContext;
     }
 

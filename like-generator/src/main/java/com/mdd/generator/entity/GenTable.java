@@ -1,6 +1,7 @@
 package com.mdd.generator.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
@@ -34,4 +35,7 @@ public class GenTable implements Serializable {
     private Long createTime;
     private Long updateTime;
 
+    //主键
+    @TableField(exist = false)
+    private GenTableColumn pk;
 }

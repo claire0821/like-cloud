@@ -364,6 +364,12 @@ public class GenerateServiceImpl implements IGenerateService {
                 new QueryWrapper<GenTableColumn>()
                         .eq("table_id", id)
                         .orderByAsc("sort"));
+        //设置表主键
+        GenTableColumn pk = columns.stream()
+                .filter(column -> column.getIsPk() == 1)
+                .findFirst()
+                .orElse(null);
+        table.setPk(pk);
 
         // 初始模板
         VelocityUtil.initVelocity();
@@ -420,6 +426,16 @@ public class GenerateServiceImpl implements IGenerateService {
                 new QueryWrapper<GenTableColumn>()
                         .orderByAsc("sort")
                         .eq("table_id", tableId));
+        for(int i = 0; i < columns.size(); i++) {
+
+        }
+
+        //设置表主键
+        GenTableColumn pk = columns.stream()
+                .filter(column -> column.getIsPk() == 1)
+                .findFirst()
+                .orElse(null);
+        table.setPk(pk);
 
         // 初始模板
         VelocityUtil.initVelocity();

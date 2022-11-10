@@ -34,7 +34,7 @@ import java.util.*;
 #end
  */
 @Service
-public class ${EntityName}ServiceImpl implements I${EntityName}Service {
+public class ${EntityName}ServiceImpl extends ServiceImpl<${EntityName}Mapper,${EntityName}> implements I${EntityName}Service {
     ## 设置模板方式的变量
     #if($table.genTpl.equals("crud"))
         #set($genTpl = "PageResult<${EntityName}ListVo>")

@@ -18,7 +18,7 @@ import java.util.Map;
  * @author ${authorName}
 #end
  */
-public interface I${EntityName}Service {
+public interface I${EntityName}Service extends IService<${EntityName}> {
 
  #if($table.genTpl=="crud")
     /**

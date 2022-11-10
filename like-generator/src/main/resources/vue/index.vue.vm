@@ -41,6 +41,11 @@
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>
                     <el-button @click="resetParams">重置</el-button>
+                    <el-button
+                       :disabled="!selectData.length"
+                       type="danger"
+                       @click="handleDelete(selectData)"
+                       >批量删除</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -58,7 +63,9 @@
                 size="large"
                 v-loading="pager.loading"
                 :data="pager.lists"
+                @selection-change="handleSelectionChange"
             >
+            <el-table-column type="selection" width="55" />
             #foreach ($column in $columns)
             #if($column.isList)
                 #if($column.dictType!="" && ($column.htmlType=="select" || $column.htmlType=="radio" || $column.htmlType=="checkbox"))
@@ -99,7 +106,7 @@
                             v-perms="['${moduleName}:del']"
                             type="danger"
                             link
-                            @click="handleDelete(row.${primaryKey})"
+                            @click="handleDelete([row.${primaryKey}])"
                         >
                             删除
                         </el-button>
@@ -143,7 +150,7 @@ const queryParams = reactive({
 #end
 #end
 })
-
+const selectData = ref<any[]>([])
 const { pager, getLists, resetPage, resetParams } = usePaging({
     fetchFun: ${moduleName}Lists,
     params: queryParams
@@ -158,7 +165,6 @@ const { dictData } = useDictData<{
 }>([#foreach ($dict in $dictFields)'${dict}'#if($dictFields[$dictSize] != ${dict}),#end#end])
 #end
 
-
 const handleAdd = async () => {
     showEdit.value = true
     await nextTick()
@@ -171,13 +177,23 @@ const handleEdit = async (data: any) => {
     editRef.value?.open('edit')
     editRef.value?.getDetail(data)
 }
-
+#if(false)
 const handleDelete = async (${primaryKey}: number) => {
     await feedback.confirm('确定要删除？')
     await ${moduleName}Delete({ ${primaryKey} })
     feedback.msgSuccess('删除成功')
     getLists()
 }
-
+#end
+const handleSelectionChange = (val: any[]) => {
+    selectData.value = val.map(({ attrGroupId }) => attrGroupId)
+}
+//批量删除
+const handleDelete = async (ids: any[] | number) => {
+    await feedback.confirm('确定要删除？')
+    await groupDelete(ids)
+    feedback.msgSuccess('删除成功')
+    getLists()
+}
 getLists()
 </script>

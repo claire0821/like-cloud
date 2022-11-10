@@ -37,4 +37,6 @@ public class GenTableColumn implements Serializable {
     private Long createTime;
     private Long updateTime;
 
+
+
 }

@@ -109,6 +109,7 @@ public class ${EntityName}Controller {
         return AjaxResult.success();
     }
 
+    #if(false)
     /**
      * ${functionName}删除
      *
@@ -123,6 +124,20 @@ public class ${EntityName}Controller {
     public Object del(@Validated(value = ${EntityName}Param.delete.class) @RequestBody ${EntityName}Param ${entityName}Param) {
         #set($AttrName=$primaryKey.substring(0,1).toUpperCase() + ${primaryKey.substring(1)})
         i${EntityName}Service.del(${entityName}Param.get${AttrName}());
+        return AjaxResult.success();
+    }
+    #end
+
+    /**
+     * ${functionName}批量删除
+     *
+     * @param attrGroupIds 参数
+     * @return Object
+     */
+    @Log(title = "${functionName}批量删除")
+    @PostMapping("/delBatch")
+    public Object delBatch(@RequestBody ${pk.javaType}[] ${pk.javaField}s) {
+        i${EntityName}Service.removeByIds(Arrays.asList(${pk.javaField}s));
         return AjaxResult.success();
     }
 
