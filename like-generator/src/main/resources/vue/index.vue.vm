@@ -129,13 +129,13 @@
     </div>
 </template>
 <script lang="ts" setup name="${moduleName}">
-import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${moduleName}'
+import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${subPackageName}/${moduleName}'
 #if($dictFields.size()>=1)
 import { useDictData } from '@/hooks/useDictOptions'
 #end
 import { usePaging } from '@/hooks/usePaging'
 import feedback from '@/utils/feedback'
-import EditPopup from './edit.vue'
+import EditPopup from './${moduleName}_edit.vue'
 const editRef = shallowRef<InstanceType<typeof EditPopup>>()
 const showEdit = ref(false)
 const queryParams = reactive({
