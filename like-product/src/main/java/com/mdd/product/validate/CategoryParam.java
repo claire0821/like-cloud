@@ -1,6 +1,7 @@
 package com.mdd.product.validate;
 
 import com.mdd.common.validate.BaseParam;
+import com.mdd.common.validator.annotation.IDLongMust;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.EqualsAndHashCode;
@@ -16,9 +17,9 @@ import javax.validation.constraints.*;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class PmsCategoryParam extends BaseParam {
+public class CategoryParam extends BaseParam {
 
-    @IDMust(message = "catId参数必传且需大于0", groups = {update.class, delete.class})
+    @IDLongMust(message = "catId参数必传且需大于等于0", groups = {update.class, delete.class, change.class})
     private Long catId;
 
     @NotNull(message = "name参数缺失", groups = {create.class, update.class})

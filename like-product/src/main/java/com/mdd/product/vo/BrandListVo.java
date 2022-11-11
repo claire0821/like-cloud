@@ -8,7 +8,7 @@ import java.io.Serializable;
  * PmsBrandVo
  */
 @Data
-public class PmsBrandDetailVo implements Serializable {
+public class BrandListVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +18,6 @@ public class PmsBrandDetailVo implements Serializable {
     private String descript;  // 介绍
     private Long showStatus;  // 显示状态[0-不显示；1-显示]
     private String firstLetter;  // 检索首字母
-    private Long sort;  // 排序
+    private Integer sort;  // 排序
 
 }

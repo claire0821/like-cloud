@@ -3,19 +3,14 @@ package com.mdd.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.product.service.IPmsAttrAttrgroupRelationService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.PmsAttrAttrgroupRelationParam;
-import com.mdd.product.vo.PmsAttrAttrgroupRelationListVo;
+import com.mdd.product.vo.AttrAttrgroupRelationListVo;
 import com.mdd.product.vo.PmsAttrAttrgroupRelationDetailVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.product.entity.PmsAttrAttrgroupRelation;
 import com.mdd.product.mapper.PmsAttrAttrgroupRelationMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
-import com.mdd.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -40,7 +35,7 @@ public class PmsAttrAttrgroupRelationServiceImpl implements IPmsAttrAttrgroupRel
      * @return PageResult<PmsAttrAttrgroupRelationListVo>
      */
     @Override
-    public PageResult<PmsAttrAttrgroupRelationListVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<AttrAttrgroupRelationListVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -55,9 +50,9 @@ public class PmsAttrAttrgroupRelationServiceImpl implements IPmsAttrAttrgroupRel
 
         IPage<PmsAttrAttrgroupRelation> iPage = pmsAttrAttrgroupRelationMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<PmsAttrAttrgroupRelationListVo> list = new LinkedList<>();
+        List<AttrAttrgroupRelationListVo> list = new LinkedList<>();
         for(PmsAttrAttrgroupRelation item : iPage.getRecords()) {
-            PmsAttrAttrgroupRelationListVo vo = new PmsAttrAttrgroupRelationListVo();
+            AttrAttrgroupRelationListVo vo = new AttrAttrgroupRelationListVo();
             BeanUtils.copyProperties(item, vo);
             list.add(vo);
         }

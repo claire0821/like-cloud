@@ -7,7 +7,7 @@ import ${packageName}.common.config.aop.Log;
 import ${packageName}.${subPackageName}.service.I${EntityName}Service;
 import ${packageName}.${subPackageName}.validate.${EntityName}Param;
 #if($table.genTpl.equals("crud"))
-import ${packageName}.admin.validate.common.PageParam;
+import ${packageName}.common.validate.PageParam;
 import ${packageName}.${subPackageName}.vo.${EntityName}ListVo;
 #end
 import ${packageName}.${subPackageName}.vo.${EntityName}DetailVo;
@@ -16,10 +16,12 @@ import ${packageName}.common.core.AjaxResult;
 import ${packageName}.common.core.PageResult;
 #end
 import ${packageName}.common.validator.annotation.IDMust;
+import ${packageName}.common.validator.annotation.IDLongMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Map;
 
 #set($isAuthor = !$authorName.equals(""))
@@ -30,7 +32,7 @@ import java.util.Map;
 #end
  */
 @RestController
-@RequestMapping("api/${moduleName}")
+@RequestMapping("api/${subPackageName}/${moduleName}")
 public class ${EntityName}Controller {
 
     @Resource
@@ -72,8 +74,8 @@ public class ${EntityName}Controller {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Long id) {
-        ${EntityName}DetailVo detail = i${EntityName}Service.detail(id);
+    public Object detail(@Validated  #if($column.javaType.equals('Long')) @IDLongMust() #else @IDMust() #end @RequestParam("id") ${pk.javaType} ${pk.javaField}) {
+        ${EntityName}DetailVo detail = i${EntityName}Service.detail(${pk.javaField});
         return AjaxResult.success(detail);
     }
 
@@ -131,7 +133,7 @@ public class ${EntityName}Controller {
     /**
      * ${functionName}批量删除
      *
-     * @param attrGroupIds 参数
+     * @param ${pk.javaField}s 参数
      * @return Object
      */
     @Log(title = "${functionName}批量删除")

@@ -1,9 +1,11 @@
 package ${packageName}.${subPackageName}.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 #if(!$table.genTpl.equals("crud"))
 import com.alibaba.fastjson.JSONArray;
 #end
-import ${packageName}.common.validate.common.PageParam;
+import ${packageName}.common.validate.PageParam;
+import com.mdd.${subPackageName}.entity.${EntityName};
 import ${packageName}.${subPackageName}.validate.${EntityName}Param;
 import ${packageName}.${subPackageName}.vo.${EntityName}ListVo;
 import ${packageName}.${subPackageName}.vo.${EntityName}DetailVo;

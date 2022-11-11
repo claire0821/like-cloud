@@ -4,8 +4,7 @@ import com.mdd.common.config.aop.Log;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.service.IPmsAttrAttrgroupRelationService;
 import com.mdd.product.validate.PmsAttrAttrgroupRelationParam;
-import com.mdd.common.validate.PageParam;
-import com.mdd.product.vo.PmsAttrAttrgroupRelationListVo;
+import com.mdd.product.vo.AttrAttrgroupRelationListVo;
 import com.mdd.product.vo.PmsAttrAttrgroupRelationDetailVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
@@ -36,7 +35,7 @@ public class PmsAttrAttrgroupRelationController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<PmsAttrAttrgroupRelationListVo> list = iPmsAttrAttrgroupRelationService.list(pageParam, params);
+        PageResult<AttrAttrgroupRelationListVo> list = iPmsAttrAttrgroupRelationService.list(pageParam, params);
         return AjaxResult.success(list);
     }
     /**

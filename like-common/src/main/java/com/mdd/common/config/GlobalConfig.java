@@ -18,7 +18,7 @@ public class GlobalConfig {
     public static String secret = "UVTIyzCy";
 
     // Mysql表前缀
-    public static String tablePrefix = "la_";
+    public static String tablePrefix = "pms_";
 
     // Redis键前缀
     public static String redisPrefix = "Like:";

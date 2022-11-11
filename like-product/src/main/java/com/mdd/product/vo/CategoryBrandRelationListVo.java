@@ -8,7 +8,7 @@ import java.io.Serializable;
  * PmsCategoryBrandRelationVo
  */
 @Data
-public class PmsCategoryBrandRelationListVo implements Serializable {
+public class CategoryBrandRelationListVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

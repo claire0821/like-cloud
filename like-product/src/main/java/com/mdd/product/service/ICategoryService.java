@@ -2,9 +2,9 @@ package com.mdd.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
-import com.mdd.product.entity.PmsCategory;
-import com.mdd.product.validate.PmsCategoryParam;
-import com.mdd.product.vo.PmsCategoryListVo;
+import com.mdd.product.entity.Category;
+import com.mdd.product.validate.CategoryParam;
+import com.mdd.product.vo.CategoryListVo;
 import com.mdd.product.vo.PmsCategoryDetailVo;
 import com.mdd.common.core.PageResult;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * 商品三级分类服务接口类
  */
-public interface IPmsCategoryService extends IService<PmsCategory> {
+public interface ICategoryService extends IService<Category> {
 
     /**
      * 商品三级分类列表
@@ -23,13 +23,13 @@ public interface IPmsCategoryService extends IService<PmsCategory> {
      * @param params 搜索参数
      * @return PageResult<PmsCategoryVo>
      */
-    PageResult<PmsCategoryListVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<CategoryListVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 查询所有
      * @return List<PmsCategory>
      */
-    List<PmsCategory> listWithTree();
+    List<Category> listWithTree();
     /**
      * 商品三级分类详情
      *
@@ -41,16 +41,16 @@ public interface IPmsCategoryService extends IService<PmsCategory> {
     /**
      * 商品三级分类新增
      *
-     * @param pmsCategoryParam 参数
+     * @param categoryParam 参数
      */
-    void add(PmsCategoryParam pmsCategoryParam);
+    void add(CategoryParam categoryParam);
 
     /**
      * 商品三级分类编辑
      *
-     * @param pmsCategoryParam 参数
+     * @param categoryParam 参数
      */
-    void edit(PmsCategoryParam pmsCategoryParam);
+    void edit(CategoryParam categoryParam);
 
     /**
      * 商品三级分类删除
@@ -60,4 +60,14 @@ public interface IPmsCategoryService extends IService<PmsCategory> {
     void del(Long id);
 
     void removeMenuByIds(List<Long> asList);
+
+    /**
+     * 找到catelogId的完整路径；
+     * [父/子/孙]
+     * @param catelogId
+     * @return
+     */
+     Long[] findCatelogPath(Long catelogId);
+
+    void updateCascade(Category category);
 }

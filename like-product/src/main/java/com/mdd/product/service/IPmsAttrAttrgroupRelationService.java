@@ -2,7 +2,7 @@ package com.mdd.product.service;
 
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.PmsAttrAttrgroupRelationParam;
-import com.mdd.product.vo.PmsAttrAttrgroupRelationListVo;
+import com.mdd.product.vo.AttrAttrgroupRelationListVo;
 import com.mdd.product.vo.PmsAttrAttrgroupRelationDetailVo;
 import com.mdd.common.core.PageResult;
 
@@ -20,7 +20,7 @@ public interface IPmsAttrAttrgroupRelationService {
      * @param params 搜索参数
      * @return PageResult<PmsAttrAttrgroupRelationVo>
      */
-    PageResult<PmsAttrAttrgroupRelationListVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<AttrAttrgroupRelationListVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 属性&属性分组关联详情

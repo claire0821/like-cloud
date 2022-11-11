@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 品牌分类关联实体
  */
 @Data
-public class PmsCategoryBrandRelation implements Serializable {
+public class CategoryBrandRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -1,12 +1,12 @@
 package com.mdd.product.mapper;
 
 import com.mdd.common.core.basics.IBaseMapper;
-import com.mdd.product.entity.PmsBrand;
+import com.mdd.product.entity.AttrGroup;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 品牌Mapper
+ * 属性分组Mapper
  */
 @Mapper
-public interface PmsBrandMapper extends IBaseMapper<PmsBrand> {
+public interface AttrGroupMapper extends IBaseMapper<AttrGroup> {
 }

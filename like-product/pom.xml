@@ -51,5 +51,6 @@
             <groupId>org.mdd</groupId>
             <artifactId>like-common</artifactId>
         </dependency>
+
     </dependencies>
 </project>

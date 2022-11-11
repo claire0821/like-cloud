@@ -102,10 +102,10 @@ public class GenUtil {
 //            }
         }
 
-        //布尔字段
+        // 布尔字段
         else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_BOOL, columnType)) {
             column.setJavaType(JavaConstants.TYPE_BOOL);
-            column.setHtmlType(HtmlConstants.HTML_DATETIME);
+            column.setHtmlType(HtmlConstants.HTML_INPUT);
         }
 
         // 非必填字段

@@ -2,10 +2,10 @@ package com.mdd.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
-import com.mdd.product.entity.PmsBrand;
-import com.mdd.product.validate.PmsBrandParam;
-import com.mdd.product.vo.PmsBrandListVo;
-import com.mdd.product.vo.PmsBrandDetailVo;
+import com.mdd.product.entity.Brand;
+import com.mdd.product.validate.BrandParam;
+import com.mdd.product.vo.BrandListVo;
+import com.mdd.product.vo.BrandDetailVo;
 import com.mdd.common.core.PageResult;
 
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * 品牌服务接口类
  */
-public interface IPmsBrandService extends IService<PmsBrand> {
+public interface IBrandService extends IService<Brand> {
 
     /**
      * 品牌列表
@@ -22,7 +22,7 @@ public interface IPmsBrandService extends IService<PmsBrand> {
      * @param params 搜索参数
      * @return PageResult<PmsBrandVo>
      */
-    PageResult<PmsBrandListVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<BrandListVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 品牌详情
@@ -30,21 +30,21 @@ public interface IPmsBrandService extends IService<PmsBrand> {
      * @param id 主键ID
      * @return PmsBrand
      */
-    PmsBrandDetailVo detail(Long id);
+    BrandDetailVo detail(Long id);
 
     /**
      * 品牌新增
      *
-     * @param pmsBrandParam 参数
+     * @param brandParam 参数
      */
-    void add(PmsBrandParam pmsBrandParam);
+    void add(BrandParam brandParam);
 
     /**
      * 品牌编辑
      *
-     * @param pmsBrandParam 参数
+     * @param brandParam 参数
      */
-    void edit(PmsBrandParam pmsBrandParam);
+    void edit(BrandParam brandParam);
 
     /**
      * 品牌删除
