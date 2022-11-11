@@ -190,7 +190,7 @@ public class VelocityUtil {
         }
 
         else if (template.contains("vue/edit.vue.vm")) {
-            fileName = StringUtil.format("vue/views/{}/edit.vue", moduleName);
+            fileName = StringUtil.format("vue/views/{}/{}_edit.vue", moduleName,entityName);
         }
 
         else if (template.contains("vue/index.vue.vm")) {

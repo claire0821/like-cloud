@@ -174,7 +174,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         List<Long> paths = new ArrayList<>();
         List<Long> parentPath = findParentPath(catelogId,paths);
         Collections.reverse(parentPath);
-        return (Long[]) parentPath.toArray();
+        return parentPath.toArray(new Long[parentPath.size()]);
     }
 
     /**

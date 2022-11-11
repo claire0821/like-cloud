@@ -1,6 +1,7 @@
 package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.validate.BaseParam;
 import com.mdd.product.service.IAttrService;
 import com.mdd.product.validate.AttrParam;
 import com.mdd.common.validate.PageParam;
@@ -43,11 +44,11 @@ public class AttrController {
     /**
      * 商品属性详情
      *
-     * @param id 主键ID
+     * @param attrId 主键ID
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated   @IDMust()  @RequestParam("id") Long attrId) {
+    public Object detail(@Validated @IDLongMust()  @RequestParam("attrId") Long attrId) {
         AttrDetailVo detail = iAttrService.detail(attrId);
         return AjaxResult.success(detail);
     }
@@ -92,4 +93,31 @@ public class AttrController {
         return AjaxResult.success();
     }
 
+    /**
+     * 商品属性编辑
+     *
+     * @param attrDetailVo 参数
+     * @return Object
+     */
+    @Log(title = "商品属性编辑")
+    @PostMapping("/update")
+    public Object update(@Validated(value = BaseParam.change.class) @RequestBody AttrDetailVo attrDetailVo) {
+        iAttrService.update(attrDetailVo);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 商品属性新增
+     *
+     * @param attrVo 参数
+     * @return Object
+     */
+    @Log(title = "商品属性新增")
+    @PostMapping("/save")
+    public Object save(@RequestBody AttrListVo attrVo) {
+        iAttrService.save(attrVo);
+        return AjaxResult.success();
+    }
 }
+//TODO 删除全部包括关联数据
+//TODO 查询 查询全部

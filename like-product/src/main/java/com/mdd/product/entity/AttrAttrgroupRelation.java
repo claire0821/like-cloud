@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 属性&属性分组关联实体
  */
 @Data
-public class PmsAttrAttrgroupRelation implements Serializable {
+public class AttrAttrgroupRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,6 +18,6 @@ public class PmsAttrAttrgroupRelation implements Serializable {
     private Long id; // id
     private Long attrId; // 属性id
     private Long attrGroupId; // 属性分组id
-    private Long attrSort; // 属性组内排序
+    private Integer attrSort; // 属性组内排序
 
 }

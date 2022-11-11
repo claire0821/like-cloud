@@ -70,11 +70,11 @@ public class ${EntityName}Controller {
      #if(!$authorName.equals(""))
      * @author ${authorName}
      #end
-     * @param id 主键ID
+     * @param ${pk.javaField} 主键ID
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated  #if($column.javaType.equals('Long')) @IDLongMust() #else @IDMust() #end @RequestParam("id") ${pk.javaType} ${pk.javaField}) {
+    public Object detail(@Validated #if($column.javaType.equals("Long")) @IDLongMust() #else @IDMust() #end @RequestParam("${pk.javaField}") ${pk.javaType} ${pk.javaField}) {
         ${EntityName}DetailVo detail = i${EntityName}Service.detail(${pk.javaField});
         return AjaxResult.success(detail);
     }

@@ -24,7 +24,7 @@ import java.util.*;
  * 属性分组实现类
  */
 @Service
-public class IAttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup> implements IAttrGroupService {
+public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup> implements IAttrGroupService {
         
     @Resource
     AttrGroupMapper pmsAttrGroupMapper;

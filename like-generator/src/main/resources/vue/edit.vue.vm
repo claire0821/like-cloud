@@ -130,7 +130,7 @@
 </template>
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus'
-import { #if($table.treePrimary && $table.treeParent)${moduleName}Lists,#end ${moduleName}Edit, ${moduleName}Add, ${moduleName}Detail } from '@/api/${moduleName}'
+import { #if($table.treePrimary && $table.treeParent)${moduleName}Lists,#end ${moduleName}Edit, ${moduleName}Add, ${moduleName}Detail } from '@/api/${subPackageName}/${moduleName}'
 import Popup from '@/components/popup/index.vue'
 import feedback from '@/utils/feedback'
 import type { PropType } from 'vue'

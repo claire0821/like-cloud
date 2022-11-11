@@ -1,12 +1,21 @@
 package com.mdd.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.product.controller.CategoryController;
+import com.mdd.product.entity.AttrAttrgroupRelation;
+import com.mdd.product.entity.AttrGroup;
+import com.mdd.product.entity.Category;
+import com.mdd.product.mapper.AttrAttrgroupRelationMapper;
+import com.mdd.product.mapper.AttrGroupMapper;
+import com.mdd.product.mapper.CategoryMapper;
 import com.mdd.product.service.IAttrService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.product.service.ICategoryService;
 import com.mdd.product.validate.AttrParam;
 import com.mdd.product.vo.AttrListVo;
 import com.mdd.product.vo.AttrDetailVo;
@@ -18,7 +27,9 @@ import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -33,6 +44,17 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
     @Resource
     AttrMapper attrMapper;
 
+    @Autowired
+    AttrAttrgroupRelationMapper attrAttrgroupRelationMapper;
+
+    @Autowired
+    AttrGroupMapper attrGroupMapper;
+
+    @Autowired
+    CategoryMapper categoryMapper;
+
+    @Autowired
+    ICategoryService iCategoryService;
     /**
      * 商品属性列表
      *
@@ -61,10 +83,49 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
 
         IPage<Attr> iPage = attrMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
+        //1、设置分类和分组的名字
+        String attrGroupName = "";
+        final String attr_id = params.get("attr_id");
+
+        final AttrAttrgroupRelation attrAttrgroupRelation = attrAttrgroupRelationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelation>().eq("attr_id", attr_id));
+        if(attrAttrgroupRelation != null && attrAttrgroupRelation.getAttrGroupId() != null) {
+            final AttrGroup attrGroup = attrGroupMapper.selectById(attrAttrgroupRelation.getAttrGroupId());
+            if(attrGroup != null) {
+                attrGroupName = attrGroup.getAttrGroupName();
+            }
+
+        }
+        //2、设置分类信息
+        final String catelog_id = params.get("catelog_id");
+        String catelogName = "";
+        if(catelog_id != null && catelog_id.length() > 0) {
+            final Category category = categoryMapper.selectById(catelog_id);
+            if(category != null) {
+                catelogName = category.getName();
+            }
+        }
+
         List<AttrListVo> list = new LinkedList<>();
         for(Attr item : iPage.getRecords()) {
             AttrListVo vo = new AttrListVo();
             BeanUtils.copyProperties(item, vo);
+            if(attrGroupName.length() == 0) {
+                final AttrAttrgroupRelation attrAttrgroupRelation1 = attrAttrgroupRelationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelation>().eq("attr_id", item.getAttrId()));
+                if(attrAttrgroupRelation1 != null && attrAttrgroupRelation1.getAttrGroupId() != null) {
+                    final AttrGroup attrGroup = attrGroupMapper.selectById(attrAttrgroupRelation1.getAttrGroupId());
+                    if(attrGroup != null) {
+                        attrGroupName = attrGroup.getAttrGroupName();
+                    }
+                }
+            }
+            vo.setGroupName(attrGroupName);
+            if(catelogName.length() == 0) {
+                final Category category = categoryMapper.selectById(item.getCatelogId());
+                if(category != null) {
+                    catelogName = category.getName();
+                }
+            }
+            vo.setCatelogName(catelogName);
             list.add(vo);
         }
 
@@ -88,6 +149,27 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
 
         AttrDetailVo vo = new AttrDetailVo();
         BeanUtils.copyProperties(model, vo);
+
+        //1、设置分类和分组的名字
+        final AttrAttrgroupRelation attrAttrgroupRelation = attrAttrgroupRelationMapper.selectOne(new QueryWrapper<AttrAttrgroupRelation>().eq("attr_id", model.getAttrId()));
+        if(attrAttrgroupRelation != null && attrAttrgroupRelation.getAttrGroupId() != null) {
+            vo.setAttrGroupId(attrAttrgroupRelation.getAttrGroupId());
+            final AttrGroup attrGroup = attrGroupMapper.selectById(attrAttrgroupRelation.getAttrGroupId());
+            if(attrGroup != null) {
+                vo.setGroupName(attrGroup.getAttrGroupName());
+            }
+        }
+
+        //2、设置分类信息
+        final Category category = categoryMapper.selectById(model.getCatelogId());
+        if(category != null) {
+            vo.setCatelogName(category.getName());
+        }
+
+        final Long[] catelogPath = iCategoryService.findCatelogPath(model.getCatelogId());
+        if(catelogPath != null) {
+            vo.setCatelogPath(catelogPath);
+        }
         return vo;
     }
 
@@ -151,6 +233,41 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
         Assert.notNull(model, "数据不存在!");
 
         attrMapper.delete(new QueryWrapper<Attr>().eq("attr_id", id));
+    }
+
+    @Transactional
+    @Override
+    public void update(AttrDetailVo attrDetailVo) {
+        Attr attr = new Attr();
+        BeanUtils.copyProperties(attr, attrDetailVo);
+        updateById(attr);
+        //修改分组关联
+        AttrAttrgroupRelation attrAttrgroupRelation = new AttrAttrgroupRelation();
+        attrAttrgroupRelation.setAttrGroupId(attrDetailVo.getAttrGroupId());
+        attrAttrgroupRelation.setAttrId(attrDetailVo.getAttrId());
+        final Integer count = attrAttrgroupRelationMapper.selectCount(new QueryWrapper<AttrAttrgroupRelation>()
+                .eq("attr_id", attrAttrgroupRelation.getAttrId()));
+        if(count > 0) {
+            attrAttrgroupRelationMapper.update(attrAttrgroupRelation,new UpdateWrapper<AttrAttrgroupRelation>()
+            .eq("attr_id", attrAttrgroupRelation.getAttrId()));
+        } else {
+            attrAttrgroupRelationMapper.insert(attrAttrgroupRelation);
+        }
+
+    }
+
+    @Transactional
+    @Override
+    public void save(AttrListVo attrListVo) {
+        Attr attr = new Attr();
+        BeanUtils.copyProperties(attrListVo, attr);
+        //保存基本数据
+        baseMapper.insert(attr);
+        //保存关联数据
+        AttrAttrgroupRelation attrAttrgroupRelation = new AttrAttrgroupRelation();
+        attrAttrgroupRelation.setAttrGroupId(attrListVo.getAttrGroupId());
+        attrAttrgroupRelation.setAttrId(attrListVo.getAttrId());
+        attrAttrgroupRelationMapper.insert(attrAttrgroupRelation);
     }
 
 }

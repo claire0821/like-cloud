@@ -5,7 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * PmsAttrAttrgroupRelationVo
+ * AttrAttrgroupRelationVo
  */
 @Data
 public class AttrAttrgroupRelationListVo implements Serializable {

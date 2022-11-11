@@ -129,7 +129,7 @@
     </div>
 </template>
 <script lang="ts" setup name="${moduleName}">
-import { ${moduleName}Delete, ${moduleName}Lists } from '@/api/${subPackageName}/${moduleName}'
+import { ${moduleName}DeleteBatch, ${moduleName}Lists } from '@/api/${subPackageName}/${moduleName}'
 #if($dictFields.size()>=1)
 import { useDictData } from '@/hooks/useDictOptions'
 #end
@@ -191,7 +191,7 @@ const handleSelectionChange = (val: any[]) => {
 //批量删除
 const handleDelete = async (ids: any[] | number) => {
     await feedback.confirm('确定要删除？')
-    await groupDelete(ids)
+    await ${moduleName}DeleteBatch(ids)
     feedback.msgSuccess('删除成功')
     getLists()
 }

@@ -53,4 +53,6 @@ public interface IAttrService extends IService<Attr> {
      */
     void del(Long id);
 
+    void update(AttrDetailVo attrDetailVo);
+    void save(AttrListVo attrListVo);
 }
