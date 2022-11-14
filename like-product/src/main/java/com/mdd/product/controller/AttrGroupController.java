@@ -2,16 +2,19 @@ package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
 import com.mdd.common.validator.annotation.IDLongMust;
+import com.mdd.product.entity.Attr;
 import com.mdd.product.entity.AttrGroup;
+import com.mdd.product.service.IAttrAttrgroupRelationService;
 import com.mdd.product.service.IAttrGroupService;
+import com.mdd.product.service.IAttrService;
 import com.mdd.product.service.ICategoryService;
 import com.mdd.product.validate.AttrGroupParam;
 import com.mdd.common.validate.PageParam;
-import com.mdd.product.vo.AttrGroupListVo;
-import com.mdd.product.vo.PmsAttrGroupDetailVo;
+import com.mdd.product.vo.*;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +32,12 @@ public class AttrGroupController {
     IAttrGroupService IAttrGroupService;
     @Resource
     ICategoryService iCategoryService;
+
+    @Autowired
+    IAttrService iAttrService;
+
+    @Autowired
+    IAttrAttrgroupRelationService iAttrAttrgroupRelationService;
     /**
      * 属性分组列表
      *
@@ -135,6 +144,50 @@ public class AttrGroupController {
         vo.setCatelogPath(path);
 
         return AjaxResult.success(vo);
+    }
+
+    @Log(title = "移除关联")
+    @PostMapping("/attr/relation/delete")
+    public Object deleteRelation(@RequestBody AttrAttrgroupRelationListVo[] vos){
+        iAttrService.deleteRelation(vos);
+        return AjaxResult.success();
+    }
+
+    ///product/attrgroup/{attrgroupId}/attr/relation
+    @Log(title = "根据分组id查找关联的所有基本属性")
+    @GetMapping("/attr/relation")
+    public Object attrRelation(@Validated PageParam pageParam,
+                               @RequestParam Map<String, String> params){
+        final Long attrgroupId = Long.valueOf(params.get("attrGroupId"));
+        final PageResult<AttrListVo> listVoPageResult = iAttrService.getRelationAttr(pageParam, params,attrgroupId);
+        return AjaxResult.success(listVoPageResult);
+    }
+
+    /**
+     * 获取当前分组没有关联的所有属性
+     *
+     * @param pageParam 分页参数
+     * @param params 搜索参数
+     * @return Object
+     */
+    @GetMapping("/noattr/relation")
+    public Object attrNoRelation(@Validated PageParam pageParam,
+                       @RequestParam Map<String, String> params) {
+        final Long attrgroupId = Long.valueOf(params.get("attrGroupId"));
+        PageResult<AttrListVo> list = iAttrService.getNoRelationAttr(pageParam, params, attrgroupId);
+        return AjaxResult.success(list);
+    }
+
+
+    /**
+     * 新增关联
+     * @param vos
+     * @return
+     */
+    @PostMapping("/attr/addRelation")
+    public Object addRelation(@RequestBody List<AttrAttrgroupRelationListVo> vos){
+        iAttrAttrgroupRelationService.saveBatch(vos);
+        return AjaxResult.success();
     }
 }
 //TODO 根据catelogId查询和其他条件查询

@@ -17,12 +17,14 @@ import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.common.config.GlobalConfig;
+import com.mdd.product.vo.AttrGroupListVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 属性&属性分组关联实现类
@@ -138,4 +140,21 @@ public class AttrAttrgroupRelationServiceImpl extends ServiceImpl<AttrAttrgroupR
         attrAttrgroupRelationMapper.delete(new QueryWrapper<AttrAttrgroupRelation>().eq("id", id));
     }
 
+    @Override
+    public void deleteBatchRelation(List<AttrAttrgroupRelation> attrAttrgroupRelations) {
+        for (AttrAttrgroupRelation entity : attrAttrgroupRelations) {
+            attrAttrgroupRelationMapper.delete(
+                    new QueryWrapper<AttrAttrgroupRelation>().eq("attr_id", entity.getAttrId()).eq("attr_group_id",entity.getAttrGroupId()));
+        }
+    }
+
+    @Override
+    public void saveBatch(List<AttrAttrgroupRelationListVo> vos) {
+        List<AttrAttrgroupRelation> collect = vos.stream().map(item -> {
+            AttrAttrgroupRelation relationEntity = new AttrAttrgroupRelation();
+            BeanUtils.copyProperties(item, relationEntity);
+            return relationEntity;
+        }).collect(Collectors.toList());
+        this.saveBatch(collect);
+    }
 }

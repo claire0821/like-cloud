@@ -186,12 +186,12 @@ const handleDelete = async (${primaryKey}: number) => {
 }
 #end
 const handleSelectionChange = (val: any[]) => {
-    selectData.value = val.map(({ attrGroupId }) => attrGroupId)
+    selectData.value = val.map(({ ${primaryKey} }) => ${primaryKey})
 }
 //批量删除
-const handleDelete = async (ids: any[] | number) => {
+const handleDelete = async (${primaryKey}s: any[] | number) => {
     await feedback.confirm('确定要删除？')
-    await ${moduleName}DeleteBatch(ids)
+    await ${moduleName}DeleteBatch(${primaryKey}s)
     feedback.msgSuccess('删除成功')
     getLists()
 }

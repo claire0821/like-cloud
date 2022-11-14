@@ -41,8 +41,13 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
+
         QueryWrapper<AttrGroup> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc(Arrays.asList("sort", "attr_group_id"));
+        final String key = params.get("key");
+        if(key != null && key.length() > 0) {
+            queryWrapper.eq("attr_group_id",key).or().like("attr_group_name",key);
+        }
 
         pmsAttrGroupMapper.setSearch(queryWrapper, params, new String[]{
             "like:attrGroupName@attr_group_name:str",

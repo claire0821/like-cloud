@@ -7,9 +7,9 @@ import com.mdd.product.validate.AttrAttrgroupRelationParam;
 import com.mdd.product.vo.AttrAttrgroupRelationListVo;
 import com.mdd.product.vo.AttrAttrgroupRelationDetailVo;
 import com.mdd.common.core.PageResult;
+import com.mdd.product.vo.AttrGroupListVo;
 
-import java.util.Map;
-
+import java.util.*;
 /**
  * 属性&属性分组关联服务接口类
  */
@@ -53,4 +53,7 @@ public interface IAttrAttrgroupRelationService extends IService<AttrAttrgroupRel
      */
     void del(Long id);
 
+    void deleteBatchRelation(List<AttrAttrgroupRelation> attrAttrgroupRelations);
+
+    void saveBatch(List<AttrAttrgroupRelationListVo> vos);
 }

@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.entity.Attr;
 import com.mdd.product.validate.AttrParam;
-import com.mdd.product.vo.AttrListVo;
-import com.mdd.product.vo.AttrDetailVo;
+import com.mdd.product.vo.*;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,5 +54,12 @@ public interface IAttrService extends IService<Attr> {
     void del(Long id);
 
     void update(AttrDetailVo attrDetailVo);
+
     void save(AttrListVo attrListVo);
+
+    PageResult<AttrListVo> getRelationAttr(PageParam pageParam, Map<String, String> params, Long attrgroupId);
+
+    void deleteRelation(AttrAttrgroupRelationListVo[] vos);
+
+    PageResult<AttrListVo> getNoRelationAttr(PageParam pageParam, Map<String, String> params, Long attrgroupId);
 }

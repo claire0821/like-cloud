@@ -36,4 +36,5 @@
     <tree path="/like-coupon" title="优惠"/>
     <tree path="/like-gateway" title="API网关"/>
     <tree path="/like-common/src/main/java/com/mdd/common/validate" title="验证层"/>
+    <tree path="/like-common/src/main/java/com/mdd/common/constant" title="枚举定义"/>
 </trees>
