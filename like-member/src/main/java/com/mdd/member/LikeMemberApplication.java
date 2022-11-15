@@ -19,10 +19,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableFeignClients(basePackages = "com.mdd.member.feign")
 @EnableDiscoveryClient
-//@Configuration
 @ComponentScan(basePackages = {"com.mdd"})
 @MapperScan(basePackages = {"com.mdd.*.mapper"})
-//@EnableTransactionManagement
 @SpringBootApplication()
 public class LikeMemberApplication {
     public static void main(String[] args) {

@@ -1,29 +1,31 @@
 package com.mdd.member.controller;
 
 import com.mdd.common.config.aop.Log;
-import com.mdd.member.service.IUmsMemberLevelService;
-import com.mdd.member.validate.UmsMemberLevelParam;
+import com.mdd.member.service.IMemberLevelService;
+import com.mdd.member.validate.MemberLevelParam;
 import com.mdd.common.validate.PageParam;
-import com.mdd.member.vo.UmsMemberLevelListVo;
-import com.mdd.member.vo.UmsMemberLevelDetailVo;
+import com.mdd.member.vo.MemberLevelListVo;
+import com.mdd.member.vo.MemberLevelDetailVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
+import com.mdd.common.validator.annotation.IDLongMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
  * 会员等级管理
  */
 @RestController
-@RequestMapping("api/level")
-public class UmsMemberLevelController {
+@RequestMapping("api/member/level")
+public class MemberLevelController {
 
     @Resource
-    IUmsMemberLevelService iUmsMemberLevelService;
+    IMemberLevelService iMemberLevelService;
 
     /**
      * 会员等级列表
@@ -35,7 +37,7 @@ public class UmsMemberLevelController {
     @GetMapping("/list")
     public Object list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<UmsMemberLevelListVo> list = iUmsMemberLevelService.list(pageParam, params);
+        PageResult<MemberLevelListVo> list = iMemberLevelService.list(pageParam, params);
         return AjaxResult.success(list);
     }
     /**
@@ -45,47 +47,48 @@ public class UmsMemberLevelController {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDMust() @RequestParam("id") Long id) {
-        UmsMemberLevelDetailVo detail = iUmsMemberLevelService.detail(id);
+    public Object detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
+        MemberLevelDetailVo detail = iMemberLevelService.detail(id);
         return AjaxResult.success(detail);
     }
 
     /**
      * 会员等级新增
      *
-     * @param umsMemberLevelParam 参数
+     * @param memberLevelParam 参数
      * @return Object
      */
     @Log(title = "会员等级新增")
     @PostMapping("/add")
-    public Object add(@Validated(value = UmsMemberLevelParam.create.class) @RequestBody UmsMemberLevelParam umsMemberLevelParam) {
-        iUmsMemberLevelService.add(umsMemberLevelParam);
+    public Object add(@Validated(value = MemberLevelParam.create.class) @RequestBody MemberLevelParam memberLevelParam) {
+        iMemberLevelService.add(memberLevelParam);
         return AjaxResult.success();
     }
 
     /**
      * 会员等级编辑
      *
-     * @param umsMemberLevelParam 参数
+     * @param memberLevelParam 参数
      * @return Object
      */
     @Log(title = "会员等级编辑")
     @PostMapping("/edit")
-    public Object edit(@Validated(value = UmsMemberLevelParam.update.class) @RequestBody UmsMemberLevelParam umsMemberLevelParam) {
-        iUmsMemberLevelService.edit(umsMemberLevelParam);
+    public Object edit(@Validated(value = MemberLevelParam.update.class) @RequestBody MemberLevelParam memberLevelParam) {
+        iMemberLevelService.edit(memberLevelParam);
         return AjaxResult.success();
     }
 
+
     /**
-     * 会员等级删除
+     * 会员等级批量删除
      *
-     * @param umsMemberLevelParam 参数
+     * @param ids 参数
      * @return Object
      */
-    @Log(title = "会员等级删除")
-    @PostMapping("/del")
-    public Object del(@Validated(value = UmsMemberLevelParam.delete.class) @RequestBody UmsMemberLevelParam umsMemberLevelParam) {
-        iUmsMemberLevelService.del(umsMemberLevelParam.getId());
+    @Log(title = "会员等级批量删除")
+    @PostMapping("/delBatch")
+    public Object delBatch(@RequestBody Long[] ids) {
+        iMemberLevelService.removeByIds(Arrays.asList(ids));
         return AjaxResult.success();
     }
 

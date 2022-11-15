@@ -1,12 +1,12 @@
 package com.mdd.member.mapper;
 
 import com.mdd.common.core.basics.IBaseMapper;
-import com.mdd.member.entity.UmsMember;
+import com.mdd.member.entity.MemberLevel;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 会员Mapper
+ * 会员等级Mapper
  */
 @Mapper
-public interface UmsMemberMapper extends IBaseMapper<UmsMember> {
+public interface MemberLevelMapper extends IBaseMapper<MemberLevel> {
 }
