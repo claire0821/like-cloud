@@ -35,6 +35,13 @@
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-input class="w-[280px]" v-model="queryParams.${column.javaField}" />
                 </el-form-item>
+                #elseif($column.htmlType=="checkbox")
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                    <template #default="scope">
+                        <el-icon v-if="scope.row.${column.javaField} == 1"><SuccessFilled /></el-icon>
+                        <el-icon v-else><CircleCloseFilled /></el-icon>
+                    </template>
+                </el-form-item>
                 #end
             #end
             #end
@@ -46,18 +53,16 @@
                        type="danger"
                        @click="handleDelete(selectData)"
                        >批量删除</el-button>
+                    <el-button v-perms="['${moduleName}:add']" type="primary" @click="handleAdd()">
+                        <template #icon>
+                            <icon name="el-icon-Plus" />
+                        </template>
+                    新增
+                </el-button>
                 </el-form-item>
             </el-form>
         </el-card>
         <el-card class="!border-none mt-4" shadow="never">
-            <div>
-                <el-button v-perms="['${moduleName}:add']" type="primary" @click="handleAdd()">
-                    <template #icon>
-                        <icon name="el-icon-Plus" />
-                    </template>
-                    新增
-                </el-button>
-            </div>
             <el-table
                 class="mt-4"
                 size="large"

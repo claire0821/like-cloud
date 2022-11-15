@@ -5,7 +5,7 @@ import com.mdd.common.validate.PageParam;
 import com.mdd.product.entity.Category;
 import com.mdd.product.validate.CategoryParam;
 import com.mdd.product.vo.CategoryListVo;
-import com.mdd.product.vo.PmsCategoryDetailVo;
+import com.mdd.product.vo.CategoryDetailVo;
 import com.mdd.common.core.PageResult;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public interface ICategoryService extends IService<Category> {
      * @param id 主键ID
      * @return PmsCategory
      */
-    PmsCategoryDetailVo detail(Long id);
+    CategoryDetailVo detail(Long id);
 
     /**
      * 商品三级分类新增

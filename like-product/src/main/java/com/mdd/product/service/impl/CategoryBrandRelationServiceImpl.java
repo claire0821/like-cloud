@@ -9,11 +9,12 @@ import com.mdd.product.entity.Brand;
 import com.mdd.product.entity.Category;
 import com.mdd.product.mapper.BrandMapper;
 import com.mdd.product.mapper.CategoryMapper;
+import com.mdd.product.service.IBrandService;
 import com.mdd.product.service.ICategoryBrandRelationService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.CategoryBrandRelationParam;
 import com.mdd.product.vo.CategoryBrandRelationListVo;
-import com.mdd.product.vo.PmsCategoryBrandRelationDetailVo;
+import com.mdd.product.vo.CategoryBrandRelationDetailVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.product.entity.CategoryBrandRelation;
 import com.mdd.product.mapper.CategoryBrandRelationMapper;
@@ -24,6 +25,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 品牌分类关联实现类
@@ -39,6 +41,10 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
 
     @Autowired
     CategoryMapper categoryMapper;
+
+    @Autowired
+    IBrandService iBrandService;
+
     /**
      * 品牌分类关联列表
      *
@@ -80,7 +86,7 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
      * @return PmsCategoryBrandRelation
      */
     @Override
-    public PmsCategoryBrandRelationDetailVo detail(Long id) {
+    public CategoryBrandRelationDetailVo detail(Long id) {
         CategoryBrandRelation model = categoryBrandRelationMapper.selectOne(
                 new QueryWrapper<CategoryBrandRelation>()
                         .eq("id", id)
@@ -88,7 +94,7 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
 
         Assert.notNull(model, "数据不存在");
 
-        PmsCategoryBrandRelationDetailVo vo = new PmsCategoryBrandRelationDetailVo();
+        CategoryBrandRelationDetailVo vo = new CategoryBrandRelationDetailVo();
         BeanUtils.copyProperties(model, vo);
         return vo;
     }
@@ -167,6 +173,17 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
         updateWrapper.eq("catelog_id",catId);
         updateWrapper.set("catelog_name",name);
         update(updateWrapper);
+    }
+
+    @Override
+    public List<Brand> getBrandsByCatId(Long catId) {
+        List<CategoryBrandRelation> catelogId = categoryBrandRelationMapper.selectList(new QueryWrapper<CategoryBrandRelation>().eq("catelog_id", catId));
+        List<Brand> collect = catelogId.stream().map(item -> {
+            Long brandId = item.getBrandId();
+            Brand byId = iBrandService.getById(brandId);
+            return byId;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }

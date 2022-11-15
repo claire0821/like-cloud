@@ -9,7 +9,7 @@ import com.mdd.product.service.ICategoryService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.CategoryParam;
 import com.mdd.product.vo.CategoryListVo;
-import com.mdd.product.vo.PmsCategoryDetailVo;
+import com.mdd.product.vo.CategoryDetailVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.product.entity.Category;
 import com.mdd.product.mapper.CategoryMapper;
@@ -88,7 +88,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return PmsCategory
      */
     @Override
-    public PmsCategoryDetailVo detail(Long id) {
+    public CategoryDetailVo detail(Long id) {
         Category model = categoryMapper.selectOne(
                 new QueryWrapper<Category>()
                     .eq("cat_id", id)
@@ -96,7 +96,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         Assert.notNull(model, "数据不存在");
 
-        PmsCategoryDetailVo vo = new PmsCategoryDetailVo();
+        CategoryDetailVo vo = new CategoryDetailVo();
         BeanUtils.copyProperties(model, vo);
         return vo;
     }

@@ -4,21 +4,26 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mdd.product.entity.Attr;
 import com.mdd.product.service.IAttrGroupService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.product.service.IAttrService;
 import com.mdd.product.validate.AttrGroupParam;
 import com.mdd.product.vo.AttrGroupListVo;
-import com.mdd.product.vo.PmsAttrGroupDetailVo;
+import com.mdd.product.vo.AttrGroupDetailVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.product.entity.AttrGroup;
 import com.mdd.product.mapper.AttrGroupMapper;
+import com.mdd.product.vo.AttrListVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 属性分组实现类
@@ -28,6 +33,8 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
         
     @Resource
     AttrGroupMapper pmsAttrGroupMapper;
+    @Autowired
+    IAttrService iAttrService;
 
     /**
      * 属性分组列表
@@ -103,7 +110,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
      * @return PmsAttrGroup
      */
     @Override
-    public PmsAttrGroupDetailVo detail(Long id) {
+    public AttrGroupDetailVo detail(Long id) {
         AttrGroup model = pmsAttrGroupMapper.selectOne(
                 new QueryWrapper<AttrGroup>()
                     .eq("attr_group_id", id)
@@ -111,7 +118,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
 
         Assert.notNull(model, "数据不存在");
 
-        PmsAttrGroupDetailVo vo = new PmsAttrGroupDetailVo();
+        AttrGroupDetailVo vo = new AttrGroupDetailVo();
         BeanUtils.copyProperties(model, vo);
         return vo;
     }
@@ -170,6 +177,21 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
         Assert.notNull(model, "数据不存在!");
 
         pmsAttrGroupMapper.delete(new QueryWrapper<AttrGroup>().eq("attr_group_id", id));
+    }
+
+    @Override
+    public List<AttrGroupDetailVo> getAttrGroupWithAttrsByCatelogId(Long catelogId) {
+        //1、查询分组信息
+        final List<AttrGroup> attrGroups = this.list(new QueryWrapper<AttrGroup>().eq("catelog_id", catelogId));
+        //2、查询所有属性
+        final List<AttrGroupDetailVo> collect = attrGroups.stream().map(group -> {
+            AttrGroupDetailVo attrGroupDetailVo = new AttrGroupDetailVo();
+            BeanUtils.copyProperties(group, attrGroupDetailVo);
+            final List<Attr> relationAttr = iAttrService.getRelationAttr(attrGroupDetailVo.getAttrGroupId());
+            attrGroupDetailVo.setAttrs(relationAttr);
+            return attrGroupDetailVo;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }

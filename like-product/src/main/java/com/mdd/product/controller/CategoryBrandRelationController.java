@@ -2,12 +2,14 @@ package com.mdd.product.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mdd.common.config.aop.Log;
+import com.mdd.product.entity.Brand;
 import com.mdd.product.entity.CategoryBrandRelation;
 import com.mdd.product.service.ICategoryBrandRelationService;
 import com.mdd.product.validate.CategoryBrandRelationParam;
 import com.mdd.common.validate.PageParam;
+import com.mdd.product.vo.BrandListVo;
 import com.mdd.product.vo.CategoryBrandRelationListVo;
-import com.mdd.product.vo.PmsCategoryBrandRelationDetailVo;
+import com.mdd.product.vo.CategoryBrandRelationDetailVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
@@ -18,6 +20,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 品牌分类关联管理
@@ -43,6 +46,23 @@ public class CategoryBrandRelationController {
     }
 
     /**
+     *  /product/categorybrandrelation/brands/list
+     */
+    @GetMapping("/brands/list")
+    public Object relationBrandsList(@RequestParam(value = "catId",required = true)Long catId){
+        List<Brand> vos = iCategoryBrandRelationService.getBrandsByCatId(catId);
+
+        List<BrandListVo> collect = vos.stream().map(item -> {
+            BrandListVo brandVo = new BrandListVo();
+            brandVo.setBrandId(item.getBrandId());
+            brandVo.setName(item.getName());
+            return brandVo;
+        }).collect(Collectors.toList());
+
+        return AjaxResult.success(collect);
+
+    }
+    /**
      * 品牌分类关联列表
      *
      * @param pageParam 分页参数
@@ -63,7 +83,7 @@ public class CategoryBrandRelationController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated   @IDMust()  @RequestParam("id") Long id) {
-        PmsCategoryBrandRelationDetailVo detail = iCategoryBrandRelationService.detail(id);
+        CategoryBrandRelationDetailVo detail = iCategoryBrandRelationService.detail(id);
         return AjaxResult.success(detail);
     }
 

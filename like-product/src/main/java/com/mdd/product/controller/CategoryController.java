@@ -8,7 +8,7 @@ import com.mdd.product.service.ICategoryService;
 import com.mdd.product.validate.CategoryParam;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.vo.CategoryListVo;
-import com.mdd.product.vo.PmsCategoryDetailVo;
+import com.mdd.product.vo.CategoryDetailVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import org.springframework.beans.BeanUtils;
@@ -101,7 +101,7 @@ public class CategoryController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDLongMust() @RequestParam("cat_id") Long cat_id) {
-        PmsCategoryDetailVo detail = iCategoryService.detail(cat_id);
+        CategoryDetailVo detail = iCategoryService.detail(cat_id);
         return AjaxResult.success(detail);
     }
 

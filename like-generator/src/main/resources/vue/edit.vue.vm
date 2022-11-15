@@ -45,6 +45,10 @@
                 </el-form-item>
             #elseif($column.htmlType=="checkbox")
                 <el-form-item label="${column.columnComment}" prop="${column.javaField}">
+                   <el-checkbox v-model="formData.${column.javaField}" :true-label="1" :false-label="0" placeholder="请选择${column.columnComment}"></el-checkbox>
+                </el-form-item>
+            #elseif($column.htmlType=="checkbox")
+                <el-form-item label="${column.columnComment}" prop="${column.javaField}">
                     <el-checkbox-group v-model="formData.${column.javaField}" placeholder="请选择${column.columnComment}">
                         #if($column.dictType!="")
                         <el-checkbox

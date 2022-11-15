@@ -2,12 +2,14 @@ package com.mdd.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.product.entity.Brand;
 import com.mdd.product.entity.CategoryBrandRelation;
 import com.mdd.product.validate.CategoryBrandRelationParam;
 import com.mdd.product.vo.CategoryBrandRelationListVo;
-import com.mdd.product.vo.PmsCategoryBrandRelationDetailVo;
+import com.mdd.product.vo.CategoryBrandRelationDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +32,7 @@ public interface ICategoryBrandRelationService extends IService<CategoryBrandRel
      * @param id 主键ID
      * @return PmsCategoryBrandRelation
      */
-    PmsCategoryBrandRelationDetailVo detail(Long id);
+    CategoryBrandRelationDetailVo detail(Long id);
 
     /**
      * 品牌分类关联新增
@@ -56,4 +58,6 @@ public interface ICategoryBrandRelationService extends IService<CategoryBrandRel
     void saveDetail(CategoryBrandRelation categoryBrandRelation);
 
     void updateCategory(Long catId, String name);
+
+    List<Brand> getBrandsByCatId(Long catId);
 }

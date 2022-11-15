@@ -5,9 +5,10 @@ import com.mdd.common.validate.PageParam;
 import com.mdd.product.entity.AttrGroup;
 import com.mdd.product.validate.AttrGroupParam;
 import com.mdd.product.vo.AttrGroupListVo;
-import com.mdd.product.vo.PmsAttrGroupDetailVo;
+import com.mdd.product.vo.AttrGroupDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,7 +40,7 @@ public interface IAttrGroupService extends IService<AttrGroup> {
      * @param id 主键ID
      * @return PmsAttrGroup
      */
-    PmsAttrGroupDetailVo detail(Long id);
+    AttrGroupDetailVo detail(Long id);
 
     /**
      * 属性分组新增
@@ -62,4 +63,5 @@ public interface IAttrGroupService extends IService<AttrGroup> {
      */
     void del(Long id);
 
+    List<AttrGroupDetailVo> getAttrGroupWithAttrsByCatelogId(Long catelogId);
 }

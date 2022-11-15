@@ -101,7 +101,7 @@ public class AttrController {
      */
     @Log(title = "商品属性编辑")
     @PostMapping("/update")
-    public Object update(@Validated(value = BaseParam.change.class) @RequestBody AttrDetailVo attrDetailVo) {
+    public Object update(@RequestBody AttrDetailVo attrDetailVo) {
         iAttrService.update(attrDetailVo);
         return AjaxResult.success();
     }

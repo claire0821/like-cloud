@@ -255,7 +255,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
     @Override
     public void update(AttrDetailVo attrDetailVo) {
         Attr attr = new Attr();
-        BeanUtils.copyProperties(attr, attrDetailVo);
+        BeanUtils.copyProperties(attrDetailVo, attr);
         updateById(attr);
         //修改分组关联
         AttrAttrgroupRelation attrAttrgroupRelation = new AttrAttrgroupRelation();
@@ -283,7 +283,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
         if(attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode() && attrListVo.getAttrGroupId()!=null){
             AttrAttrgroupRelation attrAttrgroupRelation = new AttrAttrgroupRelation();
             attrAttrgroupRelation.setAttrGroupId(attrListVo.getAttrGroupId());
-            attrAttrgroupRelation.setAttrId(attrListVo.getAttrId());
+            attrAttrgroupRelation.setAttrId(attr.getAttrId());
             attrAttrgroupRelationMapper.insert(attrAttrgroupRelation);
         }
     }
@@ -315,6 +315,21 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
 
         return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
 
+    }
+
+    @Override
+    public List<Attr> getRelationAttr(Long attrgroupId) {
+        List<AttrAttrgroupRelation> entities = attrAttrgroupRelationMapper.selectList(new QueryWrapper<AttrAttrgroupRelation>().eq("attr_group_id", attrgroupId));
+
+        List<Long> attrIds = entities.stream().map((attr) -> {
+            return attr.getAttrId();
+        }).collect(Collectors.toList());
+
+        if(attrIds == null || attrIds.size() == 0){
+            return null;
+        }
+        Collection<Attr> attrEntities = this.listByIds(attrIds);
+        return (List<Attr>) attrEntities;
     }
 
     @Override

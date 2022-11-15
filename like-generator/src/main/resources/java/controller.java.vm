@@ -74,7 +74,7 @@ public class ${EntityName}Controller {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated #if($column.javaType.equals("Long")) @IDLongMust() #else @IDMust() #end @RequestParam("${pk.javaField}") ${pk.javaType} ${pk.javaField}) {
+    public Object detail(@Validated#if($pk.javaType.equals("Long")) @IDLongMust()#else @IDMust() #end @RequestParam("${pk.javaField}") ${pk.javaType} ${pk.javaField}) {
         ${EntityName}DetailVo detail = i${EntityName}Service.detail(${pk.javaField});
         return AjaxResult.success(detail);
     }

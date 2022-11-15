@@ -17,6 +17,12 @@ public class HtmlConstants {
     /** 日期控件 */
     public static final String HTML_DATETIME = "datetime";
 
+    /** checkbox */
+    public static final String HTML_CHECKBOX = "checkbox";
+
+    /** input-number */
+    public static final String HTML_NEMBER = "number";
+
     /** 图片上传控件 */
     public static final String HTML_IMAGE_UPLOAD = "imageUpload";
 

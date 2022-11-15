@@ -79,10 +79,13 @@ public class GenUtil {
 
         // 数字字段
         else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_NUMBER, columnType)) {
-            column.setHtmlType(HtmlConstants.HTML_INPUT);           // 输入框
+            column.setHtmlType(HtmlConstants.HTML_NEMBER);           // 输入框
 
             if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_NUMBER_INT, columnType)) {
                 column.setJavaType(JavaConstants.TYPE_INTEGER);
+                if(columnType.equals("tinyint")) {
+                    column.setHtmlType(HtmlConstants.HTML_CHECKBOX);
+                }
             } else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_NUMBER_LONG, columnType)) {
                 column.setJavaType(JavaConstants.TYPE_LONG);
             } else if (GenUtil.isArraysContains(SqlConstants.COLUMN_TYPE_NUMBER_FLOAT, columnType)) {

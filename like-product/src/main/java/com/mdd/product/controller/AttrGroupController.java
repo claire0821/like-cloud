@@ -2,7 +2,6 @@ package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
 import com.mdd.common.validator.annotation.IDLongMust;
-import com.mdd.product.entity.Attr;
 import com.mdd.product.entity.AttrGroup;
 import com.mdd.product.service.IAttrAttrgroupRelationService;
 import com.mdd.product.service.IAttrGroupService;
@@ -60,7 +59,7 @@ public class AttrGroupController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDLongMust() @RequestParam("attrGroupId") Long attrGroupId) {
-        PmsAttrGroupDetailVo detail = IAttrGroupService.detail(attrGroupId);
+        AttrGroupDetailVo detail = IAttrGroupService.detail(attrGroupId);
         return AjaxResult.success(detail);
     }
 
@@ -189,6 +188,22 @@ public class AttrGroupController {
         iAttrAttrgroupRelationService.saveBatch(vos);
         return AjaxResult.success();
     }
+
+
+    /**
+     * 获取当前分类下的所有属性分组和属性分组的所有属性
+     *
+     * @param catelogId 分类id
+     * @return Object
+     */
+    @GetMapping("/withattr")
+    public Object getAttrGroupWithAttrs(@RequestParam(value = "catelogId") Long catelogId) {
+        //1、查出当前分类下的所有属性分组，
+        //2、查出每个属性分组的所有属性
+        final List<AttrGroupDetailVo> attrGroupWithAttrsByCatelogId = IAttrGroupService.getAttrGroupWithAttrsByCatelogId(catelogId);
+        return AjaxResult.success(attrGroupWithAttrsByCatelogId);
+    }
+
 }
 //TODO 根据catelogId查询和其他条件查询
 //TODO 点击三级分类才查询
