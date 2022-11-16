@@ -20,8 +20,10 @@ import com.mdd.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -47,7 +49,27 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
 
         QueryWrapper<SkuInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("sku_id");
+        String key = params.get("key");
+        if(!StringUtils.isEmpty(key)){
+            queryWrapper.and((w)->{
+                w.eq("id",key).or().like("spu_name",key);
+            });
+        }
 
+        final String min = params.get("min");
+        final String max = params.get("max");
+        if(!StringUtils.isEmpty(min)){
+            queryWrapper.ge("price",min);
+        }
+        if(!StringUtils.isEmpty(max)  ){
+            try{
+                BigDecimal bigDecimal = new BigDecimal(max);
+                if(bigDecimal.compareTo(new BigDecimal("0")) == 1){
+                    queryWrapper.le("price",max);
+                }
+            }catch (Exception e){
+            }
+        }
         skuInfoMapper.setSearch(queryWrapper, params, new String[]{
             "=:spuId@spu_id:long",
             "like:skuName@sku_name:str",
@@ -57,7 +79,6 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
             "=:skuDefaultImg@sku_default_img:str",
             "=:skuTitle@sku_title:str",
             "=:skuSubtitle@sku_subtitle:str",
-            "=:price:str",
             "=:saleCount@sale_count:long",
         });
 

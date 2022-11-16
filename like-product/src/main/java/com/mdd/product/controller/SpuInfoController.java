@@ -21,7 +21,7 @@ import java.util.Map;
  * spu信息管理
  */
 @RestController
-@RequestMapping("api/product/info")
+@RequestMapping("api/product/spuinfo")
 public class SpuInfoController {
 
     @Resource
@@ -68,12 +68,12 @@ public class SpuInfoController {
     /**
      * spu信息新增
      *
-     * @param SpuSaveVo 参数
+     * @param vo 参数
      * @return Object
      */
     @Log(title = "spu信息新增")
     @PostMapping("/save")
-    public Object add(@RequestBody SpuSaveVo vo) {
+    public Object save(@RequestBody SpuSaveVo vo) {
         iSpuInfoService.saveSpuInfo(vo);
         return AjaxResult.success();
     }

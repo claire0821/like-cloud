@@ -8,6 +8,7 @@ import com.mdd.product.vo.SpuImagesListVo;
 import com.mdd.product.vo.SpuImagesDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,4 +54,5 @@ public interface ISpuImagesService extends IService<SpuImages> {
      */
     void del(Long id);
 
+    void saveImages(Long id, List<String> images);
 }

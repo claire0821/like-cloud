@@ -23,6 +23,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * spu图片实现类
@@ -142,6 +143,23 @@ public class SpuImagesServiceImpl extends ServiceImpl<SpuImagesMapper,SpuImages>
         Assert.notNull(model, "数据不存在!");
 
         spuImagesMapper.delete(new QueryWrapper<SpuImages>().eq("id", id));
+    }
+
+    @Override
+    public void saveImages(Long id, List<String> images) {
+        if(images == null || images.size() == 0){
+
+        }else{
+            List<SpuImages> collect = images.stream().map(img -> {
+                SpuImages spuImagesEntity = new SpuImages();
+                spuImagesEntity.setSpuId(id);
+                spuImagesEntity.setImgUrl(img);
+
+                return spuImagesEntity;
+            }).collect(Collectors.toList());
+
+            this.saveBatch(collect);
+        }
     }
 
 }

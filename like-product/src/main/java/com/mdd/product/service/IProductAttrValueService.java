@@ -8,6 +8,7 @@ import com.mdd.product.vo.ProductAttrValueListVo;
 import com.mdd.product.vo.ProductAttrValueDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,4 +54,5 @@ public interface IProductAttrValueService extends IService<ProductAttrValue> {
      */
     void del(Long id);
 
+    void saveProductAttr(List<ProductAttrValue> collect);
 }

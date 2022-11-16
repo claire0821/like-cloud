@@ -147,4 +147,9 @@ public class ProductAttrValueServiceImpl extends ServiceImpl<ProductAttrValueMap
         productAttrValueMapper.delete(new QueryWrapper<ProductAttrValue>().eq("id", id));
     }
 
+    @Override
+    public void saveProductAttr(List<ProductAttrValue> collect) {
+        this.saveBatch(collect);
+    }
+
 }
