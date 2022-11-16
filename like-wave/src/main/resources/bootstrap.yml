@@ -1,0 +1,32 @@
+# Tomcat
+server:
+  port: 8093
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: like-wave
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #Nacos服务注册中心地址
+        namespace: 8768ef5d-c569-4556-a31d-0248c97e4df6
+      config:
+        server-addr: localhost:8848 #Nacos作为配置中心地址
+        file-extension: yaml #指定yaml格式的配置
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+    sentinel:
+      transport:
+        dashboard: localhost:8080 #配置Sentinel dashboard地址
+        port: 8719
+feign:
+  sentinel:
+    enabled: true
+# ${spring.application.name}-${spring.profile.active}.${spring.cloud.nacos.config.file-extension}
+# nacos-config-client-dev.yaml
+
+# nacos-config-client-test.yaml   ----> config.info
