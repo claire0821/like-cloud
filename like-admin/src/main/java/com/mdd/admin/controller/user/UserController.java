@@ -2,6 +2,7 @@ package com.mdd.admin.controller.user;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.admin.service.user.IUserService;
+import com.mdd.common.entity.user.User;
 import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.AjaxResult;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,5 +68,4 @@ public class UserController {
         iUserService.edit(params);
         return AjaxResult.success();
     }
-
 }

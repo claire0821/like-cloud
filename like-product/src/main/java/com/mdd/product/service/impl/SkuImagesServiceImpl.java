@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.product.entity.SkuInfo;
 import com.mdd.product.service.ISkuImagesService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.SkuImagesParam;

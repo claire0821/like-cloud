@@ -57,4 +57,6 @@ public interface ISpuInfoService extends IService<SpuInfo> {
     void saveSpuInfo(SpuSaveVo vo);
 
     void saveBaseSpuInfo(SpuInfo spuInfo);
+
+    void up(Long spuId);
 }

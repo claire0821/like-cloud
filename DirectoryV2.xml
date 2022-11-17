@@ -33,8 +33,10 @@
     <tree path="/like-front/src/main/java/com/mdd/front/LikeFrontThreadLocal.java" title="线程" extension="java"/>
     <tree path="/like-product" title="商品信息"/>
     <tree path="/like-member" title="会员服务"/>
-    <tree path="/like-coupon" title="优惠"/>
+    <tree path="/like-coupon" title="优惠营销"/>
     <tree path="/like-gateway" title="API网关"/>
     <tree path="/like-common/src/main/java/com/mdd/common/validate" title="验证层"/>
     <tree path="/like-common/src/main/java/com/mdd/common/constant" title="枚举定义"/>
+    <tree path="/like-wave" title="库存系统"/>
+    <tree path="/like-ware" title="库存系统"/>
 </trees>

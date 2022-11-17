@@ -386,4 +386,13 @@ public class AttrServiceImpl extends ServiceImpl<AttrMapper,Attr> implements IAt
         return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
     }
 
+    @Override
+    public List<Long> selectSearchAttrs(List<Long> attrIds) {
+        final List<Attr> search_type = this.list(new QueryWrapper<Attr>().eq("search_type", 1));
+        final List<Long> collect = search_type.stream().map(item -> {
+            return item.getAttrId();
+        }).collect(Collectors.toList());
+        return collect;
+    }
+
 }

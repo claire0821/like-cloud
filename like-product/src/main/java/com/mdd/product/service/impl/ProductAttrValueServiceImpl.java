@@ -23,6 +23,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * spu属性值实现类
@@ -150,6 +151,35 @@ public class ProductAttrValueServiceImpl extends ServiceImpl<ProductAttrValueMap
     @Override
     public void saveProductAttr(List<ProductAttrValue> collect) {
         this.saveBatch(collect);
+    }
+
+    @Override
+    public List<ProductAttrValue> attrlistforspu(Long spuId) {
+        final List<ProductAttrValue> spu_id = baseMapper.selectList(new QueryWrapper<ProductAttrValue>()
+                .eq("spu_id", spuId));
+        return spu_id;
+    }
+
+    @Override
+    public void updateSpuAttr(List<ProductAttrValue> entities) {
+        //TODO 判断空
+        final ProductAttrValue productAttrValue = entities.get(0);
+        long spuId = productAttrValue.getSpuId();
+        //1、删除这个spuId之前对应的所有属性
+        this.baseMapper.delete(new QueryWrapper<ProductAttrValue>()
+        .eq("spu_id",spuId));
+
+//        final List<ProductAttrValue> collect = entities.stream().map(item -> {
+//            item.setSpuId(spuId);
+//            return item;
+//        }).collect(Collectors.toList());
+        this.saveBatch(entities);
+    }
+
+    @Override
+    public List<ProductAttrValue> baseAttrListforspu(Long spuId) {
+        final List<ProductAttrValue> spu_id = this.list(new QueryWrapper<ProductAttrValue>().eq("spu_id", spuId));
+        return spu_id;
     }
 
 }

@@ -18,9 +18,10 @@
         <module>like-coupon</module>
         <module>like-member</module>
         <module>like-order</module>
-        <module>like-wave</module>
+        <module>like-ware</module>
         <module>renren-generator</module>
         <module>like-gateway</module>
+        <module>like-ware</module>
     </modules>
 
     <!--springcloud需要2.6以上-->

@@ -1,5 +1,7 @@
 package com.mdd.admin.service.user;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.mdd.common.entity.user.User;
 import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.user.UserVo;
 import com.mdd.common.core.PageResult;
@@ -9,7 +11,7 @@ import java.util.Map;
 /**
  * 用户服务接口类
  */
-public interface IUserService {
+public interface IUserService extends IService<User> {
 
     /**
      * 用户列表

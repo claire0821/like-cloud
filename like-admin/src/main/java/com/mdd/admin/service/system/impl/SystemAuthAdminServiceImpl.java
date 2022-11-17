@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.config.AdminConfig;
@@ -34,7 +35,7 @@ import java.util.*;
  * 系统管理员服务实现类
  */
 @Service
-public class SystemAuthAdminServiceImpl implements ISystemAuthAdminService {
+public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMapper,SystemAuthAdmin> implements ISystemAuthAdminService {
 
     @Resource
     SystemAuthAdminMapper systemAuthAdminMapper;

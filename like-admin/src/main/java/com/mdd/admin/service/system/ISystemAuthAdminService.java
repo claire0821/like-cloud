@@ -1,5 +1,6 @@
 package com.mdd.admin.service.system;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthAdminParam;
 import com.mdd.admin.vo.system.SystemAuthAdminVo;
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * 系统管理员服务接口类
  */
-public interface ISystemAuthAdminService {
+public interface ISystemAuthAdminService extends IService<SystemAuthAdmin> {
 
     /**
      * 根据账号查找管理员

@@ -180,4 +180,10 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
         skuInfoMapper.delete(new QueryWrapper<SkuInfo>().eq("sku_id", id));
     }
 
+    @Override
+    public List<SkuInfo> getSkusBySpuId(Long spuId) {
+        final List<SkuInfo> spu_id = this.list(new QueryWrapper<SkuInfo>().eq("spu_id", spuId));
+        return spu_id;
+    }
+
 }

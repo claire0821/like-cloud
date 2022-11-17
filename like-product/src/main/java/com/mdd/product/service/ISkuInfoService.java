@@ -8,6 +8,7 @@ import com.mdd.product.vo.SkuInfoListVo;
 import com.mdd.product.vo.SkuInfoDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,4 +54,5 @@ public interface ISkuInfoService extends IService<SkuInfo> {
      */
     void del(Long id);
 
+    List<SkuInfo> getSkusBySpuId(Long spuId);
 }

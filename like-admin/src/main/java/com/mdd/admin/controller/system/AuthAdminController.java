@@ -3,6 +3,8 @@ package com.mdd.admin.controller.system;
 import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.system.ISystemAuthAdminService;
+import com.mdd.common.entity.system.SystemAuthAdmin;
+import com.mdd.common.entity.user.User;
 import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthAdminParam;
 import com.mdd.admin.vo.system.SystemAuthAdminVo;
@@ -14,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +39,18 @@ public class AuthAdminController {
     public AjaxResult list(@Validated PageParam pageParam,
                         @RequestParam Map<String, String> params) {
         PageResult<SystemAuthAdminVo> list = iSystemAuthAdminService.list(pageParam, params);
+        return AjaxResult.success(list);
+    }
+
+    //TODO 采购单分配给管理员还是用户
+    /**
+     * 用户列表
+     *
+     * @return AjaxResult
+     */
+    @GetMapping("/userlists")
+    public AjaxResult userlists() {
+        List<SystemAuthAdmin> list = iSystemAuthAdminService.list();
         return AjaxResult.success(list);
     }
 

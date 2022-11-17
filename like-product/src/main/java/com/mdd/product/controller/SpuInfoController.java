@@ -106,4 +106,11 @@ public class SpuInfoController {
         return AjaxResult.success();
     }
 
+    //TODO 上架
+    @Log(title = "商品上架")
+    @PostMapping(value = "/up")
+    public Object spuUp(@RequestParam("spuId") Long spuId) {
+        iSpuInfoService.up(spuId);
+        return AjaxResult.success();
+    }
 }

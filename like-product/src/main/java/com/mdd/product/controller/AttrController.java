@@ -2,7 +2,9 @@ package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
 import com.mdd.common.validate.BaseParam;
+import com.mdd.product.entity.ProductAttrValue;
 import com.mdd.product.service.IAttrService;
+import com.mdd.product.service.IProductAttrValueService;
 import com.mdd.product.validate.AttrParam;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.vo.AttrListVo;
@@ -11,11 +13,13 @@ import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IDLongMust;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,6 +31,8 @@ public class AttrController {
 
     @Resource
     IAttrService iAttrService;
+    @Autowired
+    IProductAttrValueService iProductAttrValueService;
 
     /**
      * 商品属性列表
@@ -117,6 +123,20 @@ public class AttrController {
     public Object save(@RequestBody AttrListVo attrVo) {
         iAttrService.save(attrVo);
         return AjaxResult.success();
+    }
+
+    @Log(title = "查出商品的属性")
+    @GetMapping("/listforspu")
+    public Object listforspu(@RequestParam("spuId") Long spuId,
+                             @RequestParam("attrType") Integer attrType){
+        List<ProductAttrValue> entities = iProductAttrValueService.attrlistforspu(spuId);
+        return AjaxResult.success(entities);
+    }
+
+    @PostMapping("/updateSpuAttr")
+    public Object updateSpuAttr(@RequestBody List<ProductAttrValue> entities){
+        iProductAttrValueService.updateSpuAttr(entities);
+        return AjaxResult.success(entities);
     }
 }
 //TODO 删除全部包括关联数据

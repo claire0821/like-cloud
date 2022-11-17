@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mdd.admin.service.user.IUserService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.admin.vo.user.UserVo;
@@ -28,7 +29,7 @@ import java.util.regex.Pattern;
  * 用户服务实现类
  */
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUserService {
 
     @Resource
     UserMapper userMapper;
