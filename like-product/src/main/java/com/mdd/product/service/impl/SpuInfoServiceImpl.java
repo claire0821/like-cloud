@@ -346,7 +346,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
         try{
             final LinkedHashMap skuHasStock = (LinkedHashMap) wareFeignService.getSkuHasStock(skuIdList);
             final Integer code = (Integer) skuHasStock.get("code");
-            if(code == 0) {
+            if(code == HttpEnum.SUCCESS.getCode()) {
                 stockMap = (Map<Long, Boolean>) skuHasStock.get("data");
             }
             final List data = (List) skuHasStock.get("data");

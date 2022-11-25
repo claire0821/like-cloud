@@ -17,5 +17,4 @@ public class BaseParam implements Serializable {
     public interface update{}
     public interface delete{}
     public interface change{}
-
 }

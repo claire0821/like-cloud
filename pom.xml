@@ -22,6 +22,8 @@
         <module>renren-generator</module>
         <module>like-gateway</module>
         <module>like-ware</module>
+        <module>like-auth</module>
+        <module>like-search</module>
     </modules>
 
     <!--springcloud需要2.6以上-->
@@ -63,6 +65,7 @@
         <aliyun-oss.version>3.10.2</aliyun-oss.version>
         <aliyun-java.version>4.5.16</aliyun-java.version>
         <oshi-core.version>6.1.2</oshi-core.version>
+        <hutool-version>5.5.8</hutool-version>
     </properties>
 
     <!-- 依赖声明 -->
@@ -191,6 +194,22 @@
                 <groupId>com.github.oshi</groupId>
                 <artifactId>oshi-core</artifactId>
                 <version>${oshi-core.version}</version>
+            </dependency>
+            <!--hutool-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-core</artifactId>
+                <version>${hutool-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-crypto</artifactId>
+                <version>${hutool-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-http</artifactId>
+                <version>${hutool-version}</version>
             </dependency>
             <!--通用工具-->
             <dependency>

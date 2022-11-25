@@ -14,6 +14,11 @@ public enum HttpEnum {
     LOGIN_DISABLE_ERROR(331, "登录账号已被禁用了"),
     TOKEN_EMPTY(332, "token参数为空"),
     TOKEN_INVALID(333, "token参数无效"),
+    LIMIT_ERROR(334, "访问过于频繁，请稍后再试"),
+    SMAE_MOBILE(335, "存在相同的手机号"),
+    SAME_USERNAME(336, "存在相同的用户名"),
+    ACCOUNT_MOBILE_EMPTY(337, "请输入账号名或者手机号码"),
+    LOGIN_ERROR(338, "登录失败"),
 
     NO_PERMISSION(403, "无相关权限"),
     REQUEST_404_ERROR(404, "请求接口不存在"),

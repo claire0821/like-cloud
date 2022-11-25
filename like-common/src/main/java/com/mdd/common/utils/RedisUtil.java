@@ -1,6 +1,7 @@
 package com.mdd.common.utils;
 
 import com.mdd.common.config.GlobalConfig;
+import com.mdd.common.config.RedisConfig;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -659,4 +660,50 @@ public class RedisUtil {
         return redisTemplate.opsForList().remove(key, count, value);
     }
 
+    /**
+     * 将用户的部分信息存储在token中，并返回token信息
+     *
+     * @author Claire
+     * @param id 会员id
+     */
+    public static String setToken(Integer id) {
+        String token = ToolsUtil.makeToken();
+        String key = redisPrefix + RedisConfig.TokenKey + token;
+        redisTemplate.opsForValue().set(key, id, 7201, TimeUnit.SECONDS);
+        return token;
+    }
+
+    /**
+     * 获取token的值
+     *
+     * @author Claire
+     * @param token 键
+     * @return Object
+     */
+    public static String getToken(String token) {
+        token = redisPrefix + RedisConfig.TokenKey + token;
+        return token;
+    }
+
+    /**
+     * 判断key是否存在
+     *
+     * @author Claire
+     * @param token 键
+     * @return true=存在,false=不存在
+     */
+    public static Boolean existsToken(String token) {
+        return redisTemplate.hasKey(token);
+    }
+
+    /**
+     * 获取token的值
+     *
+     * @author Claire
+     * @param token 键
+     * @return Object
+     */
+    public static Object getUserID(String token) {
+        return redisTemplate.opsForValue().get(token);
+    }
 }

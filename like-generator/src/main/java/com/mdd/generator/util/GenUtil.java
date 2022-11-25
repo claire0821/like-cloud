@@ -189,7 +189,7 @@ public class GenUtil {
      * @return 类名
      */
     public static String toClassName(String tableName) {
-        String tablePrefix = GlobalConfig.tablePrefix;
+        String tablePrefix = GenConfig.tablePrefix;
         if (GenConfig.isRemoveTablePrefix && StringUtil.isNotEmpty(tablePrefix)) {
             String[] searchList = StringUtil.split(tablePrefix, ",");
             tableName = replaceFirst(tableName, searchList);

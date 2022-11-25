@@ -70,4 +70,6 @@ public interface ICategoryService extends IService<Category> {
      Long[] findCatelogPath(Long catelogId);
 
     void updateCascade(Category category);
+
+    List<CategoryListVo> getByParentID(Long parentId);
 }

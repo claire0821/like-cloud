@@ -188,6 +188,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         iCategoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
     }
 
+    @Override
+    public List<CategoryListVo> getByParentID(Long parentId) {
+        return null;
+    }
+
     private List<Long> findParentPath(Long catelogId, List<Long> paths) {
         paths.add(catelogId);
         Category byId = this.getById(catelogId);

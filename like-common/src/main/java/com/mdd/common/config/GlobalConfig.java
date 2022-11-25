@@ -45,4 +45,27 @@ public class GlobalConfig {
     // 上传视频扩展
     public static String[] uploadVideoExt = new String[] {"mp4", "mp3", "avi", "flv", "rmvb", "mov"};
 
+    // 免登录验证
+    public static String[] notLoginUri = new String[]{
+            "/api/index",
+            "/api/config",
+            "/api/policy",
+            "/api/search",
+            "/api/hotSearch",
+            "/api/decorate",
+            "/api/sms/send",
+            "/api/upload/image",
+
+            "/api/login/check",
+            "/api/login/codeUrl",
+            "/api/login/oaLogin",
+            "/api/login/register",
+            "/api/login/forgotPassword",
+
+            "/api/article/category",
+            "/api/article/detail",
+            "/api/article/list",
+            "/api/member/member/login",
+            "/api/member/member/register",
+    };
 }

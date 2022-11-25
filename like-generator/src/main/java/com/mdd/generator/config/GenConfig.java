@@ -5,7 +5,7 @@ public class GenConfig {
     // 基础包名
     public static String packageName = "com.mdd";
 
-    public static String subPackageName = "wave";
+    public static String subPackageName = "member";
 
     // 后台应用
     public static String adminPackage   = "like-admin/src/main/java/com/mdd/admin";
@@ -18,10 +18,12 @@ public class GenConfig {
     public static String memberPackage = "like-member/src/main/java/com/mdd/member";
     public static String couponPackage = "like-coupon/src/main/java/com/mdd/coupon";
     public static String wavePackage = "like-coupon/src/main/java/com/mdd/wave";
-    public static String modulepackage = wavePackage;
+    public static String modulepackage = memberPackage;
     // 是否去除表前缀
     public static Boolean isRemoveTablePrefix = true;
 
+    // Mysql表前缀
+    public static String tablePrefix = "ums_";
     // 注释类型[top=顶, right=右]
     public static String notesType = "right";
 

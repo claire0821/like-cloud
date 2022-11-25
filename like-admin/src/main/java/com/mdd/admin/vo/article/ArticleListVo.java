@@ -22,5 +22,6 @@ public class ArticleListVo implements Serializable {
     private Integer isShow;    // 是否显示: [0=否, 1=是]
     private String createTime; // 创建时间
     private String updateTime; // 更新时间
+    private Boolean collect;
 
 }

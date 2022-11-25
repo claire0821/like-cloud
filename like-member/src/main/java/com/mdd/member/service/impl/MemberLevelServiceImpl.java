@@ -156,4 +156,14 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper,Member
         memberLevelMapper.delete(new QueryWrapper<MemberLevel>().eq("id", id));
     }
 
+    /**
+     * 获取默认等级
+     * @return
+     */
+    @Override
+    public MemberLevel getDefaultLevel() {
+        final MemberLevel default_status = memberLevelMapper.selectOne(new QueryWrapper<MemberLevel>().eq("default_status", 1));
+        return default_status;
+    }
+
 }

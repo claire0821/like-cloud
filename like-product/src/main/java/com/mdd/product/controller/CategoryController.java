@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -156,6 +157,13 @@ public class CategoryController {
     @PostMapping("/update")
     public Object update(@Validated(value = CategoryParam.change.class) @RequestBody Category category) {
         iCategoryService.updateCascade(category);
+        return AjaxResult.success();
+    }
+
+    @Log(title = "根据父分类id获取商品分类列表")
+    @GetMapping(value = "/get/{parentId}")
+    public Object getByParentID(@NotNull(message = "分类ID不能为空") @PathVariable Long parentId) {
+        List<CategoryListVo> categoryListVos = iCategoryService.getByParentID(parentId);
         return AjaxResult.success();
     }
 }

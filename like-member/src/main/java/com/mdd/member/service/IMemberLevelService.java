@@ -53,4 +53,5 @@ public interface IMemberLevelService extends IService<MemberLevel> {
      */
     void del(Long id);
 
+    MemberLevel getDefaultLevel();
 }

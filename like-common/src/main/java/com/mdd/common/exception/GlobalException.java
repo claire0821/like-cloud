@@ -5,6 +5,8 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -21,6 +23,7 @@ import java.util.Objects;
  */
 @Slf4j
 @ControllerAdvice
+@ConditionalOnClass(MybatisPlusException.class)
 public class GlobalException {
 
     /**
@@ -128,6 +131,8 @@ public class GlobalException {
     /**
      * 拦截MybatisPlus异常
      */
+    //TODO ConditionalOnClass标记在方法上
+    //@ConditionalOnClass(name = "com.baomidou.mybatisplus.core.exceptions.MybatisPlusException")
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MybatisPlusException.class)
     @ResponseBody

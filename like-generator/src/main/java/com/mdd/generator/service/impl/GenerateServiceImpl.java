@@ -11,6 +11,7 @@ import com.mdd.common.core.PageResult;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.utils.StringUtil;
 import com.mdd.common.utils.TimeUtil;
+import com.mdd.generator.config.GenConfig;
 import com.mdd.generator.constant.GenConstants;
 import com.mdd.generator.entity.GenTable;
 import com.mdd.generator.entity.GenTableColumn;
@@ -244,7 +245,7 @@ public class GenerateServiceImpl implements IGenerateService {
         model.setGenType(genParam.getGenType());
         model.setGenPath(genParam.getGenPath());
         model.setSubTableFk(genParam.getSubTableFk());
-        model.setSubTableName(genParam.getSubTableName().replace(GlobalConfig.tablePrefix, ""));
+        model.setSubTableName(genParam.getSubTableName().replace(GenConfig.tablePrefix, ""));
         genTableMapper.updateById(model);
 
         for (Map<String, String> item : genParam.getColumn()) {
