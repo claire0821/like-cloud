@@ -2,6 +2,7 @@ package com.mdd.common.es;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @create: 2022-11-17 16:15
  **/
 @Data
-public class SkuEsModel {
+public class SkuEsModel implements Serializable {
 
     private Long skuId;
 
@@ -30,15 +31,15 @@ public class SkuEsModel {
 
     private Long hotScore;
 
-    private Long brandId;
+    private Long categoryId;
 
-    private Long catalogId;
+    private String categoryName;
+
+    private Long brandId;
 
     private String brandName;
 
     private String brandImg;
-
-    private String catalogName;
 
     private List<Attrs> attrs;
 
@@ -48,4 +49,5 @@ public class SkuEsModel {
         private String attrName;
         private String attrValue;
     }
+
 }

@@ -1,10 +1,12 @@
 package com.mdd.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.common.constant.ProductConstant;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.es.SkuEsModel;
@@ -13,6 +15,7 @@ import com.mdd.common.to.SkuReductionTo;
 import com.mdd.common.to.SpuBoundTo;
 import com.mdd.product.entity.*;
 import com.mdd.product.feign.CouponFeignService;
+import com.mdd.product.feign.SearchFeignService;
 import com.mdd.product.feign.WareFeignService;
 import com.mdd.product.service.*;
 import com.mdd.common.validate.PageParam;
@@ -68,7 +71,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
     IBrandService iBrandService;
     @Autowired
     ICategoryService iCategoryService;
-
+    @Autowired
+    SearchFeignService searchFeignService;
     /**
      * spu信息列表
      *
@@ -358,7 +362,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
 
         //2、封装每个sku的信息
         Map<Long, Boolean> finalStockMap = stockMap;
-        skuInfoEntities.stream().map(sku -> {
+        final List<SkuEsModel> collect = skuInfoEntities.stream().map(sku -> {
             //组装需要的数据
             SkuEsModel esModel = new SkuEsModel();
             esModel.setSkuPrice(sku.getPrice());
@@ -380,24 +384,25 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
             esModel.setBrandImg(brandEntity.getLogo());
 
             Category categoryEntity = iCategoryService.getById(sku.getCatalogId());
-            esModel.setCatalogId(categoryEntity.getCatId());
-            esModel.setCatalogName(categoryEntity.getName());
+            esModel.setCategoryId(categoryEntity.getCatId());
+            esModel.setCategoryName(categoryEntity.getName());
 
             //设置检索属性
             esModel.setAttrs(attrsList);
-            BeanUtils.copyProperties(sku,esModel);
+            BeanUtils.copyProperties(sku, esModel);
             return esModel;
         }).collect(Collectors.toList());
 
         //TODO 5、将数据发给es进行保存：gulimall-search
-//        R r = searchFeignService.productStatusUp(collect);
-//        if (r.getCode() == 0) {
-//            //远程调用成功
-//            //TODO 6、修改当前spu的状态
-//            this.baseMapper.updaSpuStatus(spuId, ProductConstant.ProductStatusEnum.SPU_UP.getCode());
-//        } else {
-//            //远程调用失败
-//            //TODO 7、重复调用？接口幂等性:重试机制
-//        }
+        final LinkedHashMap res = (LinkedHashMap) searchFeignService.productStatusUp(collect);
+        final Integer code = (Integer) res.get("code");
+        if (code == HttpEnum.SUCCESS.getCode()) {
+            //远程调用成功
+            //TODO 6、修改当前spu的状态
+            this.update(new UpdateWrapper<SpuInfo>().eq("id",spuId).set("publish_status",ProductConstant.ProductStatusEnum.SPU_UP.getCode()));
+        } else {
+            //远程调用失败
+            //TODO 7、重复调用？接口幂等性:重试机制
+        }
     }
 }

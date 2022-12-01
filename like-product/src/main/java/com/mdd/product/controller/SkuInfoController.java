@@ -8,7 +8,6 @@ import com.mdd.product.vo.SkuInfoListVo;
 import com.mdd.product.vo.SkuInfoDetailVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
-import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IDLongMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/product/skuinfo")
 public class SkuInfoController {
-
     @Resource
     ISkuInfoService iSkuInfoService;
 
@@ -91,5 +89,4 @@ public class SkuInfoController {
         iSkuInfoService.removeByIds(Arrays.asList(skuIds));
         return AjaxResult.success();
     }
-
 }

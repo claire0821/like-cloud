@@ -40,5 +40,5 @@
     <tree path="/like-wave" title="库存系统"/>
     <tree path="/like-ware" title="库存系统"/>
     <tree path="/like-auth/src/main/java/com/mdd/auth/limit" title="限流"/>
-    <tree path="/like-search" title="搜索模块"/>
+    <tree path="/like-search" title="检索服务"/>
 </trees>
