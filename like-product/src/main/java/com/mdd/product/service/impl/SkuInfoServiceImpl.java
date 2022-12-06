@@ -1,23 +1,22 @@
 package com.mdd.product.service.impl;
 
+import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.yulichang.query.MPJQueryWrapper;
-import com.mdd.product.service.ISkuInfoService;
+import com.mdd.common.config.ThreadPoolConfig;
+import com.mdd.product.entity.SkuImages;
+import com.mdd.product.entity.SpuInfoDesc;
+import com.mdd.product.service.*;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.SkuInfoParam;
-import com.mdd.product.vo.SkuInfoListVo;
-import com.mdd.product.vo.SkuInfoDetailVo;
+import com.mdd.product.vo.*;
 import com.mdd.common.core.PageResult;
 import com.mdd.product.entity.SkuInfo;
 import com.mdd.product.mapper.SkuInfoMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
-import com.mdd.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -25,6 +24,10 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * sku信息实现类
@@ -34,6 +37,18 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
         
     @Resource
     SkuInfoMapper skuInfoMapper;
+//    @Autowired
+//    ThreadPoolExecutor executor;
+    @Autowired
+    Executor executor;
+    @Autowired
+    ISkuSaleAttrValueService iSkuSaleAttrValueService;
+    @Autowired
+    ISkuImagesService iSkuImagesService;
+    @Autowired
+    ISpuInfoDescService iSpuInfoDescService;
+    @Autowired
+    IAttrGroupService iAttrGroupService;
 
     /**
      * sku信息列表
@@ -184,6 +199,87 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
     public List<SkuInfo> getSkusBySpuId(Long spuId) {
         final List<SkuInfo> spu_id = this.list(new QueryWrapper<SkuInfo>().eq("spu_id", spuId));
         return spu_id;
+    }
+
+    @Override
+    public ProductDetaliVo productDetail(Long skuId) {
+        ProductDetaliVo productDetaliVo = new ProductDetaliVo();
+
+        CompletableFuture<SkuInfo> infoFuture = CompletableFuture.supplyAsync(() -> {
+            //1、sku基本信息的获取  pms_sku_info
+            SkuInfo info = this.getById(skuId);
+            productDetaliVo.setInfo(info);
+            productDetaliVo.setBrandId(info.getBrandId());
+            productDetaliVo.setCatalogId(info.getCatalogId());
+            productDetaliVo.setPrice(info.getPrice());
+            productDetaliVo.setSkuId(info.getSkuId());
+            productDetaliVo.setSkuName(info.getSkuName());
+            productDetaliVo.setSkuTitle(info.getSkuTitle());
+            productDetaliVo.setSpuId(info.getSpuId());
+            return info;
+        }, executor);
+
+
+        CompletableFuture<Void> saleAttrFuture = infoFuture.thenAcceptAsync((res) -> {
+            //3、获取spu的销售属性组合
+            List<SkuItemSaleAttrVo> saleAttrVos = iSkuSaleAttrValueService.getSaleAttrBySpuId(res.getSpuId());
+            productDetaliVo.setSaleAttr(saleAttrVos);
+        }, executor);
+
+
+        CompletableFuture<Void> descFuture = infoFuture.thenAcceptAsync((res) -> {
+            //4、获取spu的介绍    pms_spu_info_desc
+            SpuInfoDesc spuInfoDescEntity = iSpuInfoDescService.getById(res.getSpuId());
+            productDetaliVo.setDesc(spuInfoDescEntity);
+        }, executor);
+
+
+        CompletableFuture<Void> baseAttrFuture = infoFuture.thenAcceptAsync((res) -> {
+            //5、获取spu的规格参数信息
+            List<SpuItemAttrGroupVo> attrGroupVos = iAttrGroupService.getAttrGroupWithAttrsBySpuId(res.getSpuId(), res.getCatalogId());
+            productDetaliVo.setGroupAttrs(attrGroupVos);
+        }, executor);
+
+
+        // Long spuId = info.getSpuId();
+        // Long catalogId = info.getCatalogId();
+
+        //2、sku的图片信息    pms_sku_images
+        CompletableFuture<Void> imageFuture = CompletableFuture.runAsync(() -> {
+            List<SkuImages> imagesEntities = iSkuImagesService.getImagesBySkuId(skuId);
+            productDetaliVo.setImages(imagesEntities);
+        }, executor);
+
+        //CompletableFuture<Void> seckillFuture = CompletableFuture.runAsync(() -> {
+            //3、远程调用查询当前sku是否参与秒杀优惠活动
+//            R skuSeckilInfo = seckillFeignService.getSkuSeckilInfo(skuId);
+//            if (skuSeckilInfo.getCode() == 0) {
+//                //查询成功
+//                SeckillSkuVo seckilInfoData = skuSeckilInfo.getData("data", new TypeReference<SeckillSkuVo>() {
+//                });
+//                skuItemVo.setSeckillSkuVo(seckilInfoData);
+//
+//                if (seckilInfoData != null) {
+//                    long currentTime = System.currentTimeMillis();
+//                    if (currentTime > seckilInfoData.getEndTime()) {
+//                        skuItemVo.setSeckillSkuVo(null);
+//                    }
+//                }
+//            }
+        //}, executor);
+
+
+        //等到所有任务都完成
+        try {
+            CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture).get();
+            //CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture,seckillFuture).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return productDetaliVo;
     }
 
 }

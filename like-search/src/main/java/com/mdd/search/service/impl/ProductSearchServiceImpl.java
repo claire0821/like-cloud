@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,6 +68,7 @@ public class ProductSearchServiceImpl implements IProductSearchService {
 
         System.out.println("test: " + printEsBySearchRequest(build));
 
+        //TODO 分页
         return productResultVo;
     }
 
@@ -90,17 +92,17 @@ public class ProductSearchServiceImpl implements IProductSearchService {
             }
 
             //1.1.2 bool-filter-term categoryId分类查询
-            if (productSearchVo.getCategoryId() != null && productSearchVo.getCategoryId() > 0) {
+            if (productSearchVo.getCategory() != null && productSearchVo.getCategory() > 0) {
                 b.filter(f -> f
                         .term(t -> t
                                 .field(EsClient.SEARCH_CATEGORY_ID)
-                                .value(FieldValue.of(productSearchVo.getCategoryId()))
+                                .value(FieldValue.of(productSearchVo.getCategory()))
                         )
                 );
             }
             //1.1.3 bool-filter-terms brandId品牌查询
-            if (productSearchVo.getBrandIds() != null && productSearchVo.getBrandIds().size() > 0) {
-                List<FieldValue> fieldValues = productSearchVo.getBrandIds().stream().map(FieldValue::of).collect(Collectors.toList());
+            if (productSearchVo.getBrands() != null && productSearchVo.getBrands().size() > 0) {
+                List<FieldValue> fieldValues = productSearchVo.getBrands().stream().map(FieldValue::of).collect(Collectors.toList());
                 TermsQueryField termsQueryField = TermsQueryField.of(t -> t.value(fieldValues));
                 TermsQuery termsQuery = TermsQuery.of(t -> t.field(EsClient.SEARCH_BRAND_ID).terms(termsQueryField));
                 b.filter(f -> f.terms(termsQuery));
@@ -108,27 +110,45 @@ public class ProductSearchServiceImpl implements IProductSearchService {
 
             //1.1.4 bool-filter-nested attrs属性查询
             if(productSearchVo.getAttrs() != null && productSearchVo.getAttrs().size() > 0) {
-                for(Long attrId : productSearchVo.getAttrs().keySet()) {
-
-                    final List<String> strings = productSearchVo.getAttrs().get(attrId);
+                for(ScreenOptions attr : productSearchVo.getAttrs()) {
+                    final List<ScreenOptions.Value> values = attr.getValues();
+                    final List<String> strings = values.stream().map(v -> v.getValue()).collect(Collectors.toList());
                     if(strings != null && strings.size() > 0) {
-                        TermQuery termQuery = TermQuery.of(t -> t
-                                .field(EsClient.SEARCH_ATTRS + "." + EsClient.SEARCH_ATTR_ID)
-                                .value(FieldValue.of(attrId))
-                        );
+//                        TermQuery termQuery = TermQuery.of(t -> t
+//                                .field(EsClient.SEARCH_ATTRS + "." + EsClient.SEARCH_ATTR_ID)
+//                                .value(FieldValue.of(attr.getId()))
+//                        );
+//
+//                        List<FieldValue> fieldValues = strings.stream().map(FieldValue::of).collect(Collectors.toList());
+//                        TermsQueryField termsQueryField = TermsQueryField.of(t -> t.value(fieldValues));
+//                        TermsQuery termsQuery = TermsQuery.of(t -> t.field(EsClient.SEARCH_ATTRS + "." + EsClient.SEARCH_ATTR_VALUE).terms(termsQueryField));
+//
+//                        BoolQuery nestedBoolQuery = BoolQuery.of(t -> t
+//                        .must(m -> m.term(termQuery)).must(must -> must.terms(termsQuery)));
+//                        NestedQuery nestedQuery = NestedQuery.of(n ->
+//                                n.path(EsClient.SEARCH_ATTRS)
+//                                .scoreMode(ChildScoreMode.None)//不参与评分
+//                                .query(nestedBoolQuery._toQuery())
+//                        );
 
-                        List<FieldValue> fieldValues = strings.stream().map(FieldValue::of).collect(Collectors.toList());
-                        TermsQueryField termsQueryField = TermsQueryField.of(t -> t.value(fieldValues));
-                        TermsQuery termsQuery = TermsQuery.of(t -> t.field(EsClient.SEARCH_ATTRS + "." + EsClient.SEARCH_ATTR_NAME).terms(termsQueryField));
+                        Query attrIdQuery = TermQuery.of(t -> t.field(EsClient.SEARCH_ATTRS + "." + EsClient.SEARCH_ATTR_ID).value(FieldValue.of(attr.getId())))._toQuery();
+                        FieldValue[] attrFieldValues = new FieldValue[attr.getValues().size()];
+//                        final List<String> strings = values.stream().map(v -> v.getValue()).collect(Collectors.toList());
+                        for (int i = 0; i < strings.size(); i++) {
+                            attrFieldValues[i] = FieldValue.of(strings.get(i));
+                        }
 
-                        BoolQuery nestedBoolQuery = BoolQuery.of(t -> t
-                        .must(m -> m.term(termQuery)).must(must -> must.terms(termsQuery)));
-                        NestedQuery nestedQuery = NestedQuery.of(n ->
-                                n.path(EsClient.SEARCH_ATTRS)
-                                .scoreMode(ChildScoreMode.None)//不参与评分
-                                .query(nestedBoolQuery._toQuery())
-                        );
-                        b.filter(nestedQuery.query());
+                        TermsQueryField termsQueryField = new TermsQueryField.Builder()
+                                .value(Arrays.asList(attrFieldValues))
+                                .build();
+                        Query attrValueQuery = TermsQuery.of(t -> t.field(EsClient.SEARCH_ATTRS + "." + EsClient.SEARCH_ATTR_VALUE).terms(termsQueryField))._toQuery();
+                        Query nestAttrQuery = NestedQuery.of(t -> t.path(EsClient.SEARCH_ATTRS)
+                                .query(q -> q.bool(bool -> bool
+                                        .must(attrIdQuery)
+                                        .must(attrValueQuery)
+                                )))._toQuery();
+
+                        b.filter(nestAttrQuery);
                     }
                 }
             }
@@ -294,9 +314,12 @@ public class ProductSearchServiceImpl implements IProductSearchService {
             List<StringTermsBucket> attrNameAgg = attr_id_agg.aggregations().get(EsClient.ES_ATTR_NAME_AGG).sterms().buckets().array();
             attrVo.setName(attrNameAgg.get(0).key());
             List<StringTermsBucket> attrValueAgg = attr_id_agg.aggregations().get(EsClient.ES_ATTR_VALUE_AGG).sterms().buckets().array();
-            List<String> attrValues = new ArrayList<>();
+            List<ScreenOptions.Value> attrValues = new ArrayList<>();
             for (StringTermsBucket attr_value_agg : attrValueAgg) {
-                attrValues.add(attr_value_agg.key());
+                ScreenOptions.Value value = new ScreenOptions.Value();
+                value.setSelected(false);
+                value.setValue(attr_value_agg.key());
+                attrValues.add(value);
             }
             attrVo.setValues(attrValues);
             screenOptionsList.add(attrVo);

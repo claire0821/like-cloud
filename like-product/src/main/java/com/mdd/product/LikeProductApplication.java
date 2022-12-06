@@ -6,9 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.Arrays;
 
 /**
  * @program: server
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableDiscoveryClient
 @Configuration
 @ComponentScan(basePackages = {"com.mdd"})
+//@ComponentScan(basePackages = {"com.mdd.common.config"})
 @MapperScan(basePackages = {"com.mdd.*.mapper"})
 @EnableTransactionManagement
 @SpringBootApplication(exclude = {RedisRepositoriesAutoConfiguration.class})

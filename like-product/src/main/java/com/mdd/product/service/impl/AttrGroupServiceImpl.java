@@ -5,16 +5,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mdd.product.entity.Attr;
+import com.mdd.product.entity.AttrAttrgroupRelation;
+import com.mdd.product.entity.ProductAttrValue;
+import com.mdd.product.service.IAttrAttrgroupRelationService;
 import com.mdd.product.service.IAttrGroupService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.service.IAttrService;
+import com.mdd.product.service.IProductAttrValueService;
 import com.mdd.product.validate.AttrGroupParam;
-import com.mdd.product.vo.AttrGroupListVo;
-import com.mdd.product.vo.AttrGroupDetailVo;
+import com.mdd.product.vo.*;
 import com.mdd.common.core.PageResult;
 import com.mdd.product.entity.AttrGroup;
 import com.mdd.product.mapper.AttrGroupMapper;
-import com.mdd.product.vo.AttrListVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,10 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
     AttrGroupMapper pmsAttrGroupMapper;
     @Autowired
     IAttrService iAttrService;
-
+    @Autowired
+    IAttrAttrgroupRelationService iAttrAttrgroupRelationService;
+    @Autowired
+    IProductAttrValueService iProductAttrValueService;
     /**
      * 属性分组列表
      *
@@ -192,6 +197,48 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
             return attrGroupDetailVo;
         }).collect(Collectors.toList());
         return collect;
+    }
+
+    @Override
+    public List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId) {
+//        //1、查出当前spu对应的所有属性的分组信息以及当前分组下的所有属性对应的值
+//        List<ProductDetaliVo.SpuItemAttrGroupVo> spuItemAttrGroupVoArrayList = new ArrayList<>();
+//        //查到分类下的组信息
+//        final List<AttrGroup> list = this.list(new QueryWrapper<AttrGroup>()
+//                .eq("catelog_id", catalogId)
+//                .eq("spu_id", spuId));
+//
+//        for (AttrGroup attrGroup : list) {
+//            final List<AttrAttrgroupRelation> attrAttrgroupRelations = iAttrAttrgroupRelationService.list(new QueryWrapper<AttrAttrgroupRelation>()
+//                    .eq("attr_group_id", attrGroup.getAttrGroupId()));
+//
+//            ProductDetaliVo.SpuItemAttrGroupVo spuItemAttrGroupVo = new ProductDetaliVo.SpuItemAttrGroupVo();
+//            spuItemAttrGroupVo.setGroupName(attrGroup.getAttrGroupName());
+//            List<Attr> attrList = new ArrayList<>();
+//
+//            //从组和属性关联中查到属性
+//            for (AttrAttrgroupRelation attrAttrgroupRelation : attrAttrgroupRelations) {
+//                final Attr attr = iAttrService.getById(attrAttrgroupRelation.getAttrId());
+//                //查到产品下的属性
+//                final ProductAttrValue one = iProductAttrValueService.getOne(new QueryWrapper<ProductAttrValue>()
+//                        .eq("spu_id", spuId).eq("attr_id", attr.getAttrId()));
+//                if(one != null) {
+//                    attrList.add(attr);
+//                }
+//            }
+//            //产品有的属性才添加
+//            if(attrList.size() > 0) {
+//                spuItemAttrGroupVo.setAttrs(attrList);
+//                spuItemAttrGroupVoArrayList.add(spuItemAttrGroupVo);
+//            }
+//
+//        }
+//
+//        List<ProductDetaliVo.SpuItemAttrGroupVo> vos = this.getAttrGroupWithAttrsBySpuId(spuId,catalogId);
+
+        //1、查出当前spu对应的所有属性的分组信息以及当前分组下的所有属性对应的值
+        List<SpuItemAttrGroupVo> spuItemAttrGroupVoArrayList = this.getBaseMapper().getAttrGroupWithAttrsBySpuId(spuId,catalogId);
+        return spuItemAttrGroupVoArrayList;
     }
 
 }

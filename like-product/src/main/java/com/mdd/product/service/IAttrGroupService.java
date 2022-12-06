@@ -7,6 +7,8 @@ import com.mdd.product.validate.AttrGroupParam;
 import com.mdd.product.vo.AttrGroupListVo;
 import com.mdd.product.vo.AttrGroupDetailVo;
 import com.mdd.common.core.PageResult;
+import com.mdd.product.vo.ProductDetaliVo;
+import com.mdd.product.vo.SpuItemAttrGroupVo;
 
 import java.util.List;
 import java.util.Map;
@@ -64,4 +66,6 @@ public interface IAttrGroupService extends IService<AttrGroup> {
     void del(Long id);
 
     List<AttrGroupDetailVo> getAttrGroupWithAttrsByCatelogId(Long catelogId);
+
+    List<SpuItemAttrGroupVo> getAttrGroupWithAttrsBySpuId(Long spuId, Long catalogId);
 }

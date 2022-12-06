@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.entity.SkuSaleAttrValue;
 import com.mdd.product.validate.SkuSaleAttrValueParam;
+import com.mdd.product.vo.ProductDetaliVo;
+import com.mdd.product.vo.SkuItemSaleAttrVo;
 import com.mdd.product.vo.SkuSaleAttrValueListVo;
 import com.mdd.product.vo.SkuSaleAttrValueDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,4 +56,5 @@ public interface ISkuSaleAttrValueService extends IService<SkuSaleAttrValue> {
      */
     void del(Long id);
 
+    List<SkuItemSaleAttrVo> getSaleAttrBySpuId(Long spuId);
 }

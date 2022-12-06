@@ -10,11 +10,13 @@ import java.util.concurrent.Executor;
 /**
  * 异步线程池配置
  */
+
 @Configuration
 @EnableAsync
 public class ThreadPoolConfig {
 
-    @Bean("taskExecutor")
+    //@Bean("taskExecutor")
+    @Bean()
     public Executor asyncServiceExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 设置核心线程数

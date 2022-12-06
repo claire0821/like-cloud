@@ -14,6 +14,7 @@ import com.mdd.common.to.SkuHasStockVo;
 import com.mdd.common.to.SkuReductionTo;
 import com.mdd.common.to.SpuBoundTo;
 import com.mdd.product.entity.*;
+import com.mdd.product.entity.Attr;
 import com.mdd.product.feign.CouponFeignService;
 import com.mdd.product.feign.SearchFeignService;
 import com.mdd.product.feign.WareFeignService;

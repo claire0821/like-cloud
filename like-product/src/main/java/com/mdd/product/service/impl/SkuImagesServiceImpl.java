@@ -142,4 +142,10 @@ public class SkuImagesServiceImpl extends ServiceImpl<SkuImagesMapper,SkuImages>
         skuImagesMapper.delete(new QueryWrapper<SkuImages>().eq("id", id));
     }
 
+    @Override
+    public List<SkuImages> getImagesBySkuId(Long skuId) {
+        final List<SkuImages> sku_id = this.list(new QueryWrapper<SkuImages>().eq("sku_id", skuId));
+        return sku_id;
+    }
+
 }

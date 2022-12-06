@@ -54,4 +54,6 @@ public interface ISkuImagesService extends IService<SkuImages> {
      * @param id 主键ID
      */
     void del(Long id);
+
+    List<SkuImages> getImagesBySkuId(Long skuId);
 }

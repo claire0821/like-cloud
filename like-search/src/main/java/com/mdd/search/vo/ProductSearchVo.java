@@ -20,11 +20,12 @@ public class ProductSearchVo {
     private String keyword;
     private String sort;//排序条件 综合排序 销量 价格
     private String order;//升降序
-    private Long categoryId;//分类
-    private List<Long> brandIds;//品牌 多选
+    private Long category;//分类 单选
+    private List<Long> brands;//品牌 多选
 
     private Integer hasStock = 1;//是否有货 0无库存 1有库存
     private Integer minPrice;//最低价
     private Integer maxPrice;//最高价
-    private Map<Long, List<String>> attrs; //属性
+    private List<ScreenOptions> attrs;
+    //private Map<Long, List<String>> attrs; //属性
 }

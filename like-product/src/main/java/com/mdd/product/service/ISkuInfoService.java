@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.entity.SkuInfo;
 import com.mdd.product.validate.SkuInfoParam;
+import com.mdd.product.vo.ProductDetaliVo;
 import com.mdd.product.vo.SkuInfoListVo;
 import com.mdd.product.vo.SkuInfoDetailVo;
 import com.mdd.common.core.PageResult;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * sku信息服务接口类
@@ -55,4 +57,6 @@ public interface ISkuInfoService extends IService<SkuInfo> {
     void del(Long id);
 
     List<SkuInfo> getSkusBySpuId(Long spuId);
+
+    ProductDetaliVo productDetail(Long skuId);
 }

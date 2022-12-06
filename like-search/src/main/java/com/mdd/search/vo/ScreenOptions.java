@@ -16,6 +16,12 @@ public class ScreenOptions {
     private String name;
     private String url;
     private String img;
+    private boolean selected = false;//是否选择
+    private List<Value> values;
 
-    private List<String> values;
+    @Data
+    public static class Value {
+        private boolean selected = false;//是否选择
+        private String value;
+    }
 }

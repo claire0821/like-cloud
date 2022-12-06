@@ -4,25 +4,26 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.product.entity.SkuInfo;
+import com.mdd.product.service.ISkuInfoService;
 import com.mdd.product.service.ISkuSaleAttrValueService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.SkuSaleAttrValueParam;
+import com.mdd.product.vo.ProductDetaliVo;
+import com.mdd.product.vo.SkuItemSaleAttrVo;
 import com.mdd.product.vo.SkuSaleAttrValueListVo;
 import com.mdd.product.vo.SkuSaleAttrValueDetailVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.product.entity.SkuSaleAttrValue;
 import com.mdd.product.mapper.SkuSaleAttrValueMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
-import com.mdd.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * sku销售属性&值实现类
@@ -32,7 +33,6 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueMap
         
     @Resource
     SkuSaleAttrValueMapper skuSaleAttrValueMapper;
-
     /**
      * sku销售属性&值列表
      *
@@ -142,6 +142,42 @@ public class SkuSaleAttrValueServiceImpl extends ServiceImpl<SkuSaleAttrValueMap
         Assert.notNull(model, "数据不存在!");
 
         skuSaleAttrValueMapper.delete(new QueryWrapper<SkuSaleAttrValue>().eq("id", id));
+    }
+
+    @Override
+    public List<SkuItemSaleAttrVo> getSaleAttrBySpuId(Long spuId) {
+        //List<ProductDetaliVo.SkuItemSaleAttrVo> skuItemSaleAttrVoList = new ArrayList<>();
+
+//        //根据spuId查到商品的全部sku
+//        final List<Object> skuIds = iSkuInfoService.listObjs(new QueryWrapper<SkuInfo>()
+//                .eq("spu_id", spuId).select("sku_id"));
+//        for (Object skuId : skuIds) {
+//            final List<SkuSaleAttrValue> list = this.list(new QueryWrapper<SkuSaleAttrValue>()
+//                    .eq("sku_id", skuId)
+//                    .groupBy("attr_id").groupBy("attr_name").groupBy("attr_value"));
+//            for (SkuSaleAttrValue skuSaleAttrValue : list) {
+//                ProductDetaliVo.SkuItemSaleAttrVo skuItemSaleAttrVo = new ProductDetaliVo.SkuItemSaleAttrVo();
+//                skuItemSaleAttrVo.setAttrId(skuSaleAttrValue.getAttrId());
+//                skuItemSaleAttrVo.setAttrName(skuSaleAttrValue.getAttrName());
+//                //返回同一销售名的全部销售参数值
+//                final List<String> collect = list.stream().filter(m -> {
+//                    return (m.getAttrId().equals(skuSaleAttrValue.getAttrId()) && m.getAttrName().equals(skuSaleAttrValue.getAttrName()));
+//                }).map(res -> {
+//                    return res.getAttrValue();
+//                }).collect(Collectors.toList());
+//                skuItemSaleAttrVo.setAttrValues(collect);
+//                skuItemSaleAttrVoList.add(skuItemSaleAttrVo);
+//            }
+//        }
+//        //去重
+//        final ArrayList<ProductDetaliVo.SkuItemSaleAttrVo> collect = skuItemSaleAttrVoList.stream()
+//                .collect(Collectors
+//                        .collectingAndThen(Collectors
+//                                .toCollection(() ->
+//                                        new TreeSet<>(Comparator.comparing(ProductDetaliVo.SkuItemSaleAttrVo::getAttrId))), ArrayList::new));
+
+        List<SkuItemSaleAttrVo> saleAttrVos = this.getBaseMapper().getSaleAttrBySpuId(spuId);
+        return saleAttrVos;
     }
 
 }
