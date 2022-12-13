@@ -6,6 +6,7 @@ import com.mdd.common.core.PageResult;
 import com.mdd.common.validate.PageParam;
 import com.mdd.common.validator.annotation.IDLongMust;
 import com.mdd.product.service.ISkuInfoService;
+import com.mdd.product.service.ISpuInfoService;
 import com.mdd.product.validate.SkuInfoParam;
 import com.mdd.product.vo.ProductDetaliVo;
 import com.mdd.product.vo.SkuInfoDetailVo;
@@ -26,6 +27,8 @@ import java.util.concurrent.ExecutionException;
 public class ProductController {
     @Resource
     ISkuInfoService iSkuInfoService;
+    @Resource
+    ISpuInfoService iSpuInfoService;
 
     /**
      * 商品信息详情
@@ -34,8 +37,10 @@ public class ProductController {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@PathVariable @IDLongMust() @RequestParam("skuId") Long skuId) {
-        ProductDetaliVo detail = iSkuInfoService.productDetail(skuId);
+    public Object detail(@PathVariable @IDLongMust() @RequestParam("spuId") Long spuId,
+                         @PathVariable @IDLongMust() @RequestParam("skuId") Long skuId) {
+//        ProductDetaliVo detail = iSkuInfoService.productDetail(skuId);
+        ProductDetaliVo detail = iSpuInfoService.productDetail(spuId,skuId);
         return AjaxResult.success(detail);
     }
 

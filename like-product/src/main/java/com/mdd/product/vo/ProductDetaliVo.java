@@ -15,35 +15,30 @@ import java.util.List;
  **/
 @Data
 public class ProductDetaliVo {
-    //1、sku基本信息的获取  pms_sku_info
-    private Long skuId; // skuId
-    private Long spuId; // spuId
-    private String skuName; // sku名称
-    private String skuDesc; // sku介绍描述
-    private Long catalogId; // 所属分类id
-    private Long brandId; // 品牌id
-    private String skuDefaultImg; // 默认图片
-    private String skuTitle; // 标题
-    private String skuSubtitle; // 副标题
-    private BigDecimal price; // 价格
-    private Long saleCount; // 销量
+    // spuId
+    private Long spuId;
+    //spu标题
+    private String title;
+    //轮播图 spu
+//    private List<SpuImages> images;
+    private List<String> images;
 
-    private SkuInfo info;
-
-    private boolean hasStock = true;
-
-    //2、sku的图片信息    pms_sku_images
-    private List<SkuImages> images;
-
-    //3、获取spu的销售属性组合
+    //sku
+    private List<ProductDetaliSkuVo> skuInfos;
+    private ProductDetaliSkuVo checkedProduct;//默认选中的sku
+    //获取spu的销售属性组合
     private List<SkuItemSaleAttrVo> saleAttr;
 
-    //4、获取spu的介绍
-    private SpuInfoDesc desc;
+
+    private Long totalSaleCount; // 销量
+    private Long totalClickCount; // 浏览量
+
 
     //5、获取spu的规格参数信息
     private List<SpuItemAttrGroupVo> groupAttrs;
 
     //6、秒杀商品的优惠信息
     private SeckillSkuVo seckillSkuVo;
+
+    private Integer activityType;
 }

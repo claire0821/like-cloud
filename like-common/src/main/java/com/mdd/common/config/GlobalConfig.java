@@ -23,6 +23,12 @@ public class GlobalConfig {
     // Redis键前缀
     public static String redisPrefix = "Like:";
 
+    // 登录缓存键
+    public static final String TokenKey = "token:";
+
+    // 购物车缓存键
+    public static final String CartKey = "cart:";
+
     // 短信验证码
     public static String redisSmsCode  = "smsCode:";
 

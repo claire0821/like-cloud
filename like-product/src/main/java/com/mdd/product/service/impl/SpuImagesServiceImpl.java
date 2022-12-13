@@ -162,4 +162,10 @@ public class SpuImagesServiceImpl extends ServiceImpl<SpuImagesMapper,SpuImages>
         }
     }
 
+    @Override
+    public List<SpuImages> getImagesSort(Long spuId) {
+        final List<SpuImages> list = this.list(new QueryWrapper<SpuImages>().eq("spu_id", spuId).orderByAsc("img_sort"));
+        return list;
+    }
+
 }

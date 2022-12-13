@@ -30,6 +30,10 @@ public class SeckillSkuVo {
      */
     private BigDecimal seckillPrice;
     /**
+     * 原价价格
+     */
+    private BigDecimal marketPrice;
+    /**
      * 秒杀总量
      */
     private Integer seckillCount;

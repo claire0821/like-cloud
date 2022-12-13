@@ -55,4 +55,11 @@ public interface ISpuImagesService extends IService<SpuImages> {
     void del(Long id);
 
     void saveImages(Long id, List<String> images);
+
+    /**
+     * 查找spu图片根据img_sort升序排序
+     * @param spuId
+     * @return
+     */
+    List<SpuImages> getImagesSort(Long spuId);
 }

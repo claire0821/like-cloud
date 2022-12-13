@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mdd.common.config.ThreadPoolConfig;
 import com.mdd.product.entity.SkuImages;
+import com.mdd.product.entity.SkuSaleAttrValue;
 import com.mdd.product.entity.SpuInfoDesc;
 import com.mdd.product.service.*;
 import com.mdd.common.validate.PageParam;
@@ -28,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 /**
  * sku信息实现类
@@ -37,8 +39,6 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
         
     @Resource
     SkuInfoMapper skuInfoMapper;
-//    @Autowired
-//    ThreadPoolExecutor executor;
     @Autowired
     Executor executor;
     @Autowired
@@ -205,81 +205,134 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
     public ProductDetaliVo productDetail(Long skuId) {
         ProductDetaliVo productDetaliVo = new ProductDetaliVo();
 
-        CompletableFuture<SkuInfo> infoFuture = CompletableFuture.supplyAsync(() -> {
-            //1、sku基本信息的获取  pms_sku_info
-            SkuInfo info = this.getById(skuId);
-            productDetaliVo.setInfo(info);
-            productDetaliVo.setBrandId(info.getBrandId());
-            productDetaliVo.setCatalogId(info.getCatalogId());
-            productDetaliVo.setPrice(info.getPrice());
-            productDetaliVo.setSkuId(info.getSkuId());
-            productDetaliVo.setSkuName(info.getSkuName());
-            productDetaliVo.setSkuTitle(info.getSkuTitle());
-            productDetaliVo.setSpuId(info.getSpuId());
-            return info;
-        }, executor);
-
-
-        CompletableFuture<Void> saleAttrFuture = infoFuture.thenAcceptAsync((res) -> {
-            //3、获取spu的销售属性组合
-            List<SkuItemSaleAttrVo> saleAttrVos = iSkuSaleAttrValueService.getSaleAttrBySpuId(res.getSpuId());
-            productDetaliVo.setSaleAttr(saleAttrVos);
-        }, executor);
-
-
-        CompletableFuture<Void> descFuture = infoFuture.thenAcceptAsync((res) -> {
-            //4、获取spu的介绍    pms_spu_info_desc
-            SpuInfoDesc spuInfoDescEntity = iSpuInfoDescService.getById(res.getSpuId());
-            productDetaliVo.setDesc(spuInfoDescEntity);
-        }, executor);
-
-
-        CompletableFuture<Void> baseAttrFuture = infoFuture.thenAcceptAsync((res) -> {
-            //5、获取spu的规格参数信息
-            List<SpuItemAttrGroupVo> attrGroupVos = iAttrGroupService.getAttrGroupWithAttrsBySpuId(res.getSpuId(), res.getCatalogId());
-            productDetaliVo.setGroupAttrs(attrGroupVos);
-        }, executor);
-
-
-        // Long spuId = info.getSpuId();
-        // Long catalogId = info.getCatalogId();
-
-        //2、sku的图片信息    pms_sku_images
-        CompletableFuture<Void> imageFuture = CompletableFuture.runAsync(() -> {
-            List<SkuImages> imagesEntities = iSkuImagesService.getImagesBySkuId(skuId);
-            productDetaliVo.setImages(imagesEntities);
-        }, executor);
-
-        //CompletableFuture<Void> seckillFuture = CompletableFuture.runAsync(() -> {
-            //3、远程调用查询当前sku是否参与秒杀优惠活动
-//            R skuSeckilInfo = seckillFeignService.getSkuSeckilInfo(skuId);
-//            if (skuSeckilInfo.getCode() == 0) {
-//                //查询成功
-//                SeckillSkuVo seckilInfoData = skuSeckilInfo.getData("data", new TypeReference<SeckillSkuVo>() {
-//                });
-//                skuItemVo.setSeckillSkuVo(seckilInfoData);
+//        CompletableFuture<SkuInfo> infoFuture = CompletableFuture.supplyAsync(() -> {
+//            //1、sku基本信息的获取  pms_sku_info
+//            SkuInfo info = this.getById(skuId);
+//            productDetaliVo.setInfo(info);
+//            productDetaliVo.setBrandId(info.getBrandId());
+//            productDetaliVo.setCatalogId(info.getCatalogId());
+//            productDetaliVo.setPrice(info.getPrice());
+//            productDetaliVo.setSkuId(info.getSkuId());
+//            productDetaliVo.setSkuName(info.getSkuName());
+//            productDetaliVo.setSkuTitle(info.getSkuTitle());
+//            productDetaliVo.setSpuId(info.getSpuId());
+//            return info;
+//        }, executor);
 //
-//                if (seckilInfoData != null) {
-//                    long currentTime = System.currentTimeMillis();
-//                    if (currentTime > seckilInfoData.getEndTime()) {
-//                        skuItemVo.setSeckillSkuVo(null);
-//                    }
-//                }
-//            }
-        //}, executor);
+//
+//        CompletableFuture<Void> saleAttrFuture = infoFuture.thenAcceptAsync((res) -> {
+//            //3、获取spu的销售属性组合
+//            List<SkuItemSaleAttrVo> saleAttrVos = iSkuSaleAttrValueService.getSaleAttrBySpuId(res.getSpuId());
+//            productDetaliVo.setSaleAttr(saleAttrVos);
+//        }, executor);
+//
+//
+//        CompletableFuture<Void> descFuture = infoFuture.thenAcceptAsync((res) -> {
+//            //4、获取spu的介绍    pms_spu_info_desc
+//            SpuInfoDesc spuInfoDescEntity = iSpuInfoDescService.getById(res.getSpuId());
+//            productDetaliVo.setDesc(spuInfoDescEntity);
+//        }, executor);
+//
+//
+//        CompletableFuture<Void> baseAttrFuture = infoFuture.thenAcceptAsync((res) -> {
+//            //5、获取spu的规格参数信息
+//            List<SpuItemAttrGroupVo> attrGroupVos = iAttrGroupService.getAttrGroupWithAttrsBySpuId(res.getSpuId(), res.getCatalogId());
+//            productDetaliVo.setGroupAttrs(attrGroupVos);
+//        }, executor);
+//
+//
+//        // Long spuId = info.getSpuId();
+//        // Long catalogId = info.getCatalogId();
+//
+//        //2、sku的图片信息    pms_sku_images
+//        CompletableFuture<Void> imageFuture = CompletableFuture.runAsync(() -> {
+//            List<SkuImages> imagesEntities = iSkuImagesService.getImagesBySkuId(skuId);
+//            productDetaliVo.setImages(imagesEntities);
+//        }, executor);
+//
+//        //CompletableFuture<Void> seckillFuture = CompletableFuture.runAsync(() -> {
+//            //3、远程调用查询当前sku是否参与秒杀优惠活动
+////            R skuSeckilInfo = seckillFeignService.getSkuSeckilInfo(skuId);
+////            if (skuSeckilInfo.getCode() == 0) {
+////                //查询成功
+////                SeckillSkuVo seckilInfoData = skuSeckilInfo.getData("data", new TypeReference<SeckillSkuVo>() {
+////                });
+////                skuItemVo.setSeckillSkuVo(seckilInfoData);
+////
+////                if (seckilInfoData != null) {
+////                    long currentTime = System.currentTimeMillis();
+////                    if (currentTime > seckilInfoData.getEndTime()) {
+////                        skuItemVo.setSeckillSkuVo(null);
+////                    }
+////                }
+////            }
+//        //}, executor);
+//
+//
+//        //等到所有任务都完成
+//        try {
+//            CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture).get();
+//            //CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture,seckillFuture).get();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
 
+        return productDetaliVo;
+    }
 
+    @Override
+    public ProductDetaliSkuVo getDetial(Long skuId) {
+        ProductDetaliSkuVo productDetaliSkuVo = new ProductDetaliSkuVo();
+        CompletableFuture<Void> skuInfoFuture = CompletableFuture.runAsync(() -> {
+            final SkuInfo skuInfo = this.getById(skuId);
+            if(skuInfo == null) {
+
+            }
+
+            productDetaliSkuVo.setSkuId(skuInfo.getSkuId());
+            productDetaliSkuVo.setName(skuInfo.getSkuName());
+            productDetaliSkuVo.setDesc(skuInfo.getSkuDesc());
+            productDetaliSkuVo.setImg(skuInfo.getSkuDefaultImg());
+            productDetaliSkuVo.setSubtitle(skuInfo.getSkuSubtitle());
+            productDetaliSkuVo.setTitle(skuInfo.getSkuTitle());
+            productDetaliSkuVo.setPrice(skuInfo.getPrice());
+
+            final List<SkuSaleAttrValue> skuSaleAttrValues = iSkuSaleAttrValueService.list(new QueryWrapper<SkuSaleAttrValue>().eq("sku_id", skuInfo.getSkuId()));
+            //sku对应的销售属性
+
+            List<com.mdd.product.vo.Attr> attrs = new ArrayList<>();
+            for (SkuSaleAttrValue skuSaleAttrValue : skuSaleAttrValues) {
+                com.mdd.product.vo.Attr attr = new com.mdd.product.vo.Attr();
+                attr.setAttrId(skuSaleAttrValue.getAttrId());
+                attr.setAttrName(skuSaleAttrValue.getAttrName());
+                attr.setAttrValue(skuSaleAttrValue.getAttrValue());
+                attrs.add(attr);
+            }
+
+            final List<String> collect = attrs.stream().map(com.mdd.product.vo.Attr::getAttrValue).collect(Collectors.toList());
+            productDetaliSkuVo.setSaleValueStr(String.join(",",collect));
+            productDetaliSkuVo.setSaleAttr(attrs);
+            //TODO 库存 会员价 活动价 销量 浏览量
+            productDetaliSkuVo.setStock(10L);
+            productDetaliSkuVo.setMemberPrice(productDetaliSkuVo.getPrice());
+            productDetaliSkuVo.setActivityPrice(productDetaliSkuVo.getPrice());
+            productDetaliSkuVo.setSaleCount(100L);
+            productDetaliSkuVo.setClickCount(100L);
+        }, executor);
+
+        //TODO 库存
         //等到所有任务都完成
         try {
-            CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture).get();
+            CompletableFuture.allOf(skuInfoFuture).get();
             //CompletableFuture.allOf(saleAttrFuture,descFuture,baseAttrFuture,imageFuture,seckillFuture).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
-        return productDetaliVo;
+        return productDetaliSkuVo;
     }
 
 }

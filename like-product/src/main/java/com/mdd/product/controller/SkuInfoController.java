@@ -1,9 +1,12 @@
 package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.product.entity.SkuInfo;
 import com.mdd.product.service.ISkuInfoService;
 import com.mdd.product.validate.SkuInfoParam;
 import com.mdd.common.validate.PageParam;
+import com.mdd.product.vo.ProductDetaliSkuVo;
+import com.mdd.product.vo.ProductDetaliVo;
 import com.mdd.product.vo.SkuInfoListVo;
 import com.mdd.product.vo.SkuInfoDetailVo;
 import com.mdd.common.core.AjaxResult;
@@ -13,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -88,5 +92,32 @@ public class SkuInfoController {
     public Object delBatch(@RequestBody Long[] skuIds) {
         iSkuInfoService.removeByIds(Arrays.asList(skuIds));
         return AjaxResult.success();
+    }
+
+    /**
+     * sku信息详情包括销售属性
+     *
+     * @param skuId 参数
+     * @return Object
+     */
+    @Log(title = "sku信息批量删除")
+    @GetMapping("/getDetial")
+    public Object getDetial(@Validated @IDLongMust() @RequestParam("skuId") Long skuId) {
+       ProductDetaliSkuVo productDetaliSkuVo = iSkuInfoService.getDetial(skuId);
+        return AjaxResult.success(productDetaliSkuVo);
+    }
+
+    /**
+     * 根据skuId查询当前商品的价格
+     * @param skuId
+     * @return
+     */
+    @GetMapping(value = "/price")
+    public Object getPrice(@PathVariable("skuId") Long skuId) {
+        //获取当前商品的信息
+        SkuInfo skuInfo = iSkuInfoService.getById(skuId);
+        //获取商品的价格
+        BigDecimal price = skuInfo.getPrice();
+        return AjaxResult.success(price);
     }
 }

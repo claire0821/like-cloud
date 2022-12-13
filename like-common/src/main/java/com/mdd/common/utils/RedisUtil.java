@@ -331,7 +331,7 @@ public class RedisUtil {
      * @param key 键
      * @return 对应的多个键值
      */
-    public Map<Object, Object> hmGet(String key) {
+    public static Map<Object, Object> hmGet(String key) {
         key = redisPrefix + key;
         return redisTemplate.opsForHash().entries(key);
     }
@@ -668,7 +668,7 @@ public class RedisUtil {
      */
     public static String setToken(Integer id) {
         String token = ToolsUtil.makeToken();
-        String key = redisPrefix + RedisConfig.TokenKey + token;
+        String key = redisPrefix + GlobalConfig.TokenKey + token;
         redisTemplate.opsForValue().set(key, id, 7201, TimeUnit.SECONDS);
         return token;
     }
@@ -681,7 +681,7 @@ public class RedisUtil {
      * @return Object
      */
     public static String getToken(String token) {
-        token = redisPrefix + RedisConfig.TokenKey + token;
+        token = redisPrefix + GlobalConfig.TokenKey + token;
         return token;
     }
 

@@ -2,6 +2,10 @@ package com.mdd.product.vo;
 
 import lombok.Data;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @program: server
  * @description:
@@ -11,6 +15,11 @@ import lombok.Data;
 @Data
 public class AttrValueWithSkuIdVo {
     private String attrValue;
+    private List<String> skuIds;
+    private String strSkuIds;
 
-    private String skuIds;
+    public void setStrSkuIds(String strSkuIds) {
+        this.strSkuIds = strSkuIds;
+        setSkuIds(Arrays.stream(strSkuIds.split(",")).collect(Collectors.toList()));
+    }
 }

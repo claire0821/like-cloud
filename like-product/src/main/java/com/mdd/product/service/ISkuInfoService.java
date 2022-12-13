@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.entity.SkuInfo;
 import com.mdd.product.validate.SkuInfoParam;
+import com.mdd.product.vo.ProductDetaliSkuVo;
 import com.mdd.product.vo.ProductDetaliVo;
 import com.mdd.product.vo.SkuInfoListVo;
 import com.mdd.product.vo.SkuInfoDetailVo;
@@ -59,4 +60,6 @@ public interface ISkuInfoService extends IService<SkuInfo> {
     List<SkuInfo> getSkusBySpuId(Long spuId);
 
     ProductDetaliVo productDetail(Long skuId);
+
+    ProductDetaliSkuVo getDetial(Long skuId);
 }
