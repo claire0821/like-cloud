@@ -2,27 +2,20 @@ package com.mdd.cart.service.impl;
 
 import com.alibaba.fastjson.JSON;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.mdd.cart.LikeCartThreadLocal;
 import com.mdd.cart.feign.IProductFeignService;
 import com.mdd.cart.service.ICartService;
-import com.mdd.cart.vo.CartItemVo;
+import com.mdd.common.vo.CartItemVo;
 import com.mdd.cart.vo.CartVo;
-import com.mdd.cart.vo.SkuInfoVo;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.constant.CartConstant;
 import com.mdd.common.enums.HttpEnum;
-import com.mdd.common.to.SkuHasStockVo;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.vo.ProductDetaliSkuVo;
-import jdk.nashorn.internal.objects.Global;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundHashOperations;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,8 +23,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.stream.Collectors;
 
 
 /**
@@ -159,6 +150,44 @@ public class CartServiceImpl implements ICartService {
     }
 
     @Override
+    public List<CartItemVo> getCurrentCartItems() {
+        List<CartItemVo> cartItemVoList = new ArrayList<>();
+        //获取当前用户登录的信息
+        final Long userId = LikeCartThreadLocal.getUserId();
+        //如果用户未登录直接返回null
+        if (userId == null) {
+            return null;
+        } else {
+            //获取购物车项
+            final Map<Object, Object> objectObjectMap = RedisUtil.hmGet(GlobalConfig.CartKey + userId);
+            if(objectObjectMap == null || objectObjectMap.size() == 0) {
+                return null;
+            }
+            final Collection<Object> values = objectObjectMap.values();
+            List<CartItemVo> list = new ArrayList<CartItemVo>();
+            for (Object value : values) {
+                if(value instanceof CartItemVo) {
+                    CartItemVo cartItemVo = (CartItemVo) value;
+                    //更新价格
+                    if(cartItemVo.getSelected() && cartItemVo.getStatus().equals(CartConstant.CartItemStatusEnum.CART_ITEM_STATUS_ENUM_NORMAL.getCode())) {
+                        Map<String, Object> priceMap = (LinkedHashMap) iProductFeignService.getPrice(cartItemVo.getSkuId());
+                        final Integer code = (Integer) priceMap.get("code");
+                        if(code.equals(HttpEnum.SUCCESS)) {
+                            Object data = priceMap.get("data");
+                            String jsonString = JSON.toJSONString(data);
+                            BigDecimal bigDecimal = JSON.parseObject(jsonString, new TypeReference<BigDecimal>(){});
+                            cartItemVo.setPrice(bigDecimal);
+                        }
+                        cartItemVoList.add(cartItemVo);
+                    }
+
+                }
+            }
+            return cartItemVoList;
+        }
+    }
+
+    @Override
     public CartVo getUserCartItems() {
 
         CartVo cartVo = new CartVo();
@@ -189,7 +218,7 @@ public class CartServiceImpl implements ICartService {
                             cartItemVo.setPrice(bigDecimal);
                         }
                     }
-                    list.add((CartItemVo) value);
+                    list.add(cartItemVo);
                 }
             }
             cartVo.setItems(list);

@@ -666,7 +666,7 @@ public class RedisUtil {
      * @author Claire
      * @param id 会员id
      */
-    public static String setToken(Integer id) {
+    public static String setToken(Long id) {
         String token = ToolsUtil.makeToken();
         String key = redisPrefix + GlobalConfig.TokenKey + token;
         redisTemplate.opsForValue().set(key, id, 7201, TimeUnit.SECONDS);

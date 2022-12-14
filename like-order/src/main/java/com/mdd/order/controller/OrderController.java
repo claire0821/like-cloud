@@ -2,6 +2,7 @@ package com.mdd.order.controller;
 
 import com.mdd.common.config.aop.Log;
 import com.mdd.order.service.IOrderService;
+import com.mdd.order.to.OrderCreateTo;
 import com.mdd.order.validate.OrderParam;
 import com.mdd.common.validate.PageParam;
 import com.mdd.order.vo.OrderListVo;
@@ -92,4 +93,15 @@ public class OrderController {
         return AjaxResult.success();
     }
 
+    /**
+     * 确认订单
+     *
+     * @return Object
+     */
+    @Log(title = "确认订单")
+    @PostMapping("/confirm")
+    public Object confirm() {
+        OrderCreateTo orderCreateTo = iOrderService.createOrder();
+        return AjaxResult.success(orderCreateTo);
+    }
 }

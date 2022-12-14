@@ -2,12 +2,14 @@ package com.mdd.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.common.vo.MemberReceiveAddressVo;
 import com.mdd.member.entity.MemberReceiveAddress;
 import com.mdd.member.validate.MemberReceiveAddressParam;
 import com.mdd.member.vo.MemberReceiveAddressListVo;
 import com.mdd.member.vo.MemberReceiveAddressDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,4 +55,7 @@ public interface IMemberReceiveAddressService extends IService<MemberReceiveAddr
      */
     void del(Long id);
 
+    List<MemberReceiveAddressVo> listByMember(Long memberId);
+
+    MemberReceiveAddressVo getDefaultAddress(Long memberId);
 }

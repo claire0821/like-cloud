@@ -1,13 +1,17 @@
 package com.mdd.common.core;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.mdd.common.enums.HttpEnum;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Data
-public class AjaxResult implements Serializable {
+public class AjaxResult implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -177,4 +181,11 @@ public class AjaxResult implements Serializable {
         return new AjaxResult(code, msg, data);
     }
 
+
+    //利用fastjson进行反序列化
+    public <T> T getData(TypeReference<T> typeReference) {
+        String jsonString = JSON.toJSONString(data);
+        T t = JSON.parseObject(jsonString, new TypeReference<T>(){});
+        return t;
+    }
 }

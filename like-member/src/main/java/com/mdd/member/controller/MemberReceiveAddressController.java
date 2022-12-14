@@ -1,6 +1,7 @@
 package com.mdd.member.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.vo.MemberReceiveAddressVo;
 import com.mdd.member.service.IMemberReceiveAddressService;
 import com.mdd.member.validate.MemberReceiveAddressParam;
 import com.mdd.common.validate.PageParam;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,4 +94,28 @@ public class MemberReceiveAddressController {
         return AjaxResult.success();
     }
 
+
+    /**
+     * 会员收货地址列表
+     *
+     * @param memberId 用户id
+     * @return Object
+     */
+    @GetMapping("/listByMember")
+    public AjaxResult listByMember(@RequestParam("memberId") Long memberId) {
+        List<MemberReceiveAddressVo> list = iMemberReceiveAddressService.listByMember(memberId);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 会员默认收货地址
+     *
+     * @param memberId 用户id
+     * @return Object
+     */
+    @GetMapping("/getDefaultAddress")
+    public AjaxResult getDefaultAddress(@RequestParam("memberId") Long memberId) {
+        MemberReceiveAddressVo vo = iMemberReceiveAddressService.getDefaultAddress(memberId);
+        return AjaxResult.success(vo);
+    }
 }

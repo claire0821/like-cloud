@@ -16,6 +16,7 @@ import com.mdd.common.exception.LoginException;
 import com.mdd.common.exception.OperateException;
 import com.mdd.common.utils.*;
 import com.mdd.common.validate.member.LoginParam;
+import com.mdd.common.vo.MemberVo;
 import com.mdd.member.entity.MemberLevel;
 import com.mdd.member.service.IMemberLevelService;
 import com.mdd.member.service.IMemberService;
@@ -247,7 +248,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
     }
 
     @Override
-    public MemberDetailVo login(LoginParam loginParam) {
+    public MemberVo login(LoginParam loginParam) {
         com.baomidou.mybatisplus.core.toolkit.Assert.notNull(loginParam.getScene(), "scene参数缺失!");
         switch (loginParam.getScene()) {
             case "mnp":
@@ -278,7 +279,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
      * @param loginParam 参数
      * @return Map<String, Object>
      */
-    public MemberDetailVo accountLogin(LoginParam loginParam) {
+    public MemberVo accountLogin(LoginParam loginParam) {
         if((loginParam.getUsername() == null || loginParam.getUsername().length() == 0)) {
             throw new LoginException(HttpEnum.ACCOUNT_MOBILE_EMPTY.getCode(), HttpEnum.ACCOUNT_MOBILE_EMPTY.getMsg());
         }
@@ -296,9 +297,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
 //        member.setLastLoginTime(System.currentTimeMillis() / 1000);
 //        userMapper.updateById(user);
 
-        MemberDetailVo memberDetailVo = new MemberDetailVo();
-        BeanUtils.copyProperties(member,memberDetailVo);
-        return memberDetailVo;
+        MemberVo memberVo = new MemberVo();
+        BeanUtils.copyProperties(member,memberVo);
+        memberVo.setEmail("");
+        memberVo.setMobile("");
+        return memberVo;
     }
 
     /**

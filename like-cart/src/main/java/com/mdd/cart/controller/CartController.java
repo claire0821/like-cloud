@@ -1,12 +1,11 @@
 package com.mdd.cart.controller;
 
 import com.mdd.cart.service.ICartService;
-import com.mdd.cart.vo.CartItemVo;
+import com.mdd.common.vo.CartItemVo;
 import com.mdd.cart.vo.CartVo;
 import com.mdd.common.core.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -107,4 +106,13 @@ public class CartController {
         return AjaxResult.success();
     }
 
+    /**
+     * 获取当前用户的购物车商品项
+     * @return
+     */
+    @GetMapping(value = "/currentUserCartItems")
+    public AjaxResult getCurrentCartItems() {
+        List<CartItemVo> cartItemVoList = iCartService.getCurrentCartItems();
+        return AjaxResult.success(cartItemVoList);
+    }
 }

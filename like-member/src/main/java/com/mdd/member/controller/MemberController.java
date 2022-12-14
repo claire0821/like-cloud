@@ -3,6 +3,7 @@ package com.mdd.member.controller;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.aop.Log;
 import com.mdd.common.validate.member.LoginParam;
+import com.mdd.common.vo.MemberVo;
 import com.mdd.member.LikeMemberThreadLocal;
 import com.mdd.member.service.IMemberService;
 import com.mdd.member.validate.MemberParam;
@@ -116,8 +117,8 @@ public class MemberController {
      */
     @Log(title = "会员登录")
     @PostMapping("/login")
-    public Object login(@Validated @RequestBody LoginParam loginParam) {
-        final MemberDetailVo login = iMemberService.login(loginParam);
+    public AjaxResult login(@Validated @RequestBody LoginParam loginParam) {
+        final MemberVo login = iMemberService.login(loginParam);
         return AjaxResult.success(login);
     }
 

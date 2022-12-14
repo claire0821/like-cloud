@@ -3,6 +3,7 @@ package com.mdd.order.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.order.entity.Order;
+import com.mdd.order.to.OrderCreateTo;
 import com.mdd.order.validate.OrderParam;
 import com.mdd.order.vo.OrderListVo;
 import com.mdd.order.vo.OrderDetailVo;
@@ -52,5 +53,7 @@ public interface IOrderService extends IService<Order> {
      * @param id 主键ID
      */
     void del(Long id);
+
+    OrderCreateTo createOrder();
 
 }

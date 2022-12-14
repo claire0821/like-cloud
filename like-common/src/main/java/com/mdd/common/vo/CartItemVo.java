@@ -1,4 +1,4 @@
-package com.mdd.cart.vo;
+package com.mdd.common.vo;
 
 import java.math.BigDecimal;
 import java.util.List;

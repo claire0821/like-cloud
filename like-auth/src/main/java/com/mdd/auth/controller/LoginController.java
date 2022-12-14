@@ -1,23 +1,20 @@
 package com.mdd.auth.controller;
 
+import com.alibaba.fastjson.TypeReference;
 import com.mdd.auth.feign.MemberFeignService;
-import com.mdd.common.config.RedisConfig;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.utils.ToolsUtil;
 import com.mdd.common.validate.member.LoginParam;
 import com.mdd.common.validate.member.RegParam;
+import com.mdd.common.vo.MemberVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -127,21 +124,21 @@ public class LoginController {
      */
     @PostMapping("/login")
     public Object login(@RequestBody LoginParam loginParam) {
-        final LinkedHashMap res = (LinkedHashMap) memberFeignService.login(loginParam);
-        final Integer code = (Integer) res.get("code");
+        final AjaxResult res = memberFeignService.login(loginParam);
+        final Integer code = res.getCode();
 
         if(code != HttpEnum.SUCCESS.getCode()) {
             return res;
         }
 
-        Map<String, Object> data = (Map<String, Object>) res.get("data");
+        MemberVo data = res.getData(new TypeReference<MemberVo>() {});
         Map<String, Object> response = new LinkedHashMap<>();
-        final Integer id = (Integer) data.get("id");
+        final Long id = data.getId();
         if(id == null) {
             throw new LoginException(HttpEnum.LOGIN_ERROR.getCode(), HttpEnum.LOGIN_ERROR.getMsg());
         }
 
-        final String mobile = (String) data.get("mobile");
+        final String mobile = data.getMobile();
         response.put("isBindMobile", (mobile == null || mobile.isEmpty()) ? false : true);
 
         final String token = RedisUtil.setToken(id);

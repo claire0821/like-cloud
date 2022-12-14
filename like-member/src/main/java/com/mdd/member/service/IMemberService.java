@@ -3,6 +3,7 @@ package com.mdd.member.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.common.validate.member.LoginParam;
+import com.mdd.common.vo.MemberVo;
 import com.mdd.member.entity.Member;
 import com.mdd.member.validate.MemberParam;
 import com.mdd.common.validate.member.RegParam;
@@ -61,7 +62,7 @@ public interface IMemberService extends IService<Member> {
 
     void checkUserNameUnique(String userName);
 
-    MemberDetailVo login(LoginParam loginParam);
+    MemberVo login(LoginParam loginParam);
 
     MemberDetailVo center(Long userId);
 

@@ -2,7 +2,7 @@ package com.mdd.common.constant;
 
 /**
  * @program: server
- * @description: 属性 销售属性没有分组
+ * @description: 购物车商品状态
  * @author: Claire
  * @create: 2022-11-11 17:50
  **/

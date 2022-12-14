@@ -1,5 +1,6 @@
 package com.mdd.cart.vo;
 
+import com.mdd.common.vo.CartItemVo;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;

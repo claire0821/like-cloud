@@ -1,29 +1,42 @@
 package com.mdd.order.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.common.core.AjaxResult;
+import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.vo.CartItemVo;
+import com.mdd.common.vo.MemberReceiveAddressVo;
+import com.mdd.common.vo.ProductDetaliSkuVo;
+import com.mdd.order.LikeOrderThreadLocal;
+import com.mdd.order.feign.ICartFeignService;
+import com.mdd.order.feign.IMemberFeignService;
 import com.mdd.order.service.IOrderService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.order.to.OrderCreateTo;
 import com.mdd.order.validate.OrderParam;
 import com.mdd.order.vo.OrderListVo;
 import com.mdd.order.vo.OrderDetailVo;
 import com.mdd.common.core.PageResult;
 import com.mdd.order.entity.Order;
 import com.mdd.order.mapper.OrderMapper;
-import com.mdd.common.utils.ArrayUtil;
-import com.mdd.common.utils.TimeUtil;
-import com.mdd.common.utils.UrlUtil;
-import com.mdd.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /**
  * 订单实现类
@@ -33,7 +46,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         
     @Resource
     OrderMapper orderMapper;
-
+    @Autowired
+    IMemberFeignService iMemberFeignService;
+    @Autowired
+    ICartFeignService iCartFeignService;
+    @Autowired
+    Executor executor;
     /**
      * 订单列表
      *
@@ -252,5 +270,57 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
 
         orderMapper.delete(new QueryWrapper<Order>().eq("id", id));
     }
+
+    /**
+     * 订单创建
+     *
+     */
+    @Override
+    public OrderCreateTo createOrder() {
+        final Long userId = LikeOrderThreadLocal.getUserId();
+        OrderCreateTo createTo = new OrderCreateTo();
+
+        //1、生成订单号
+        String orderSn = IdWorker.getTimeId();
+
+        Order order = new Order();
+        order.setOrderSn(orderSn);
+        order.setMemberId(userId);
+        //收货人
+        CompletableFuture<Void> memberAddressFuture = CompletableFuture.runAsync(() -> {
+            AjaxResult memberAddressMap = (AjaxResult) iMemberFeignService.getDefaultAddress(order.getMemberId());
+            final Integer code = (Integer) memberAddressMap.getCode();
+            if(code == HttpEnum.SUCCESS.getCode()) {
+                MemberReceiveAddressVo memberAddressMapData = memberAddressMap.getData(new TypeReference<MemberReceiveAddressVo>() {});
+
+            }
+        }, executor);
+
+
+        //购物车选中商品
+        CompletableFuture<Void> cartFuture = CompletableFuture.runAsync(() -> {
+            AjaxResult memberAddressMap = (AjaxResult) iCartFeignService.getCurrentCartItems();
+            final Integer code = (Integer) memberAddressMap.getCode();
+            if(code == HttpEnum.SUCCESS.getCode()) {
+                List<CartItemVo> cartItemVos = memberAddressMap.getData(new TypeReference<List<CartItemVo>>() {});
+                createTo.setCartItemVos(cartItemVos);
+            }
+        }, executor);
+
+        //3、验价(计算价格、积分等信息)
+
+
+        //等到所有任务都完成
+        try {
+            CompletableFuture.allOf(memberAddressFuture,cartFuture).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return createTo;
+    }
+
 
 }

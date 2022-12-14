@@ -1,6 +1,6 @@
 package com.mdd.cart.service;
 
-import com.mdd.cart.vo.CartItemVo;
+import com.mdd.common.vo.CartItemVo;
 import com.mdd.cart.vo.CartVo;
 
 import java.util.List;
@@ -44,4 +44,6 @@ public interface ICartService {
     void deleteIdCartInfo(Long skuId);
 
     void selectAllCartItem(boolean selected);
+
+    List<CartItemVo> getCurrentCartItems();
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.common.vo.MemberReceiveAddressVo;
 import com.mdd.member.service.IMemberReceiveAddressService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.member.validate.MemberReceiveAddressParam;
@@ -157,6 +158,37 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
         Assert.notNull(model, "数据不存在!");
 
         memberReceiveAddressMapper.delete(new QueryWrapper<MemberReceiveAddress>().eq("id", id));
+    }
+
+    @Override
+    public List<MemberReceiveAddressVo> listByMember(Long memberId) {
+        List<MemberReceiveAddress> model = memberReceiveAddressMapper.selectList(
+                new QueryWrapper<MemberReceiveAddress>()
+                        .eq("member_id", memberId));
+
+        List<MemberReceiveAddressVo> list = new LinkedList<>();
+        for(MemberReceiveAddress item : model) {
+            MemberReceiveAddressVo vo = new MemberReceiveAddressVo();
+            BeanUtils.copyProperties(item, vo);
+            list.add(vo);
+        }
+        return list;
+    }
+
+    @Override
+    public MemberReceiveAddressVo getDefaultAddress(Long memberId) {
+        MemberReceiveAddress model = memberReceiveAddressMapper.selectOne(
+                new QueryWrapper<MemberReceiveAddress>()
+                        .eq("member_id", memberId)
+                        .eq("default_status",1));
+        if(model == null) {
+            model = memberReceiveAddressMapper.selectOne(
+                    new QueryWrapper<MemberReceiveAddress>()
+                            .eq("member_id", memberId));
+        }
+        MemberReceiveAddressVo vo = new MemberReceiveAddressVo();
+        BeanUtils.copyProperties(model, vo);
+        return vo;
     }
 
 }
