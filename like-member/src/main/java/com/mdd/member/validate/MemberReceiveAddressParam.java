@@ -19,7 +19,7 @@ import javax.validation.constraints.*;
 @Accessors(chain = true)
 public class MemberReceiveAddressParam extends BaseParam {
 
-    @IDLongMust(message = "id参数必传且需大于等于0", groups = {update.class, delete.class, change.class})
+    @IDLongMust(message = "id参数必传且需大于等于0", groups = {delete.class, change.class})
     private Long id;
     @NotNull(message = "memberId参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "memberId参数值不能少于0", groups = {create.class, update.class})
@@ -30,8 +30,8 @@ public class MemberReceiveAddressParam extends BaseParam {
     @NotNull(message = "phone参数缺失", groups = {create.class, update.class})
     @Length(max = 64, message = "phone参数不能超出64个字符", groups = {create.class, update.class})
     private String phone;
-    @NotNull(message = "postCode参数缺失", groups = {create.class, update.class})
-    @Length(max = 64, message = "postCode参数不能超出64个字符", groups = {create.class, update.class})
+//    @NotNull(message = "postCode参数缺失", groups = {update.class})
+//    @Length(max = 64, message = "postCode参数不能超出64个字符", groups = {create.class, update.class})
     private String postCode;
     @NotNull(message = "province参数缺失", groups = {create.class, update.class})
     @Length(max = 100, message = "province参数不能超出100个字符", groups = {create.class, update.class})

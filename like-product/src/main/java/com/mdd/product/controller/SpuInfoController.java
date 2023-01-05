@@ -1,6 +1,7 @@
 package com.mdd.product.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.vo.ProductDetaliSpuVo;
 import com.mdd.product.service.ISpuInfoService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.product.validate.SpuInfoParam;
@@ -112,5 +113,12 @@ public class SpuInfoController {
     public Object spuUp(@RequestParam("id") Long id) {
         iSpuInfoService.up(id);
         return AjaxResult.success();
+    }
+
+    @Log(title = "根据skuId获取spu详情")
+    @RequestMapping("/getDetialBySkuId")
+    public AjaxResult<ProductDetaliSpuVo> getDetialBySkuId(@RequestParam("skuId") Long skuId) {
+        ProductDetaliSpuVo productDetaliSpuVo = iSpuInfoService.getDetialBySkuId(skuId);
+        return AjaxResult.success(productDetaliSpuVo);
     }
 }

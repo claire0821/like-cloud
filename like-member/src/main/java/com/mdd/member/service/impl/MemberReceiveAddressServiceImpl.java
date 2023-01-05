@@ -1,11 +1,14 @@
 package com.mdd.member.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
 import com.mdd.common.vo.MemberReceiveAddressVo;
+import com.mdd.member.LikeMemberInterceptor;
+import com.mdd.member.LikeMemberThreadLocal;
 import com.mdd.member.service.IMemberReceiveAddressService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.member.validate.MemberReceiveAddressParam;
@@ -81,7 +84,7 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
      * @return MemberReceiveAddress
      */
     @Override
-    public MemberReceiveAddressDetailVo detail(Long id) {
+    public MemberReceiveAddressVo detail(Long id) {
         MemberReceiveAddress model = memberReceiveAddressMapper.selectOne(
                 new QueryWrapper<MemberReceiveAddress>()
                     .eq("id", id)
@@ -89,8 +92,9 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
 
         Assert.notNull(model, "数据不存在");
 
-        MemberReceiveAddressDetailVo vo = new MemberReceiveAddressDetailVo();
+        MemberReceiveAddressVo vo = new MemberReceiveAddressVo();
         BeanUtils.copyProperties(model, vo);
+//        vo.setProvinceCityRegion(vo.getProvince() + " " + vo.getCity() + " " + vo.getRegion());
         return vo;
     }
 
@@ -101,8 +105,9 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
      */
     @Override
     public void add(MemberReceiveAddressParam memberReceiveAddressParam) {
+        final Long userId = LikeMemberThreadLocal.getUserId();
         MemberReceiveAddress model = new MemberReceiveAddress();
-        model.setMemberId(memberReceiveAddressParam.getMemberId());
+        model.setMemberId(userId);
         model.setName(memberReceiveAddressParam.getName());
         model.setPhone(memberReceiveAddressParam.getPhone());
         model.setPostCode(memberReceiveAddressParam.getPostCode());
@@ -113,6 +118,10 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
         model.setAreacode(memberReceiveAddressParam.getAreacode());
         model.setDefaultStatus(memberReceiveAddressParam.getDefaultStatus());
         memberReceiveAddressMapper.insert(model);
+        //默认地址只有一个
+        if(model.getDefaultStatus() == 1) {
+            this.setDefaultAddress(model.getId());
+        }
     }
 
     /**
@@ -161,10 +170,11 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
     }
 
     @Override
-    public List<MemberReceiveAddressVo> listByMember(Long memberId) {
+    public List<MemberReceiveAddressVo> listByMember() {
+        final Long userId = LikeMemberThreadLocal.getUserId();
         List<MemberReceiveAddress> model = memberReceiveAddressMapper.selectList(
                 new QueryWrapper<MemberReceiveAddress>()
-                        .eq("member_id", memberId));
+                        .eq("member_id", userId));
 
         List<MemberReceiveAddressVo> list = new LinkedList<>();
         for(MemberReceiveAddress item : model) {
@@ -176,19 +186,32 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
     }
 
     @Override
-    public MemberReceiveAddressVo getDefaultAddress(Long memberId) {
+    public MemberReceiveAddressVo getDefaultAddress() {
+        //TODO 用户没有登录
+        final Long userId = LikeMemberThreadLocal.getUserId();
         MemberReceiveAddress model = memberReceiveAddressMapper.selectOne(
                 new QueryWrapper<MemberReceiveAddress>()
-                        .eq("member_id", memberId)
+                        .eq("member_id", userId)
                         .eq("default_status",1));
         if(model == null) {
             model = memberReceiveAddressMapper.selectOne(
                     new QueryWrapper<MemberReceiveAddress>()
-                            .eq("member_id", memberId));
+                            .eq("member_id", userId));
         }
         MemberReceiveAddressVo vo = new MemberReceiveAddressVo();
         BeanUtils.copyProperties(model, vo);
         return vo;
+    }
+
+    @Override
+    public void setDefaultAddress(Long id) {
+        final Long userId = LikeMemberThreadLocal.getUserId();
+        //清除之前的默认地址
+        this.update(new UpdateWrapper<MemberReceiveAddress>()
+                .eq("member_id",userId).eq("default_status",1).set("default_status",0));
+        //设置当前默认地址
+        this.update(new UpdateWrapper<MemberReceiveAddress>()
+                .eq("id",id).set("default_status",1));
     }
 
 }

@@ -30,10 +30,9 @@ public interface IMemberService extends IService<Member> {
     /**
      * 会员详情
      *
-     * @param id 主键ID
      * @return Member
      */
-    MemberDetailVo detail(Long id);
+    MemberVo detail();
 
     /**
      * 会员新增

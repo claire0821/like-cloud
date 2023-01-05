@@ -51,7 +51,7 @@ public class CartVo {
         int count = 0;
         if (items != null && items.size() > 0) {
             for (CartItemVo item : items) {
-                count += item.getCount();
+                count += item.getSkuQuantity();
             }
         }
         return count;

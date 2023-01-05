@@ -164,4 +164,12 @@ public class WareOrderTaskServiceImpl extends ServiceImpl<WareOrderTaskMapper,Wa
         wareOrderTaskMapper.delete(new QueryWrapper<WareOrderTask>().eq("id", id));
     }
 
+    @Override
+    public WareOrderTask getOrderTaskByOrderSn(String orderSn) {
+        WareOrderTask orderTaskEntity = this.baseMapper.selectOne(
+                new QueryWrapper<WareOrderTask>().eq("order_sn", orderSn));
+
+        return orderTaskEntity;
+    }
+
 }

@@ -11,7 +11,7 @@ public enum OrderStatusEnum {
     PAYED(1,"已付款"),
     SENDED(2,"已发货"),
     RECIEVED(3,"已完成"),
-    CANCLED(4,"已取消"),
+    CANCLED(4,"已关闭"),
     SERVICING(5,"售后中"),
     SERVICED(6,"售后完成");
     private Integer code;

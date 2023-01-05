@@ -32,7 +32,7 @@ public interface IMemberReceiveAddressService extends IService<MemberReceiveAddr
      * @param id 主键ID
      * @return MemberReceiveAddress
      */
-    MemberReceiveAddressDetailVo detail(Long id);
+    MemberReceiveAddressVo detail(Long id);
 
     /**
      * 会员收货地址新增
@@ -55,7 +55,9 @@ public interface IMemberReceiveAddressService extends IService<MemberReceiveAddr
      */
     void del(Long id);
 
-    List<MemberReceiveAddressVo> listByMember(Long memberId);
+    List<MemberReceiveAddressVo> listByMember();
 
-    MemberReceiveAddressVo getDefaultAddress(Long memberId);
+    MemberReceiveAddressVo getDefaultAddress();
+
+    void setDefaultAddress(Long id);
 }

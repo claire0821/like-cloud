@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @create: 2022-11-16 17:27
  **/
 @FeignClient("like-product")
-public interface ProductFeignService {
+public interface IProductFeignService {
 
     @GetMapping("api/product/skuinfo/detail")
     public Object detail(@Validated @IDLongMust() @RequestParam("skuId") Long skuId);

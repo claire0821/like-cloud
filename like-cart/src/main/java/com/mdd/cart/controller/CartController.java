@@ -28,7 +28,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/getCartItems")
-    public Object getCartItems() {
+    public AjaxResult<CartVo> getCartItems() {
         CartVo cartVo = iCartService.getUserCartItems();
         return AjaxResult.success(cartVo);
     }
@@ -40,7 +40,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/addCartItem")
-    public Object addCartItem(@RequestParam("skuId") Long skuId,
+    public AjaxResult<Object> addCartItem(@RequestParam("skuId") Long skuId,
                               @RequestParam("num") Integer num) throws ExecutionException, InterruptedException {
 
         iCartService.addToCart(skuId,num);
@@ -54,7 +54,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/changeCartItemSelected")
-    public Object changeCartItemSelected(@RequestParam(value = "skuId") Long skuId,
+    public AjaxResult<Object> changeCartItemSelected(@RequestParam(value = "skuId") Long skuId,
                             @RequestParam(value = "selected") Boolean selected) {
         iCartService.checkItem(skuId,selected);
         return AjaxResult.success();
@@ -65,7 +65,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/selectAllCartItem")
-    public Object selectAllCartItem(@RequestParam(value = "selected") Boolean selected) {
+    public AjaxResult<Object> selectAllCartItem(@RequestParam(value = "selected") Boolean selected) {
         iCartService.selectAllCartItem(selected);
         return AjaxResult.success();
     }
@@ -77,7 +77,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/countCartItem")
-    public Object countCartItem(@RequestParam(value = "skuId") Long skuId,
+    public AjaxResult<Object> countCartItem(@RequestParam(value = "skuId") Long skuId,
                             @RequestParam(value = "num") Integer num) {
         iCartService.changeItemCount(skuId,num);
         return AjaxResult.success();
@@ -90,7 +90,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/deleteCartItem")
-    public Object deleteCartItem(@RequestParam("skuId") Long skuId) {
+    public AjaxResult<Object> deleteCartItem(@RequestParam("skuId") Long skuId) {
         iCartService.deleteIdCartInfo(skuId);
         return AjaxResult.success();
 
@@ -101,7 +101,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/clearCartItem")
-    public Object clearCartItem() {
+    public AjaxResult<Object> clearCartItem() {
         iCartService.clearCartInfo();
         return AjaxResult.success();
     }
@@ -111,7 +111,7 @@ public class CartController {
      * @return
      */
     @GetMapping(value = "/currentUserCartItems")
-    public AjaxResult getCurrentCartItems() {
+    public AjaxResult<List<CartItemVo>> getCurrentCartItems() {
         List<CartItemVo> cartItemVoList = iCartService.getCurrentCartItems();
         return AjaxResult.success(cartItemVoList);
     }

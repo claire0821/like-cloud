@@ -22,6 +22,10 @@ public class MemberReceiveAddressVo implements Serializable {
     private String region;  // 区
     private String detailAddress;  // 详细地址(街道)
     private String areacode;  // 省市区代码
+    private String provinceCityRegion;  // 省市区
     private Integer defaultStatus;  // 是否默认
 
+    public String getProvinceCityRegion() {
+        return this.province + " " + this.city + " " + this.region;
+    }
 }

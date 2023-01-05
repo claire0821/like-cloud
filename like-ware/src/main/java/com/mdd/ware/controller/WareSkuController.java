@@ -1,6 +1,10 @@
 package com.mdd.ware.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.exception.BaseException;
+import com.mdd.common.vo.LockStockResult;
+import com.mdd.common.vo.WareSkuLockVo;
 import com.mdd.ware.service.IWareSkuService;
 import com.mdd.ware.validate.WareSkuParam;
 import com.mdd.common.validate.PageParam;
@@ -102,5 +106,20 @@ public class WareSkuController {
     public Object getSkuHasStock(@RequestBody List<Long> skuIds) {
         List<SkuHasStockVo> vos = iWareSkuService.getSkuHasStock(skuIds);
         return AjaxResult.success(vos);
+    }
+
+
+    /**
+     * 锁库存
+     * @return
+     */
+    @PostMapping(value = "/orderLockStock")
+    public AjaxResult<Boolean> orderLockStock(@RequestBody WareSkuLockVo vo) {
+        try {
+            boolean lockStock = iWareSkuService.orderLockStock(vo);
+            return AjaxResult.success(lockStock);
+        } catch (BaseException e) {
+            throw new BaseException(HttpEnum.ORDER_NO_STOCK.getCode(), HttpEnum.ORDER_NO_STOCK.getMsg());
+        }
     }
 }

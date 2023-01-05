@@ -23,8 +23,10 @@ public enum HttpEnum {
     NO_PERMISSION(403, "无相关权限"),
     REQUEST_404_ERROR(404, "请求接口不存在"),
 
-    SYSTEM_ERROR(500, "系统错误");
+    SYSTEM_ERROR(500, "系统错误"),
 
+    ORDER_ERROR(600, "订单错误"),
+    ORDER_NO_STOCK(601, "商品库存不足");
     /**
      * 构造方法
      */

@@ -1,6 +1,8 @@
 package com.mdd.order.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.vo.OrderVo;
+import com.mdd.order.entity.Order;
 import com.mdd.order.service.IOrderService;
 import com.mdd.order.to.OrderCreateTo;
 import com.mdd.order.validate.OrderParam;
@@ -11,6 +13,7 @@ import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IDLongMust;
+import com.mdd.order.vo.OrderSubmitVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +25,7 @@ import java.util.Map;
  * 订单管理
  */
 @RestController
-@RequestMapping("api/order/order")
+@RequestMapping("api/order")
 public class OrderController {
 
     @Resource
@@ -99,9 +102,65 @@ public class OrderController {
      * @return Object
      */
     @Log(title = "确认订单")
-    @PostMapping("/confirm")
-    public Object confirm() {
+    @GetMapping("/confirm")
+    public AjaxResult<OrderCreateTo> confirm() {
         OrderCreateTo orderCreateTo = iOrderService.createOrder();
         return AjaxResult.success(orderCreateTo);
+    }
+
+    /**
+     * 提交订单
+     *
+     * @return Object
+     */
+    @Log(title = "提交订单")
+    @GetMapping("/submit")
+    public AjaxResult<Object> submit(@RequestBody OrderSubmitVo orderSubmitVo) {
+        iOrderService.submitOrder(orderSubmitVo);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 关闭订单
+     *
+     * @return Object
+     */
+    @Log(title = "关闭订单")
+    @GetMapping("/close")
+    public AjaxResult<Object> close(@RequestParam("id") Long id) {
+        return AjaxResult.success();
+    }
+
+    /**
+     * 删除订单
+     *
+     * @return Object
+     */
+    @Log(title = "删除订单")
+    @GetMapping("/delete")
+    public AjaxResult<Object> delete(@RequestParam("id") Long id) {
+        return AjaxResult.success();
+    }
+
+    /**
+     * 完成订单
+     *
+     * @return Object
+     */
+    @Log(title = "完成订单")
+    @GetMapping("/complete")
+    public AjaxResult<Object> complete(@RequestParam("id") Long id) {
+        return AjaxResult.success();
+    }
+
+    /**
+     * 根据订单编号查询订单状态
+     * @param orderSn
+     * @return
+     */
+    @GetMapping(value = "/status/{orderSn}")
+    public AjaxResult<OrderVo> getOrderStatus(@RequestParam("orderSn") String orderSn) {
+        OrderVo order = iOrderService.getOrderByOrderSn(orderSn);
+        return AjaxResult.success(order);
     }
 }

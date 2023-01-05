@@ -2,6 +2,7 @@ package com.mdd.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.common.vo.ProductDetaliSpuVo;
 import com.mdd.product.entity.SpuInfo;
 import com.mdd.product.validate.SpuInfoParam;
 import com.mdd.product.vo.ProductDetaliVo;
@@ -62,4 +63,6 @@ public interface ISpuInfoService extends IService<SpuInfo> {
     void up(Long spuId);
 
     ProductDetaliVo productDetail(Long spuId, Long skuId);
+
+    ProductDetaliSpuVo getDetialBySkuId(Long skuId);
 }

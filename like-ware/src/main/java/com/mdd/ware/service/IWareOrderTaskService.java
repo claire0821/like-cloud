@@ -53,4 +53,5 @@ public interface IWareOrderTaskService extends IService<WareOrderTask> {
      */
     void del(Long id);
 
+    WareOrderTask getOrderTaskByOrderSn(String orderSn);
 }

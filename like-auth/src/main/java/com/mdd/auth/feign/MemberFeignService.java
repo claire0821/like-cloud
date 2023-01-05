@@ -3,6 +3,7 @@ package com.mdd.auth.feign;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validate.member.LoginParam;
 import com.mdd.common.validate.member.RegParam;
+import com.mdd.common.vo.MemberVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ public interface MemberFeignService {
 
 
     @PostMapping(value = "api/member/member/login")
-    AjaxResult login(@RequestBody LoginParam loginParam);
+    AjaxResult<MemberVo> login(@RequestBody LoginParam loginParam);
 //
 //    @PostMapping(value = "api/member/member/oauth2/login")
 //    Object oauthLogin(@RequestBody SocialUser socialUser) throws Exception;

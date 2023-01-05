@@ -21,7 +21,13 @@ public class MemberVo implements Serializable {
     private String email = "";  // 邮箱
     private String avatar;  // 头像
     private Integer gender;  // 性别
+    private Date birth;  // 生日
+    private String city;  // 所在城市
+    private String job;  // 职业
+    private String sign;  // 个性签名
     private Integer sourceType;  // 用户来源
+    private Integer integration;  // 积分
+    private Integer growth;  // 成长值
     private Integer status;  // 启用状态
 
 }

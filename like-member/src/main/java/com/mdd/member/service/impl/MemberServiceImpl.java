@@ -17,6 +17,7 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.utils.*;
 import com.mdd.common.validate.member.LoginParam;
 import com.mdd.common.vo.MemberVo;
+import com.mdd.member.LikeMemberThreadLocal;
 import com.mdd.member.entity.MemberLevel;
 import com.mdd.member.service.IMemberLevelService;
 import com.mdd.member.service.IMemberService;
@@ -101,19 +102,19 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
     /**
      * 会员详情
      *
-     * @param id 主键参数
      * @return Member
      */
     @Override
-    public MemberDetailVo detail(Long id) {
+    public MemberVo detail() {
+        final Long userId = LikeMemberThreadLocal.getUserId();
         Member model = memberMapper.selectOne(
                 new QueryWrapper<Member>()
-                    .eq("id", id)
+                    .eq("id", userId)
                     .last("limit 1"));
 
         Assert.notNull(model, "数据不存在");
 
-        MemberDetailVo vo = new MemberDetailVo();
+        MemberVo vo = new MemberVo();
         BeanUtils.copyProperties(model, vo);
         return vo;
     }

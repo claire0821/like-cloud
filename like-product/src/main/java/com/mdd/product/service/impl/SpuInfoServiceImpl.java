@@ -13,6 +13,7 @@ import com.mdd.common.es.SkuEsModel;
 import com.mdd.common.to.SkuHasStockVo;
 import com.mdd.common.to.SkuReductionTo;
 import com.mdd.common.to.SpuBoundTo;
+import com.mdd.common.vo.ProductDetaliSpuVo;
 import com.mdd.product.entity.*;
 import com.mdd.product.entity.Attr;
 import com.mdd.product.feign.CouponFeignService;
@@ -536,5 +537,24 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
         //TODO 活动类型
         productDetaliVo.setActivityType(3);
         return productDetaliVo;
+    }
+
+    @Override
+    public ProductDetaliSpuVo getDetialBySkuId(Long skuId) {
+        final SkuInfo byId = iSkuInfoService.getById(skuId);
+        final SpuInfo spuInfo = this.getById(byId.getSpuId());
+
+        ProductDetaliSpuVo productDetaliSpuVo = new ProductDetaliSpuVo();
+        BeanUtils.copyProperties(spuInfo,productDetaliSpuVo);
+        productDetaliSpuVo.setSpuId(spuInfo.getId());
+
+        final Category category = iCategoryService.getById(spuInfo.getCatalogId());
+        productDetaliSpuVo.setCatelogId(category.getCatId());
+        productDetaliSpuVo.setCatelogName(category.getName());
+
+        final Brand brand = iBrandService.getById(spuInfo.getBrandId());
+        productDetaliSpuVo.setBrandId(brand.getBrandId());
+        productDetaliSpuVo.setBrandName(brand.getName());
+        return productDetaliSpuVo;
     }
 }

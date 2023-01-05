@@ -131,7 +131,8 @@ public class LoginController {
             return res;
         }
 
-        MemberVo data = res.getData(new TypeReference<MemberVo>() {});
+//        MemberVo data = res.getData(new TypeReference<MemberVo>() {});
+        MemberVo data = (MemberVo) res.getData();
         Map<String, Object> response = new LinkedHashMap<>();
         final Long id = data.getId();
         if(id == null) {

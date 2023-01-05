@@ -264,6 +264,24 @@ public class RedisUtil {
         }
     }
 
+
+    /**
+     * 设置键值对并设置时间
+     *
+     * @author fzr
+     * @param key 键
+     * @param value 值
+     * @param time time要大于0 如果time小于等于0 将设置无限期
+     */
+    public static void set(String key, Object value, long time, TimeUnit unit) {
+        key = redisPrefix + key;
+        if (time > 0) {
+            redisTemplate.opsForValue().set(key, value, time, unit);
+        } else {
+            set(key, value);
+        }
+    }
+
     /**
      * 递增
      *

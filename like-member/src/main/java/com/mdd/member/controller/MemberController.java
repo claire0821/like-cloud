@@ -46,13 +46,11 @@ public class MemberController {
     }
     /**
      * 会员详情
-     *
-     * @param id 主键ID
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
-        MemberDetailVo detail = iMemberService.detail(id);
+    public AjaxResult<MemberVo> detail() {
+        MemberVo detail = iMemberService.detail();
         return AjaxResult.success(detail);
     }
 
@@ -117,7 +115,7 @@ public class MemberController {
      */
     @Log(title = "会员登录")
     @PostMapping("/login")
-    public AjaxResult login(@Validated @RequestBody LoginParam loginParam) {
+    public AjaxResult<MemberVo> login(@Validated @RequestBody LoginParam loginParam) {
         final MemberVo login = iMemberService.login(loginParam);
         return AjaxResult.success(login);
     }

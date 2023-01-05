@@ -49,8 +49,8 @@ public class MemberReceiveAddressController {
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
-        MemberReceiveAddressDetailVo detail = iMemberReceiveAddressService.detail(id);
+    public AjaxResult<MemberReceiveAddressVo> detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
+        MemberReceiveAddressVo detail = iMemberReceiveAddressService.detail(id);
         return AjaxResult.success(detail);
     }
 
@@ -98,24 +98,34 @@ public class MemberReceiveAddressController {
     /**
      * 会员收货地址列表
      *
-     * @param memberId 用户id
      * @return Object
      */
     @GetMapping("/listByMember")
-    public AjaxResult listByMember(@RequestParam("memberId") Long memberId) {
-        List<MemberReceiveAddressVo> list = iMemberReceiveAddressService.listByMember(memberId);
+    public AjaxResult<List<MemberReceiveAddressVo>> listByMember() {
+        List<MemberReceiveAddressVo> list = iMemberReceiveAddressService.listByMember();
         return AjaxResult.success(list);
     }
 
     /**
      * 会员默认收货地址
      *
-     * @param memberId 用户id
      * @return Object
      */
     @GetMapping("/getDefaultAddress")
-    public AjaxResult getDefaultAddress(@RequestParam("memberId") Long memberId) {
-        MemberReceiveAddressVo vo = iMemberReceiveAddressService.getDefaultAddress(memberId);
+    public AjaxResult<MemberReceiveAddressVo> getDefaultAddress() {
+        MemberReceiveAddressVo vo = iMemberReceiveAddressService.getDefaultAddress();
         return AjaxResult.success(vo);
+    }
+
+    /**
+     * 设置默认收货地址
+     *
+     * @param id 地址id
+     * @return Object
+     */
+    @GetMapping("/setDefaultAddress")
+    public AjaxResult<Object> setDefaultAddress(@RequestParam("id") Long id) {
+        iMemberReceiveAddressService.setDefaultAddress(id);
+        return AjaxResult.success();
     }
 }

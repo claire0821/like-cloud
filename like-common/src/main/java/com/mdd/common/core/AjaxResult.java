@@ -1,19 +1,13 @@
 package com.mdd.common.core;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.mdd.common.enums.HttpEnum;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-@Data
-public class AjaxResult implements Serializable{
-
-    private static final long serialVersionUID = 1L;
+//@Data
+public class AjaxResult<T> implements Serializable {
 
     /** 状态码 **/
     private Integer code;
@@ -22,12 +16,10 @@ public class AjaxResult implements Serializable{
     private String msg;
 
     /** 响应数据 **/
-    private Object data;
+    private T data;
 
-    /**
-     * 无参构造
-     */
-    public AjaxResult() {}
+    /** 无参构造 **/
+    protected AjaxResult() {}
 
     /**
      * 带参构造
@@ -37,7 +29,7 @@ public class AjaxResult implements Serializable{
      * @param msg 提示信息
      * @param data 响应数据
      */
-    public AjaxResult(Integer code, String msg, Object data) {
+    public AjaxResult(Integer code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -49,8 +41,8 @@ public class AjaxResult implements Serializable{
      * @author fzr
      * @return AjaxResult
      */
-    public static AjaxResult success() {
-        return new AjaxResult(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), new ArrayList<>());
+    public static AjaxResult<Object> success() {
+        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), new ArrayList<>());
     }
 
     /**
@@ -60,8 +52,8 @@ public class AjaxResult implements Serializable{
      * @param code 状态码
      * @return AjaxResult
      */
-    public static AjaxResult success(Integer code) {
-        return new AjaxResult(code, HttpEnum.FAILED.getMsg(), new ArrayList<>());
+    public static AjaxResult<Object> success(Integer code) {
+        return new AjaxResult<>(code, HttpEnum.SUCCESS.getMsg(), new ArrayList<>());
     }
 
     /**
@@ -71,8 +63,8 @@ public class AjaxResult implements Serializable{
      * @param msg 提示信息
      * @return AjaxResult
      */
-    public static AjaxResult success(String msg) {
-        return new AjaxResult(HttpEnum.SUCCESS.getCode(), msg, new ArrayList<>());
+    public static AjaxResult<Object> success(String msg) {
+        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), msg, new ArrayList<>());
     }
 
     /**
@@ -82,8 +74,8 @@ public class AjaxResult implements Serializable{
      * @param data 响应数据
      * @return AjaxResult
      */
-    public static AjaxResult success(Object data) {
-        return new AjaxResult(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), data);
+    public static <T> AjaxResult<T> success(T data) {
+        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), HttpEnum.SUCCESS.getMsg(), data);
     }
 
     /**
@@ -94,8 +86,8 @@ public class AjaxResult implements Serializable{
      * @param msg 提示信息
      * @return AjaxResult
      */
-    public static AjaxResult success(Integer code, String msg) {
-        return new AjaxResult(code, msg, new ArrayList<>());
+    public static AjaxResult<Object> success(Integer code, String msg) {
+        return new AjaxResult<>(code, msg, new ArrayList<>());
     }
 
     /**
@@ -106,8 +98,8 @@ public class AjaxResult implements Serializable{
      * @param data 响应数据
      * @return AjaxResult
      */
-    public static AjaxResult success(String msg, Object data) {
-        return new AjaxResult(HttpEnum.SUCCESS.getCode(), msg, data);
+    public static <T> AjaxResult <T> success(String msg, T data) {
+        return new AjaxResult<>(HttpEnum.SUCCESS.getCode(), msg, data);
     }
 
     /**
@@ -119,8 +111,8 @@ public class AjaxResult implements Serializable{
      * @param data 响应数据
      * @return AjaxResult
      */
-    public static AjaxResult success(Integer code, String msg, Object data) {
-        return new AjaxResult(code, msg, data);
+    public static <T> AjaxResult<T> success(Integer code, String msg, T data) {
+        return new AjaxResult<>(code, msg, data);
     }
 
     /**
@@ -130,8 +122,8 @@ public class AjaxResult implements Serializable{
      * @param code 状态码
      * @return AjaxResult
      */
-    public static AjaxResult failed(Integer code) {
-        return new AjaxResult(code, HttpEnum.FAILED.getMsg(), new ArrayList<>());
+    public static AjaxResult<Object> failed(Integer code) {
+        return new AjaxResult<>(code, HttpEnum.FAILED.getMsg(), new ArrayList<>());
     }
 
     /**
@@ -141,8 +133,8 @@ public class AjaxResult implements Serializable{
      * @param msg 提示信息
      * @return AjaxResult
      */
-    public static AjaxResult failed(String msg) {
-        return new AjaxResult(HttpEnum.FAILED.getCode(), msg, new ArrayList<>());
+    public static AjaxResult<Object> failed(String msg) {
+        return new AjaxResult<>(HttpEnum.FAILED.getCode(), msg, new ArrayList<>());
     }
 
     /**
@@ -152,8 +144,8 @@ public class AjaxResult implements Serializable{
      * @param data 响应数据
      * @return AjaxResult
      */
-    public static AjaxResult failed(Object data) {
-        return new AjaxResult(HttpEnum.FAILED.getCode(), HttpEnum.FAILED.getMsg(), data);
+    public static <T> AjaxResult<T> failed(T data) {
+        return new AjaxResult<T>(HttpEnum.FAILED.getCode(), HttpEnum.FAILED.getMsg(), data);
     }
 
     /**
@@ -164,8 +156,8 @@ public class AjaxResult implements Serializable{
      * @param msg 提示信息
      * @return AjaxResult
      */
-    public static AjaxResult failed(Integer code, String msg) {
-        return new AjaxResult(code, msg, new ArrayList<>());
+    public static AjaxResult<Object> failed(Integer code, String msg) {
+        return new AjaxResult<>(code, msg, new ArrayList<>());
     }
 
     /**
@@ -177,15 +169,31 @@ public class AjaxResult implements Serializable{
      * @param data 响应数据
      * @return AjaxResult
      */
-    public static AjaxResult failed(Integer code, String msg, Object data) {
-        return new AjaxResult(code, msg, data);
+    public static <T> AjaxResult<T> failed(Integer code, String msg, T data) {
+        return new AjaxResult<>(code, msg, data);
     }
 
+    public Integer getCode() {
+        return code;
+    }
 
-    //利用fastjson进行反序列化
-    public <T> T getData(TypeReference<T> typeReference) {
-        String jsonString = JSON.toJSONString(data);
-        T t = JSON.parseObject(jsonString, new TypeReference<T>(){});
-        return t;
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

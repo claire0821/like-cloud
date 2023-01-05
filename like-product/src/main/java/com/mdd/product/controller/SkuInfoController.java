@@ -100,9 +100,9 @@ public class SkuInfoController {
      * @param skuId 参数
      * @return Object
      */
-    @Log(title = "sku信息批量删除")
+    @Log(title = "sku信息详情包括销售属性")
     @GetMapping("/getDetial")
-    public Object getDetial(@Validated @IDLongMust() @RequestParam("skuId") Long skuId) {
+    public AjaxResult<ProductDetaliSkuVo> getDetial(@RequestParam("skuId") Long skuId) {
        ProductDetaliSkuVo productDetaliSkuVo = iSkuInfoService.getDetial(skuId);
         return AjaxResult.success(productDetaliSkuVo);
     }
@@ -113,7 +113,7 @@ public class SkuInfoController {
      * @return
      */
     @GetMapping(value = "/price")
-    public Object getPrice(@PathVariable("skuId") Long skuId) {
+    public AjaxResult<BigDecimal> getPrice(@RequestParam("skuId") Long skuId) {
         //获取当前商品的信息
         SkuInfo skuInfo = iSkuInfoService.getById(skuId);
         //获取商品的价格

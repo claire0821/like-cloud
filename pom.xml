@@ -25,6 +25,7 @@
         <module>like-auth</module>
         <module>like-search</module>
         <module>like-cart</module>
+        <module>like-seckill</module>
     </modules>
 
     <!--springcloud需要2.6以上-->

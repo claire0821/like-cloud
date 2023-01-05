@@ -6,6 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.mdd.cart.LikeCartThreadLocal;
 import com.mdd.cart.feign.IProductFeignService;
 import com.mdd.cart.service.ICartService;
+import com.mdd.common.core.AjaxResult;
 import com.mdd.common.vo.CartItemVo;
 import com.mdd.cart.vo.CartVo;
 import com.mdd.common.config.GlobalConfig;
@@ -13,6 +14,7 @@ import com.mdd.common.constant.CartConstant;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.vo.ProductDetaliSkuVo;
+import com.mdd.common.vo.ProductDetaliSpuVo;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,22 +59,14 @@ public class CartServiceImpl implements ICartService {
                 //1、远程查询当前要添加商品的信息
                 try{
                     Map<String, Object> skuInfoMap = null;
-                    final LinkedHashMap productSkuInfo = (LinkedHashMap) iProductFeignService.getDetial(skuId);
-                    final Integer code = (Integer) productSkuInfo.get("code");
-                    if(code == HttpEnum.SUCCESS.getCode()) {
-                        Object data = productSkuInfo.get("data");	//默认是map
-                        String jsonString = JSON.toJSONString(data);
-                        ProductDetaliSkuVo productDetaliSkuVo = JSON.parseObject(jsonString, new TypeReference<ProductDetaliSkuVo>(){});
-//                        ProductDetaliSkuVo productDetaliSkuVo = productSkuInfo.get("data", new TypeReference<ProductDetaliSkuVo>(){});
-
-//                        JSONObject object1 = JSON.parseObject(JSON.toJSONString(productSkuInfo.get("data")),
-//                                new TypeReference<ProductDetaliSkuVo>(){});
-//                        ProductDetaliSkuVo productDetaliSkuVo= object1.toJavaObject(ProductDetaliSkuVo.class);
-                        finalCartItemVo.setCount(num);
+                    final AjaxResult<ProductDetaliSkuVo> result = iProductFeignService.getDetial(skuId);
+                    if(result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+                        ProductDetaliSkuVo productDetaliSkuVo = result.getData();
+                        finalCartItemVo.setSkuQuantity(num);
                         finalCartItemVo.setSkuId(productDetaliSkuVo.getSkuId());
-                        finalCartItemVo.setTitle(productDetaliSkuVo.getTitle());
-                        finalCartItemVo.setImage(productDetaliSkuVo.getImg());
-                        finalCartItemVo.setPrice(productDetaliSkuVo.getPrice());
+                        finalCartItemVo.setSkuName(productDetaliSkuVo.getTitle());
+                        finalCartItemVo.setSkuPic(productDetaliSkuVo.getImg());
+                        finalCartItemVo.setSkuPrice(productDetaliSkuVo.getPrice());
                         finalCartItemVo.setSaleValueStr(productDetaliSkuVo.getSaleValueStr());
                         finalCartItemVo.setStatus(CartConstant.CartItemStatusEnum.CART_ITEM_STATUS_ENUM_NORMAL.getCode());
                     }
@@ -81,12 +75,39 @@ public class CartServiceImpl implements ICartService {
                 }
 
             }, executor);
+
+            CompletableFuture<Void> getSpuInfoFuture = CompletableFuture.runAsync(() -> {
+                //1、远程查询当前要添加商品spu的信息
+                try{
+                    final AjaxResult<ProductDetaliSpuVo> result = iProductFeignService.getDetialBySkuId(skuId);
+                    if(result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+                        ProductDetaliSpuVo productDetaliSpuVo = result.getData();
+                        finalCartItemVo.setSpuId(productDetaliSpuVo.getSpuId());
+                        finalCartItemVo.setSpuName(productDetaliSpuVo.getSpuName());
+                        finalCartItemVo.setBrandId(productDetaliSpuVo.getBrandId());
+                        finalCartItemVo.setBrandName(productDetaliSpuVo.getBrandName());
+                        //finalCartItemVo.setSpuPic();
+                        finalCartItemVo.setCategoryId(productDetaliSpuVo.getCatelogId());
+                        finalCartItemVo.setCategoryName(productDetaliSpuVo.getCatelogName());
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+            }, executor);
+
+
             //等待所有的异步任务全部完成
-            CompletableFuture.allOf(getSkuInfoFuture).get();
+            CompletableFuture.allOf(getSkuInfoFuture,getSpuInfoFuture).get();
+
+            //TODO 会员价
+            finalCartItemVo.setShowMemberPrice(false);
+            finalCartItemVo.setMemberPrice(finalCartItemVo.getSkuPrice());
+
             RedisUtil.hSet(GlobalConfig.CartKey + userId, String.valueOf(skuId),finalCartItemVo);
 
         } else {  //购物车有此商品，修改数量即可
-            cartItemVo.setCount(cartItemVo.getCount() + num);
+            cartItemVo.setSkuQuantity(cartItemVo.getSkuQuantity() + num);
             RedisUtil.hSet(GlobalConfig.CartKey + userId, String.valueOf(skuId),cartItemVo);
         }
 
@@ -119,7 +140,7 @@ public class CartServiceImpl implements ICartService {
         //查询购物车里面的商品
         CartItemVo cartItemVo = (CartItemVo) RedisUtil.hGet(GlobalConfig.CartKey + userId, String.valueOf(skuId));
         //修改商品数量
-        cartItemVo.setCount(num);
+        cartItemVo.setSkuQuantity(num);
         RedisUtil.hSet(GlobalConfig.CartKey + userId, String.valueOf(skuId),cartItemVo);
     }
 
@@ -170,13 +191,9 @@ public class CartServiceImpl implements ICartService {
                     CartItemVo cartItemVo = (CartItemVo) value;
                     //更新价格
                     if(cartItemVo.getSelected() && cartItemVo.getStatus().equals(CartConstant.CartItemStatusEnum.CART_ITEM_STATUS_ENUM_NORMAL.getCode())) {
-                        Map<String, Object> priceMap = (LinkedHashMap) iProductFeignService.getPrice(cartItemVo.getSkuId());
-                        final Integer code = (Integer) priceMap.get("code");
-                        if(code.equals(HttpEnum.SUCCESS)) {
-                            Object data = priceMap.get("data");
-                            String jsonString = JSON.toJSONString(data);
-                            BigDecimal bigDecimal = JSON.parseObject(jsonString, new TypeReference<BigDecimal>(){});
-                            cartItemVo.setPrice(bigDecimal);
+                        AjaxResult<BigDecimal> result = iProductFeignService.getPrice(cartItemVo.getSkuId());
+                        if(result.getData().equals(HttpEnum.SUCCESS)) {
+                            cartItemVo.setSkuPrice(result.getData());
                         }
                         cartItemVoList.add(cartItemVo);
                     }
@@ -209,14 +226,18 @@ public class CartServiceImpl implements ICartService {
                     CartItemVo cartItemVo = (CartItemVo) value;
                     //更新价格
                     if(cartItemVo.getSelected() && cartItemVo.getStatus().equals(CartConstant.CartItemStatusEnum.CART_ITEM_STATUS_ENUM_NORMAL.getCode())) {
-                        Map<String, Object> priceMap = (LinkedHashMap) iProductFeignService.getPrice(cartItemVo.getSkuId());
-                        final Integer code = (Integer) priceMap.get("code");
-                        if(code.equals(HttpEnum.SUCCESS)) {
-                            Object data = priceMap.get("data");
-                            String jsonString = JSON.toJSONString(data);
-                            BigDecimal bigDecimal = JSON.parseObject(jsonString, new TypeReference<BigDecimal>(){});
-                            cartItemVo.setPrice(bigDecimal);
+                        AjaxResult<BigDecimal> result = iProductFeignService.getPrice(cartItemVo.getSkuId());
+                        if(result.getCode().equals(HttpEnum.SUCCESS)) {
+                            cartItemVo.setSkuPrice(result.getData());
+                            cartItemVo.setShowMemberPrice(true);
+                            cartItemVo.setMemberPrice(BigDecimal.valueOf(1000));
                         }
+
+                        //TODO 会员价
+                        cartItemVo.setShowMemberPrice(false);
+                        //TODO 优惠信息
+                        //TODO 积分信息
+
                     }
                     list.add(cartItemVo);
                 }

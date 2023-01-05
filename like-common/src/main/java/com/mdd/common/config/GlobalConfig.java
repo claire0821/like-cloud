@@ -29,6 +29,8 @@ public class GlobalConfig {
     // 购物车缓存键
     public static final String CartKey = "cart:";
 
+    // 购物车缓存键
+    public static final String OrderKey = "order:";
     // 短信验证码
     public static String redisSmsCode  = "smsCode:";
 

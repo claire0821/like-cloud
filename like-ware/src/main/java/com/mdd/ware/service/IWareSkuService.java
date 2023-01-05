@@ -1,7 +1,11 @@
 package com.mdd.ware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mdd.common.to.OrderTo;
+import com.mdd.common.to.mq.StockLockedTo;
 import com.mdd.common.validate.PageParam;
+import com.mdd.common.vo.LockStockResult;
+import com.mdd.common.vo.WareSkuLockVo;
 import com.mdd.ware.entity.WareSku;
 import com.mdd.ware.validate.WareSkuParam;
 import com.mdd.ware.vo.SkuHasStockVo;
@@ -58,4 +62,24 @@ public interface IWareSkuService extends IService<WareSku> {
     void addStock(Long skuId, Long wareId, Integer skuNum);
 
     List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds);
+
+    /**
+     * 锁定库存
+     * @param vo
+     * @return
+     */
+    boolean orderLockStock(WareSkuLockVo vo);
+
+
+    /**
+     * 解锁库存
+     * @param to
+     */
+    void unlockStock(StockLockedTo to);
+
+    /**
+     * 解锁订单
+     * @param orderTo
+     */
+    void unlockStock(OrderTo orderTo);
 }

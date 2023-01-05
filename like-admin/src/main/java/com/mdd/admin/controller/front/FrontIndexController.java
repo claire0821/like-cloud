@@ -66,7 +66,7 @@ public class FrontIndexController {
      * @return Object
      */
     @GetMapping("/config")
-    public Object config() {
+    public AjaxResult<Map<String, Object>> config() {
         Map<String, Object> map = iIndexService.config();
         return AjaxResult.success(map);
     }
