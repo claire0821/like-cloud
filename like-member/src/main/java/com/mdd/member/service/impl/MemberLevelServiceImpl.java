@@ -23,6 +23,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 会员等级实现类
@@ -164,6 +165,23 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper,Member
     public MemberLevel getDefaultLevel() {
         final MemberLevel default_status = memberLevelMapper.selectOne(new QueryWrapper<MemberLevel>().eq("default_status", 1));
         return default_status;
+    }
+
+    @Override
+    public List<MemberLevelListVo> getLevel() {
+        final List<MemberLevel> memberLevels = memberLevelMapper.selectList(new QueryWrapper<MemberLevel>());
+        List<MemberLevelListVo> collect = new ArrayList<>();
+        MemberLevelListVo memberLevel = new MemberLevelListVo();
+        memberLevel.setId(0L);
+        memberLevel.setName("不限等级");
+        collect.add(memberLevel);
+        collect = memberLevels.stream().map(item -> {
+            MemberLevelListVo memberLevelListVo = new MemberLevelListVo();
+            memberLevelListVo.setId(item.getId());
+            memberLevelListVo.setName(item.getName());
+            return memberLevelListVo;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }

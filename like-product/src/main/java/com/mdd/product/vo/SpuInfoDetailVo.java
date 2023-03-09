@@ -20,5 +20,5 @@ public class SpuInfoDetailVo implements Serializable {
     private Long brandId;  // 品牌id
     private BigDecimal weight;  //
     private Integer publishStatus;  // 上架状态[0 - 下架，1 - 上架]
-
+    private String spuImg;  // 图片地址
 }

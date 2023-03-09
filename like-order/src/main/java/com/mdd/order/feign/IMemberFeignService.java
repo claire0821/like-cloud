@@ -40,4 +40,11 @@ public interface IMemberFeignService {
      */
     @GetMapping(value = "/api/member/member/detail")
     AjaxResult<MemberVo> detail();
+
+    /**
+     * 查询会员详情
+     * @return
+     */
+    @GetMapping(value = "/api/member/member/detailById")
+    AjaxResult<MemberVo> detailById(@RequestParam("id") Long id);
 }

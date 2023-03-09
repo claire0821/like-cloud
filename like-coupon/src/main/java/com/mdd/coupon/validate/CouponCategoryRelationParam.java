@@ -17,7 +17,7 @@ import javax.validation.constraints.*;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class CouponSpuCategoryRelationParam extends BaseParam {
+public class CouponCategoryRelationParam extends BaseParam {
 
     @IDLongMust(message = "id参数必传且需大于等于0", groups = {update.class, delete.class, change.class})
     private Long id;

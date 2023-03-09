@@ -2,6 +2,9 @@ package com.mdd.common.utils;
 
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.config.RedisConfig;
+import com.mdd.common.constant.OrderConstant;
+import com.mdd.common.vo.UserVo;
+import lombok.Data;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -650,6 +653,20 @@ public class RedisUtil {
     }
 
     /**
+     * 将list放入缓存
+     *
+     * @author fzr
+     * @param key 键
+     * @param value 值
+     * @return boolean
+     */
+    public static boolean lSetLeft(String key, List<Object> value) {
+        key = redisPrefix + key;
+        redisTemplate.opsForList().leftPushAll(key, value);
+        return true;
+    }
+
+    /**
      * 根据索引修改list中的某条数据
      *
      * @author fzr
@@ -698,10 +715,10 @@ public class RedisUtil {
      * @param token 键
      * @return Object
      */
-    public static String getToken(String token) {
-        token = redisPrefix + GlobalConfig.TokenKey + token;
-        return token;
-    }
+//    public static String getToken(String token) {
+//        token = redisPrefix + GlobalConfig.TokenKey + token;
+//        return token;
+//    }
 
     /**
      * 判断key是否存在
@@ -711,7 +728,7 @@ public class RedisUtil {
      * @return true=存在,false=不存在
      */
     public static Boolean existsToken(String token) {
-        return redisTemplate.hasKey(token);
+        return redisTemplate.hasKey(redisPrefix + GlobalConfig.TokenKey + token) || redisTemplate.hasKey(redisPrefix + GlobalConfig.backstageTokenKey + token);
     }
 
     /**
@@ -721,7 +738,39 @@ public class RedisUtil {
      * @param token 键
      * @return Object
      */
-    public static Object getUserID(String token) {
-        return redisTemplate.opsForValue().get(token);
+//    public static Object getUserID(String token) {
+//        return redisTemplate.opsForValue().get(token);
+//    }
+
+    public static UserVo getUser(String token) {
+        UserVo user = null;
+        if(redisTemplate.hasKey(redisPrefix + GlobalConfig.TokenKey + token)) {
+            final Long id = Long.parseLong(redisTemplate.opsForValue().get(redisPrefix + GlobalConfig.TokenKey + token).toString());
+            user = new UserVo();
+            user.setId(id);
+            user.setType(OrderConstant.OperateManTypeEnum.USER.getCode());
+        } else if(redisTemplate.hasKey(redisPrefix + GlobalConfig.backstageTokenKey + token)){
+            final Long id = Long.parseLong(redisTemplate.opsForValue().get(redisPrefix + GlobalConfig.backstageTokenKey + token).toString());
+            user = new UserVo();
+            user.setId(id);
+            user.setType(OrderConstant.OperateManTypeEnum.ADMINISTRATORS.getCode());
+        }
+        return user;
+    }
+
+    /**
+     * 自动续签
+     * @param token
+     */
+    public static void renewalToken(String token) {
+        if(redisTemplate.hasKey(redisPrefix + GlobalConfig.TokenKey + token)) {
+            if(RedisUtil.ttl(redisPrefix + GlobalConfig.TokenKey + token) < 1800) {
+                RedisUtil.expire(redisPrefix + GlobalConfig.TokenKey + token, 7200L);
+            }
+        } else if(redisTemplate.hasKey(redisPrefix + GlobalConfig.backstageTokenKey + token)){
+            if(RedisUtil.ttl(redisPrefix + GlobalConfig.backstageTokenKey + token) < 1800) {
+                RedisUtil.expire(redisPrefix + GlobalConfig.backstageTokenKey + token, 7200L);
+            }
+        }
     }
 }

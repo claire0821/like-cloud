@@ -420,19 +420,24 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
 
     @Override
     public ProductDetaliVo productDetail(Long spuId, Long skuId) {
+        if(spuId == -1) {
+            final SkuInfo byId = this.iSkuInfoService.getById(skuId);
+            spuId = byId.getSpuId();
+        }
         ProductDetaliVo productDetaliVo = new ProductDetaliVo();
 
         //spu基本信息
+        Long finalSpuId = spuId;
         CompletableFuture<SpuInfo> spuFuture = CompletableFuture.supplyAsync(() -> {
-            final SpuInfo byId = this.getById(spuId);
-            productDetaliVo.setSpuId(spuId);
+            final SpuInfo byId = this.getById(finalSpuId);
+            productDetaliVo.setSpuId(finalSpuId);
             productDetaliVo.setTitle(byId.getSpuName());
             return byId;
         }, executor);
 
         //2、spu的图片信息    pms_sku_images
         CompletableFuture<Void> imageFuture = CompletableFuture.runAsync(() -> {
-            final List<SpuImages> imagesSort = iSpuImagesService.getImagesSort(spuId);
+            final List<SpuImages> imagesSort = iSpuImagesService.getImagesSort(finalSpuId);
             if(imagesSort != null && imagesSort.size() > 0) {
                 productDetaliVo.setImages(imagesSort.stream().map(SpuImages::getImgUrl).collect(Collectors.toList()));
 //                productDetaliVo.setImages(imagesSort);
@@ -443,7 +448,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
         List<ProductDetaliSkuVo> productDetaliSkuVos = new ArrayList<>();
 
         CompletableFuture<Void> skuInfoFuture = CompletableFuture.runAsync(() -> {
-            final List<SkuInfo> skusBySpuId = iSkuInfoService.getSkusBySpuId(spuId);
+            final List<SkuInfo> skusBySpuId = iSkuInfoService.getSkusBySpuId(finalSpuId);
             if(skusBySpuId != null && skusBySpuId.size() > 0) {
                 for (SkuInfo skuInfo : skusBySpuId) {
                     ProductDetaliSkuVo productDetaliSkuVo = new ProductDetaliSkuVo();
@@ -490,13 +495,13 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
         //TODO sku秒杀价 团购价 会员价
         //获取spu的销售属性组合
         CompletableFuture<Void> saleAttrFuture = CompletableFuture.runAsync(() -> {
-            List<SkuItemSaleAttrVo> saleAttrVos = iSkuSaleAttrValueService.getSaleAttrBySpuId(spuId);
+            List<SkuItemSaleAttrVo> saleAttrVos = iSkuSaleAttrValueService.getSaleAttrBySpuId(finalSpuId);
             productDetaliVo.setSaleAttr(saleAttrVos);
         }, executor);
 
         //获取spu的规格参数信息
         CompletableFuture<Void> baseAttrFuture = spuFuture.thenAcceptAsync((res) -> {
-            List<SpuItemAttrGroupVo> attrGroupVos = iAttrGroupService.getAttrGroupWithAttrsBySpuId(spuId, res.getCatalogId());
+            List<SpuItemAttrGroupVo> attrGroupVos = iAttrGroupService.getAttrGroupWithAttrsBySpuId(finalSpuId, res.getCatalogId());
             productDetaliVo.setGroupAttrs(attrGroupVos);
         }, executor);
 
@@ -557,4 +562,38 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
         productDetaliSpuVo.setBrandName(brand.getName());
         return productDetaliSpuVo;
     }
+
+    @Override
+    public PageResult<SpuInfoDetailVo> list(PageParam pageParam, String spuName, Long catalogId) {
+        Integer page  = pageParam.getPageNo();
+        Integer limit = pageParam.getPageSize();
+
+        QueryWrapper<SpuInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+
+
+        if(!StringUtils.isEmpty(spuName)){
+            queryWrapper.and((w)->{
+                w.like("spu_name",spuName);
+            });
+        }
+        if(catalogId != null){
+            queryWrapper.and((w)->{
+                w.eq("catalog_id",catalogId);
+            });
+        }
+
+        IPage<SpuInfo> iPage = spuInfoMapper.selectPage(new Page<>(page, limit), queryWrapper);
+
+        List<SpuInfoDetailVo> list = new LinkedList<>();
+        for(SpuInfo item : iPage.getRecords()) {
+            SpuInfoDetailVo vo = new SpuInfoDetailVo();
+            BeanUtils.copyProperties(item, vo);
+            list.add(vo);
+        }
+
+        return PageResult.iPageHandle(iPage.getTotal(), iPage.getCurrent(), iPage.getSize(), list);
+    }
+
+
 }

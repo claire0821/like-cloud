@@ -55,6 +55,16 @@ public class MemberController {
     }
 
     /**
+     * 会员详情
+     * @return Object
+     */
+    @GetMapping("/detailById")
+    public AjaxResult<MemberVo> detailById(@RequestParam("id") Long id) {
+        MemberVo detail = iMemberService.detail(id);
+        return AjaxResult.success(detail);
+    }
+
+    /**
      * 会员新增
      *
      * @param memberParam 参数

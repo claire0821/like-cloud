@@ -15,7 +15,7 @@ public class SystemAuthAdmin implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value="id", type=IdType.AUTO)
-    private Integer id;            // 主键
+    private Long id;            // 主键
     private Integer deptId;        // 部门ID
     private Integer postId;        // 岗位ID
     private String nickname;       // 用户账号

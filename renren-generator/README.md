@@ -23,3 +23,7 @@
 
 **演示效果图：**
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/0731/150920_761d8835_63154.jpeg "aa.jpg")
+
+nacos单机启动命令
+startup.cmd -m standalone
+http://localhost:8848/nacos

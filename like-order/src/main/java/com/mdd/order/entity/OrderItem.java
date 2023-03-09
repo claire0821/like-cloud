@@ -32,6 +32,7 @@ public class OrderItem implements Serializable {
     private String skuName; // 商品sku名字
     private String skuPic; // 商品sku图片
     private BigDecimal skuPrice; // 商品sku价格
+    private BigDecimal memberPrice; // 商品会员价格
     private Integer skuQuantity; // 商品购买的数量
     private String skuAttrsVals; // 商品销售属性组合（JSON）
     private BigDecimal promotionAmount; // 商品促销分解金额

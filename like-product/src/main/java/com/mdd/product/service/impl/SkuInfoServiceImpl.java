@@ -335,4 +335,45 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper,SkuInfo> imple
         return productDetaliSkuVo;
     }
 
+    @Override
+    public List<ProductDetaliSkuVo> getHotSale() {
+        List<ProductDetaliSkuVo> list = new LinkedList<>();
+        //TODO Elastic Search 获取销量
+        QueryWrapper<SkuInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("sale_count").last("limit 0,5");
+        final List<SkuInfo> skuInfos = skuInfoMapper.selectList(queryWrapper);
+        CompletableFuture<Void> skuInfoFuture = CompletableFuture.runAsync(() -> {
+            for (SkuInfo skuInfo : skuInfos) {
+                ProductDetaliSkuVo productDetaliSkuVo = new ProductDetaliSkuVo();
+
+                productDetaliSkuVo.setSkuId(skuInfo.getSkuId());
+                productDetaliSkuVo.setName(skuInfo.getSkuName());
+                productDetaliSkuVo.setDesc(skuInfo.getSkuDesc());
+                productDetaliSkuVo.setImg(skuInfo.getSkuDefaultImg());
+                productDetaliSkuVo.setSubtitle(skuInfo.getSkuSubtitle());
+                productDetaliSkuVo.setTitle(skuInfo.getSkuTitle());
+                productDetaliSkuVo.setPrice(skuInfo.getPrice());
+
+
+                //TODO 库存 会员价 活动价 销量 浏览量
+                productDetaliSkuVo.setStock(10L);
+                productDetaliSkuVo.setMemberPrice(productDetaliSkuVo.getPrice());
+                productDetaliSkuVo.setActivityPrice(productDetaliSkuVo.getPrice());
+                productDetaliSkuVo.setSaleCount(100L);
+                productDetaliSkuVo.setClickCount(100L);
+                list.add(productDetaliSkuVo);
+            }
+        }, executor);
+
+        //等到所有任务都完成
+        try {
+            CompletableFuture.allOf(skuInfoFuture).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

@@ -62,7 +62,7 @@ public class AuthAdminController {
      */
     @GetMapping("/self")
     public AjaxResult self() {
-        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        Long adminId = LikeAdminThreadLocal.getAdminId();
         SystemAuthSelfVo vo = iSystemAuthAdminService.self(adminId);
         return AjaxResult.success(vo);
     }
@@ -75,7 +75,7 @@ public class AuthAdminController {
      * @return AjaxResult
      */
     @GetMapping("/detail")
-    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Integer id) {
+    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Long id) {
         SystemAuthAdminVo vo = iSystemAuthAdminService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -117,7 +117,7 @@ public class AuthAdminController {
     @Log(title = "管理员更新")
     @PostMapping("/upInfo")
     public AjaxResult upInfo(@Validated(value = SystemAuthAdminParam.upInfo.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
-        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        Long adminId = LikeAdminThreadLocal.getAdminId();
         iSystemAuthAdminService.upInfo(systemAuthAdminParam, adminId);
         return AjaxResult.success();
     }

@@ -2,10 +2,10 @@ package com.mdd.coupon.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
-import com.mdd.coupon.entity.CouponSpuCategoryRelation;
-import com.mdd.coupon.validate.CouponSpuCategoryRelationParam;
+import com.mdd.coupon.entity.CouponCategoryRelation;
+import com.mdd.coupon.validate.CouponCategoryRelationParam;
 import com.mdd.coupon.vo.CouponSpuCategoryRelationListVo;
-import com.mdd.coupon.vo.CouponSpuCategoryRelationDetailVo;
+import com.mdd.coupon.vo.CouponCategoryRelationDetailVo;
 import com.mdd.common.core.PageResult;
 
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * 优惠券分类关联服务接口类
  */
-public interface ICouponSpuCategoryRelationService extends IService<CouponSpuCategoryRelation> {
+public interface ICouponCategoryRelationService extends IService<CouponCategoryRelation> {
 
     /**
      * 优惠券分类关联列表
@@ -30,21 +30,21 @@ public interface ICouponSpuCategoryRelationService extends IService<CouponSpuCat
      * @param id 主键ID
      * @return CouponSpuCategoryRelation
      */
-    CouponSpuCategoryRelationDetailVo detail(Long id);
+    CouponCategoryRelationDetailVo detail(Long id);
 
     /**
      * 优惠券分类关联新增
      *
-     * @param couponSpuCategoryRelationParam 参数
+     * @param couponCategoryRelationParam 参数
      */
-    void add(CouponSpuCategoryRelationParam couponSpuCategoryRelationParam);
+    void add(CouponCategoryRelationParam couponCategoryRelationParam);
 
     /**
      * 优惠券分类关联编辑
      *
-     * @param couponSpuCategoryRelationParam 参数
+     * @param couponCategoryRelationParam 参数
      */
-    void edit(CouponSpuCategoryRelationParam couponSpuCategoryRelationParam);
+    void edit(CouponCategoryRelationParam couponCategoryRelationParam);
 
     /**
      * 优惠券分类关联删除

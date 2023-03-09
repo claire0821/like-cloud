@@ -24,7 +24,7 @@ public class SystemAuthAdminParam extends BaseParam {
     public interface upInfo{}
 
     @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "请选择角色", groups = {create.class, update.class})
     @Min(value = 0, message = "role参数异常", groups = {create.class, update.class})

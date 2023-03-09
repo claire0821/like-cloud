@@ -30,25 +30,23 @@ public class CouponController {
     /**
      * 优惠券信息列表
      *
-     * @param pageParam 分页参数
      * @param params 搜索参数
      * @return Object
      */
-    @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
-                       @RequestParam Map<String, String> params) {
-        PageResult<CouponListVo> list = iCouponService.list(pageParam, params);
+    @PostMapping("/list")
+    public Object list(@RequestBody Map<String, Object> params) {
+        PageResult<CouponListVo> list = iCouponService.list(params);
         return AjaxResult.success(list);
     }
     /**
      * 优惠券信息详情
      *
-     * @param id 主键ID
+     * @param code 优惠码
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
-        CouponDetailVo detail = iCouponService.detail(id);
+    public Object detail(@RequestParam("code") String code) {
+        CouponDetailVo detail = iCouponService.detail(code);
         return AjaxResult.success(detail);
     }
 

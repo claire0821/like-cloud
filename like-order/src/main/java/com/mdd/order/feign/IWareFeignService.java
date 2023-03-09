@@ -3,6 +3,7 @@ package com.mdd.order.feign;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.vo.LockStockResult;
 import com.mdd.common.vo.WareSkuLockVo;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author: Claire
  * @create: 2022-12-22 16:37
  **/
+@FeignClient("like-ware")
 public interface IWareFeignService {
     /**
      * 锁定库存

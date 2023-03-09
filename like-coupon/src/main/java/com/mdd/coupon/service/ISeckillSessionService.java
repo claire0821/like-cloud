@@ -2,12 +2,14 @@ package com.mdd.coupon.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
+import com.mdd.common.vo.SeckillSessionWithSkusVo;
 import com.mdd.coupon.entity.SeckillSession;
 import com.mdd.coupon.validate.SeckillSessionParam;
 import com.mdd.coupon.vo.SeckillSessionListVo;
 import com.mdd.coupon.vo.SeckillSessionDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,5 +54,7 @@ public interface ISeckillSessionService extends IService<SeckillSession> {
      * @param id 主键ID
      */
     void del(Long id);
+
+    List<SeckillSessionWithSkusVo> getLates3DaySession();
 
 }

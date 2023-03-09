@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("api/coupon/spurelation")
-public class CouponSpuRelationController {
+public class CouponSkuRelationController {
 
     @Resource
     ICouponSpuRelationService iCouponSpuRelationService;

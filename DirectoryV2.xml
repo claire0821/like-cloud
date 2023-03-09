@@ -42,4 +42,6 @@
     <tree path="/like-auth/src/main/java/com/mdd/auth/limit" title="限流"/>
     <tree path="/like-search" title="检索服务"/>
     <tree path="/like-cart" title="购物车模块"/>
+    <tree path="/like-seckill" title="秒杀模块"/>
+    <tree path="/like-order" title="订单模块"/>
 </trees>

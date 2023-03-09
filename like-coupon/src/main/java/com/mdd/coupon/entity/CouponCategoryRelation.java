@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 优惠券分类关联实体
  */
 @Data
-public class CouponSpuCategoryRelation implements Serializable {
+public class CouponCategoryRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

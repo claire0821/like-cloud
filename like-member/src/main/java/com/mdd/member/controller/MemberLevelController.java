@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,4 +93,15 @@ public class MemberLevelController {
         return AjaxResult.success();
     }
 
+    /**
+     * 会员等级名称和id列表
+     *
+     * @return Object
+     */
+    @Log(title = "会员等级名称和id列表")
+    @GetMapping("/getLevel")
+    public AjaxResult<List<MemberLevelListVo>> getLevel() {
+        final List<MemberLevelListVo> level = iMemberLevelService.getLevel();
+        return AjaxResult.success(level);
+    }
 }

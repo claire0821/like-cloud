@@ -2,6 +2,8 @@ package com.mdd.member.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -116,6 +118,48 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
 
         MemberVo vo = new MemberVo();
         BeanUtils.copyProperties(model, vo);
+        //TODO 距离升级还差
+        vo.setNextLevelTips("距离升级还差2000");
+        //TODO 未读消息
+        vo.setNoticeNum(1);
+        //TODO 余额
+        vo.setMoney(10);
+        //TODO 优惠券数量
+        vo.setCoupon(1);
+        //TODO 待付款
+        vo.setWaitPay(1);
+        //TODO 待发货
+        vo.setWaitDelivery(1);
+        //TODO 待收货
+        vo.setWaitTake(1);
+        //TODO 商品评价
+        vo.setWaitComment(1);
+        //TODO 退款/售后
+        vo.setAfterSale(1);
+        //等级名称
+        final MemberLevel byId = iMemberLevelService.getById(vo.getLevelId());
+        vo.setLevelName(byId.getName());
+        return vo;
+    }
+
+    /**
+     * 会员详情
+     *
+     * @return Member
+     */
+    @Override
+    public MemberVo detail(Long id) {
+        Member model = memberMapper.selectOne(
+                new QueryWrapper<Member>()
+                        .eq("id", id)
+                        .last("limit 1"));
+
+        Assert.notNull(model, "数据不存在");
+
+        MemberVo vo = new MemberVo();
+        BeanUtils.copyProperties(model, vo);
+        final MemberLevel byId = iMemberLevelService.getById(vo.getLevelId());
+        vo.setLevelName(byId.getName());
         return vo;
     }
 
@@ -200,8 +244,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void register(RegParam regParam) {
         Member member = new Member();
+        //生成唯一会员编码
+        member.setSn(RandomUtil.randomStringWithoutStr(8,"0123456789"));
 
         //设置默认等级
         MemberLevel levelEntity = iMemberLevelService.getDefaultLevel();
@@ -288,7 +335,11 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
         Member member = this.baseMapper.selectOne(new QueryWrapper<Member>().eq("username", loginParam.getUsername()).or()
                 .eq("mobile",loginParam.getMobile()));
 
+        if(member == null) {
+            throw new LoginException(HttpEnum.LOGIN_ACCOUNT_NOT_EXIST.getCode(), HttpEnum.LOGIN_ACCOUNT_NOT_EXIST.getMsg());
+        }
         com.baomidou.mybatisplus.core.toolkit.Assert.notNull(member, "账号不存在!");
+
         String pwd = ToolsUtil.makeMd5(loginParam.getPassword() + member.getSalt());
         com.baomidou.mybatisplus.core.toolkit.Assert.isFalse(!pwd.equals(member.getPassword()), "账号或密码错误!");
         com.baomidou.mybatisplus.core.toolkit.Assert.isFalse(member.getStatus() != MemberConstant.MemberStateEnum.MEMBER_STATE_TYPE_ENABLE.getCode(), "账号已被禁用!");

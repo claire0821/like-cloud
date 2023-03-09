@@ -85,7 +85,7 @@ public class LogAspect {
                 HttpServletRequest request = requestAttributes.getRequest();
 
                 // 获取当前的用户
-                Integer adminId = LikeAdminThreadLocal.getAdminId();
+                Long adminId = LikeAdminThreadLocal.getAdminId();
 
                 // 获取日志注解
                 ProceedingJoinPoint joinPoint = (ProceedingJoinPoint) joinPointObj;

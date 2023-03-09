@@ -51,6 +51,17 @@ public class LikeOrderThreadLocal {
     }
 
     /**
+     * 获取用户ID
+     */
+    public static Integer getUserType() {
+        Object adminId = LikeOrderThreadLocal.get("userType");
+        if (adminId == null || adminId.toString().equals("")) {
+            return Integer.valueOf(0);
+        }
+        return Integer.parseInt(adminId.toString());
+    }
+
+    /**
      * 删除本地线程
      */
     public static void remove() {

@@ -18,6 +18,7 @@ public class Member implements Serializable {
 
     @TableId(value="id", type= IdType.AUTO)
     private Long id; // id
+    private String sn; // 会员码
     private Long levelId; // 会员等级id
     private String username; // 用户名
     private String password; // 密码

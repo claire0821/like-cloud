@@ -16,7 +16,7 @@ public class SystemLogOperate implements Serializable {
 
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;         // 主键
-    private Integer adminId;    // 操作人ID
+    private Long adminId;    // 操作人ID
     private String type;        // 请求类型: GET/POST/PUT
     private String title;       // 操作标题
     private String method;      // 请求方法

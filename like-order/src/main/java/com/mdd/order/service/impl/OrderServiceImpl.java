@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lly835.bestpay.model.PayResponse;
 import com.lly835.bestpay.service.BestPayService;
 import com.mdd.common.config.GlobalConfig;
-import com.mdd.common.constant.OrderStatusEnum;
+import com.mdd.common.constant.OrderConstant;
 import com.mdd.common.constant.PayConstant;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
@@ -21,12 +21,14 @@ import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.vo.*;
 import com.mdd.order.LikeOrderThreadLocal;
 import com.mdd.order.entity.OrderItem;
+import com.mdd.order.entity.OrderOperateHistory;
 import com.mdd.order.entity.PaymentInfo;
 import com.mdd.order.feign.ICartFeignService;
 import com.mdd.order.feign.IMemberFeignService;
 import com.mdd.order.feign.IProductFeignService;
 import com.mdd.order.feign.IWareFeignService;
 import com.mdd.order.service.IOrderItemService;
+import com.mdd.order.service.IOrderOperateHistoryService;
 import com.mdd.order.service.IOrderService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.order.service.IPaymentInfoService;
@@ -57,6 +59,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 订单实现类
@@ -84,7 +87,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
     IPaymentInfoService iPaymentInfoService;
     @Autowired
     private BestPayService bestPayService;
-
+    @Autowired
+    IOrderOperateHistoryService iOrderOperateHistoryService;
     /**
      * 订单列表
      *
@@ -151,6 +155,37 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
             BeanUtils.copyProperties(item, vo);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             vo.setCreateTime(simpleDateFormat.format(item.getCreateTime()));
+
+            vo.setStrPayType(PayConstant.getPayEnumMsg(vo.getPayType()));
+            vo.setStrSourceType(OrderConstant.getSourceTypeEnumMsg(vo.getSourceType()));
+            vo.setStrStatus(OrderConstant.getOrderStatusEnumMsg(vo.getStatus()));
+
+            //会员信息
+            AjaxResult<MemberVo> result = iMemberFeignService.detailById(vo.getMemberId());
+            if(result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+                MemberVo memberVo = result.getData();
+                vo.setMemberAvatar(memberVo.getAvatar());
+                vo.setMemberLevelId(memberVo.getLevelId());
+                vo.setMemberLevelName(memberVo.getLevelName());
+            }
+            //商品信息
+            final QueryWrapper<OrderItem> orderItemQueryWrapper = new QueryWrapper<>();
+            orderItemQueryWrapper.eq("order_sn", vo.getOrderSn());
+            final List<OrderItem> orderItemList = iOrderItemService.list(orderItemQueryWrapper);
+            List<CartItemVo> cartItemVos = new LinkedList<>();
+            for (OrderItem orderItem : orderItemList) {
+                CartItemVo cartItemVo = new CartItemVo();
+                BeanUtils.copyProperties(orderItem,cartItemVo);
+                cartItemVo.setSaleValueStr(orderItem.getSkuAttrsVals());
+                cartItemVo.setShowMemberPrice(orderItem.getMemberPrice() == null ? false : true);
+                cartItemVos.add(cartItemVo);
+            }
+            vo.setOrderItems(cartItemVos);
+
+            //商品个数
+            vo.setProductCount(cartItemVos.stream().map(CartItemVo::getSkuQuantity).reduce(Integer::sum).get());
+            //TODO 订单类型
+            vo.setType(OrderConstant.TypeEnum.BARGAIN.getCode());
             list.add(vo);
         }
 
@@ -160,20 +195,79 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
     /**
      * 订单详情
      *
-     * @param id 主键参数
+     * @param orderSn 订单编号
      * @return Order
      */
     @Override
-    public OrderDetailVo detail(Long id) {
+    public OrderCreateTo detail(String orderSn) {
         Order model = orderMapper.selectOne(
                 new QueryWrapper<Order>()
-                    .eq("id", id)
+                    .eq("order_sn", orderSn)
                     .last("limit 1"));
 
         Assert.notNull(model, "数据不存在");
 
-        OrderDetailVo vo = new OrderDetailVo();
+        OrderCreateTo vo = new OrderCreateTo();
         BeanUtils.copyProperties(model, vo);
+
+        //获取当前线程请求头信息(解决Feign异步调用丢失请求头问题)
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        //会员信息
+        CompletableFuture<Void> memberFuture = CompletableFuture.runAsync(() -> {
+            //每一个线程都来共享之前的请求数据
+            RequestContextHolder.setRequestAttributes(requestAttributes);
+
+            AjaxResult<MemberVo> memberVoAjaxResult = iMemberFeignService.detailById(model.getMemberId());
+            if(memberVoAjaxResult.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+                MemberVo memberVo = memberVoAjaxResult.getData();
+                vo.setMember(memberVo);
+            }
+        }, executor);
+
+        //收货人
+        CompletableFuture<Void> memberAddressFuture = CompletableFuture.runAsync(() -> {
+            //每一个线程都来共享之前的请求数据
+            RequestContextHolder.setRequestAttributes(requestAttributes);
+
+            AjaxResult<MemberReceiveAddressVo> receiveAddressVoAjaxResult = iMemberFeignService.getDefaultAddress();
+            if(receiveAddressVoAjaxResult.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+                MemberReceiveAddressVo memberAddressMapData = receiveAddressVoAjaxResult.getData();
+                vo.setAddress(memberAddressMapData);
+            }
+        }, executor);
+
+        //商品信息
+        final QueryWrapper<OrderItem> orderItemQueryWrapper = new QueryWrapper<>();
+        orderItemQueryWrapper.eq("order_sn", vo.getOrderSn());
+        final List<OrderItem> orderItemList = iOrderItemService.list(orderItemQueryWrapper);
+        List<CartItemVo> cartItemVos = new LinkedList<>();
+        for (OrderItem orderItem : orderItemList) {
+            CartItemVo cartItemVo = new CartItemVo();
+            BeanUtils.copyProperties(orderItem,cartItemVo);
+            cartItemVo.setSaleValueStr(orderItem.getSkuAttrsVals());
+            cartItemVo.setShowMemberPrice(orderItem.getMemberPrice() == null ? false : true);
+            cartItemVos.add(cartItemVo);
+        }
+        vo.setCartItems(cartItemVos);
+        //商品个数
+        vo.setProductCount(cartItemVos.stream().map(CartItemVo::getSkuQuantity).reduce(Integer::sum).get());
+        //支付方式
+        vo.setStrPayType(PayConstant.getPayEnumMsg(vo.getPayType()));
+
+        //TODO 剩余支付时间
+        vo.setCancelTime(new Date());
+        //TODO 订单类型
+        vo.setType(OrderConstant.TypeEnum.BARGAIN.getCode());
+        vo.setStrType(OrderConstant.getTypeEnumMsg(vo.getType()));
+        //等到所有任务都完成
+        try {
+            CompletableFuture.allOf(memberFuture,memberAddressFuture).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         return vo;
     }
 
@@ -453,7 +547,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         //订单备注
         order.setNote(orderSubmitVo.getNote());
         //订单初始状态
-        order.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
+        order.setStatus(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode());
 
         //保存到数据库
         saveOrder(order);
@@ -483,7 +577,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         orderEntity.setCreateTime(new Date());
         BigDecimal totalPrice = orderTo.getSeckillPrice().multiply(BigDecimal.valueOf(orderTo.getNum()));
         orderEntity.setPayAmount(totalPrice);
-        orderEntity.setStatus(OrderStatusEnum.CREATE_NEW.getCode());
+        orderEntity.setStatus(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode());
 
         //保存订单
         this.save(orderEntity);
@@ -609,6 +703,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         }
         iOrderItemService.saveBatch(orderItems);
 
+        //订单操作日志
+        iOrderOperateHistoryService.add(order.getOrderSn(),OrderConstant.ActionTypeEnum.PLACE_ORDER.getCode(),"");
     }
 
     //查询购物车
@@ -633,11 +729,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         Order orderInfo = this.getOne(new QueryWrapper<Order>().
                 eq("order_sn",orderEntity.getOrderSn()));
 
-        if (orderInfo.getStatus().equals(OrderStatusEnum.CREATE_NEW.getCode())) {
+        if (orderInfo.getStatus().equals(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode())) {
             //代付款状态进行关单
             Order orderUpdate = new Order();
             orderUpdate.setId(orderInfo.getId());
-            orderUpdate.setStatus(OrderStatusEnum.CANCLED.getCode());
+            orderUpdate.setStatus(OrderConstant.OrderStatusEnum.CANCLED.getCode());
             this.updateById(orderUpdate);
 
             // 发送消息给MQ
@@ -674,7 +770,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         if (tradeStatus.equals("TRADE_SUCCESS") || tradeStatus.equals("TRADE_FINISHED")) {
             //支付成功状态
             String orderSn = asyncVo.getOut_trade_no(); //获取订单号
-            updateOrderStatus(orderSn,OrderStatusEnum.PAYED.getCode(),PayConstant.ALIPAY);
+            updateOrderStatus(orderSn,OrderConstant.OrderStatusEnum.PAYED.getCode(),PayConstant.PayEnum.PAY_TYPE_ZHIFUBAO.getCode());
         }
 
         return "success";
@@ -718,7 +814,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
 
         //判断订单状态状态是否为已支付或者是已取消,如果不是订单状态不是已支付状态
         Integer status = orderEntity.getStatus();
-        if (status.equals(OrderStatusEnum.PAYED.getCode()) || status.equals(OrderStatusEnum.CANCLED.getCode())) {
+        if (status.equals(OrderConstant.OrderStatusEnum.PAYED.getCode()) || status.equals(OrderConstant.OrderStatusEnum.CANCLED.getCode())) {
             throw new RuntimeException("该订单已失效,orderNo=" + payResponse.getOrderId());
         }
 
@@ -731,13 +827,23 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         //3.修改订单支付状态
         //支付成功状态
         String orderSn = orderEntity.getOrderSn();
-        this.updateOrderStatus(orderSn,OrderStatusEnum.PAYED.getCode(), PayConstant.WXPAY);
+        this.updateOrderStatus(orderSn,OrderConstant.OrderStatusEnum.PAYED.getCode(), PayConstant.PayEnum.PAY_TYPE_WEIXIN.getCode());
 
         //4.告诉微信不要再重复通知了
         return "<xml>\n" +
                 "  <return_code><![CDATA[SUCCESS]]></return_code>\n" +
                 "  <return_msg><![CDATA[OK]]></return_msg>\n" +
                 "</xml>";
+    }
+
+    /**
+     * 更改订单备注
+     * @param orderSn 订单编号
+     * @param note 备注
+     */
+    @Override
+    public void updateNote(String orderSn, String note) {
+        this.update(new UpdateWrapper<Order>().eq("order_sn",orderSn).set("note",note));
     }
 
 }

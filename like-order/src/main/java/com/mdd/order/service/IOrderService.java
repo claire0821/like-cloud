@@ -32,10 +32,10 @@ public interface IOrderService extends IService<Order> {
     /**
      * 订单详情
      *
-     * @param id 主键ID
+     * @param orderSn 订单编号
      * @return Order
      */
-    OrderDetailVo detail(Long id);
+    OrderCreateTo detail(String orderSn);
 
     /**
      * 订单新增
@@ -83,4 +83,6 @@ public interface IOrderService extends IService<Order> {
      * @param notifyData
      */
     String asyncNotify(String notifyData);
+
+    void updateNote(String orderSn, String note);
 }

@@ -35,6 +35,13 @@ public interface IMemberService extends IService<Member> {
     MemberVo detail();
 
     /**
+     * 会员详情
+     *
+     * @return Member
+     */
+    MemberVo detail(Long id);
+
+    /**
      * 会员新增
      *
      * @param memberParam 参数

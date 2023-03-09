@@ -40,12 +40,12 @@ public class LikeAdminThreadLocal {
     /**
      * 获取管理员ID
      */
-    public static Integer getAdminId() {
+    public static Long getAdminId() {
         String adminId = LikeAdminThreadLocal.get("adminId").toString();
         if (adminId.equals("")) {
-            return 0;
+            return 0L;
         }
-        return Integer.parseInt(adminId);
+        return Long.parseLong(adminId);
     }
 
     /**

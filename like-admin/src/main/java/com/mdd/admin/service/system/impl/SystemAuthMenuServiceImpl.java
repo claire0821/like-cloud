@@ -43,7 +43,7 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
      */
     @Override
     public JSONArray selectMenuByRoleId(Integer roleId) {
-        Integer adminId = LikeAdminThreadLocal.getAdminId();
+        Long adminId = LikeAdminThreadLocal.getAdminId();
         List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleId);
 
         QueryWrapper<SystemAuthMenu> queryWrapper = new QueryWrapper<>();

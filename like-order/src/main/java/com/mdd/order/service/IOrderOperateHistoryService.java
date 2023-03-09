@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.order.entity.OrderOperateHistory;
 import com.mdd.order.validate.OrderOperateHistoryParam;
-import com.mdd.order.vo.OrderOperateHistoryListVo;
-import com.mdd.order.vo.OrderOperateHistoryDetailVo;
+import com.mdd.order.vo.OrderOperateHistoryVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +22,7 @@ public interface IOrderOperateHistoryService extends IService<OrderOperateHistor
      * @param params 搜索参数
      * @return PageResult<OrderOperateHistoryVo>
      */
-    PageResult<OrderOperateHistoryListVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<OrderOperateHistoryVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 订单操作历史记录详情
@@ -30,7 +30,7 @@ public interface IOrderOperateHistoryService extends IService<OrderOperateHistor
      * @param id 主键ID
      * @return OrderOperateHistory
      */
-    OrderOperateHistoryDetailVo detail(Long id);
+    OrderOperateHistoryVo detail(Long id);
 
     /**
      * 订单操作历史记录新增
@@ -53,4 +53,7 @@ public interface IOrderOperateHistoryService extends IService<OrderOperateHistor
      */
     void del(Long id);
 
+    List<OrderOperateHistoryVo> listByOrder(Long orderSn);
+
+    void add(String orderSn, Integer actionType, String note);
 }

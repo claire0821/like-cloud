@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -120,5 +121,21 @@ public class SpuInfoController {
     public AjaxResult<ProductDetaliSpuVo> getDetialBySkuId(@RequestParam("skuId") Long skuId) {
         ProductDetaliSpuVo productDetaliSpuVo = iSpuInfoService.getDetialBySkuId(skuId);
         return AjaxResult.success(productDetaliSpuVo);
+    }
+
+    /**
+     * spu信息列表
+     *
+     * @param pageParam 分页参数
+     * @param spuName spu名称
+     * @param catalogId 搜索参数
+     * @return Object
+     */
+    @GetMapping("/listWithImg")
+    public AjaxResult<PageResult<SpuInfoDetailVo>> listWithImg(@Validated PageParam pageParam,
+                       @RequestParam(value = "spuName",required = false) String spuName,
+                       @RequestParam(value = "catalogId",required = false) Long catalogId) {
+        PageResult<SpuInfoDetailVo> list = iSpuInfoService.list(pageParam, spuName, catalogId);
+        return AjaxResult.success(list);
     }
 }

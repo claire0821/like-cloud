@@ -124,14 +124,13 @@ public class LoginController {
      */
     @PostMapping("/login")
     public Object login(@RequestBody LoginParam loginParam) {
-        final AjaxResult res = memberFeignService.login(loginParam);
+        final AjaxResult<MemberVo> res = memberFeignService.login(loginParam);
         final Integer code = res.getCode();
 
         if(code != HttpEnum.SUCCESS.getCode()) {
             return res;
         }
 
-//        MemberVo data = res.getData(new TypeReference<MemberVo>() {});
         MemberVo data = (MemberVo) res.getData();
         Map<String, Object> response = new LinkedHashMap<>();
         final Long id = data.getId();

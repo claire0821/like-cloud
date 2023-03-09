@@ -2,10 +2,12 @@ package com.mdd.order.feign;
 
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.vo.ProductDetaliSpuVo;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@FeignClient("like-product")
 public interface IProductFeignService {
     /**
      * 根据skuId查询spu的信息

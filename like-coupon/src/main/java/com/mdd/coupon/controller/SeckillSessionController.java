@@ -1,6 +1,7 @@
 package com.mdd.coupon.controller;
 
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.vo.SeckillSessionWithSkusVo;
 import com.mdd.coupon.service.ISeckillSessionService;
 import com.mdd.coupon.validate.SeckillSessionParam;
 import com.mdd.common.validate.PageParam;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -90,6 +92,17 @@ public class SeckillSessionController {
     public Object delBatch(@RequestBody Long[] ids) {
         iSeckillSessionService.removeByIds(Arrays.asList(ids));
         return AjaxResult.success();
+    }
+
+    /**
+     * 查询最近三天需要参加秒杀商品的信息
+     * @return
+     */
+    @Log(title = "查询最近三天需要参加秒杀商品的信息")
+    @GetMapping(value = "/lates3DaySession")
+    public AjaxResult<List<SeckillSessionWithSkusVo>> getLates3DaySession() {
+        List<SeckillSessionWithSkusVo> seckillSessionWithSkusVos = iSeckillSessionService.getLates3DaySession();
+        return AjaxResult.success(seckillSessionWithSkusVos);
     }
 
 }

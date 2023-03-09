@@ -39,7 +39,7 @@ public interface ISystemAuthAdminService extends IService<SystemAuthAdmin> {
      * @author fzr
      * @return SystemSelfVo
      */
-    SystemAuthSelfVo self(Integer adminId);
+    SystemAuthSelfVo self(Long adminId);
 
     /**
      * 管理员详情
@@ -48,7 +48,7 @@ public interface ISystemAuthAdminService extends IService<SystemAuthAdmin> {
      * @param id 主键参数
      * @return SysAdmin
      */
-    SystemAuthAdminVo detail(Integer id);
+    SystemAuthAdminVo detail(Long id);
 
     /**
      * 管理员新增
@@ -72,7 +72,7 @@ public interface ISystemAuthAdminService extends IService<SystemAuthAdmin> {
      * @author fzr
      * @param systemAuthAdminParam 参数
      */
-    void upInfo(SystemAuthAdminParam systemAuthAdminParam, Integer adminId);
+    void upInfo(SystemAuthAdminParam systemAuthAdminParam, Long adminId);
 
     /**
      * 管理员删除
@@ -80,7 +80,7 @@ public interface ISystemAuthAdminService extends IService<SystemAuthAdmin> {
      * @author fzr
      * @param id 主键参数
      */
-    void del(Integer id);
+    void del(Long id);
 
     /**
      * 管理员状态切换
@@ -88,11 +88,11 @@ public interface ISystemAuthAdminService extends IService<SystemAuthAdmin> {
      * @author fzr
      * @param id 主键参数
      */
-    void disable(Integer id);
+    void disable(Long id);
 
     /**
      * 缓存管理员
      */
-    void cacheAdminUserByUid(Integer id);
+    void cacheAdminUserByUid(Long id);
 
 }

@@ -120,7 +120,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
      * @return SystemSelfVo
      */
     @Override
-    public SystemAuthSelfVo self(Integer adminId) {
+    public SystemAuthSelfVo self(Long adminId) {
         // 管理员信息
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(SystemAuthAdmin.class, info->
@@ -183,7 +183,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
      * @return SysAdmin
      */
     @Override
-    public SystemAuthAdminVo detail(Integer id) {
+    public SystemAuthAdminVo detail(Long id) {
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(SystemAuthAdmin.class, info->
                     !info.getColumn().equals("salt") &&
@@ -319,7 +319,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(systemAuthAdminParam.getId());
 
-        Integer id = LikeAdminThreadLocal.getAdminId();
+        Long id = LikeAdminThreadLocal.getAdminId();
         if (systemAuthAdminParam.getPassword() != null && systemAuthAdminParam.getId().equals(id)) {
             String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
             RedisUtil.del(AdminConfig.backstageTokenKey + token);
@@ -340,7 +340,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
      * @param systemAuthAdminParam 参数
      */
     @Override
-    public void upInfo(SystemAuthAdminParam systemAuthAdminParam, Integer adminId) {
+    public void upInfo(SystemAuthAdminParam systemAuthAdminParam, Long adminId) {
         SystemAuthAdmin model = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select("id,username,nickname,password,salt")
                 .eq("id", adminId)
@@ -381,7 +381,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
             String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
             RedisUtil.del(AdminConfig.backstageTokenKey + token);
 
-            int uid = model.getId();
+            Long uid = model.getId();
             Set<Object> ts = RedisUtil.sGet(AdminConfig.backstageTokenSet + uid);
             for (Object t: ts) {
                 RedisUtil.del(AdminConfig.backstageTokenKey+t.toString());
@@ -398,7 +398,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
      * @param id 主键
      */
     @Override
-    public void del(Integer id) {
+    public void del(Long id) {
         String[] field = {"id", "username", "nickname"};
         Assert.notNull(systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)
@@ -426,7 +426,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
      * @param id 主键参数
      */
     @Override
-    public void disable(Integer id) {
+    public void disable(Long id) {
         String[] field = {"id", "username", "nickname", "is_disable"};
         SystemAuthAdmin systemAuthAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(field)
@@ -449,7 +449,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
      * 缓存管理员
      */
     @Override
-    public void cacheAdminUserByUid(Integer id) {
+    public void cacheAdminUserByUid(Long id) {
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectById(id);
 
         Map<String, Object> user = new LinkedHashMap<>();

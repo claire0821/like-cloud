@@ -65,4 +65,6 @@ public interface ISpuInfoService extends IService<SpuInfo> {
     ProductDetaliVo productDetail(Long spuId, Long skuId);
 
     ProductDetaliSpuVo getDetialBySkuId(Long skuId);
+
+    PageResult<SpuInfoDetailVo> list(PageParam pageParam, String spuName, Long catalogId);
 }

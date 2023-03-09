@@ -22,7 +22,7 @@ import java.util.Map;
  * 商品满减信息管理
  */
 @RestController
-@RequestMapping("api/coupon/skufullreduction")
+@RequestMapping("api/coupon/reduction")
 public class SkuFullReductionController {
 
     @Resource

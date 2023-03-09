@@ -26,6 +26,9 @@ public class GlobalConfig {
     // 登录缓存键
     public static final String TokenKey = "token:";
 
+    // 令牌缓存键
+    public static final String backstageTokenKey = "backstage:token:";
+
     // 购物车缓存键
     public static final String CartKey = "cart:";
 
@@ -75,5 +78,6 @@ public class GlobalConfig {
             "/api/article/list",
             "/api/member/member/login",
             "/api/member/member/register",
+            "/api/member/level/getLevel",
     };
 }

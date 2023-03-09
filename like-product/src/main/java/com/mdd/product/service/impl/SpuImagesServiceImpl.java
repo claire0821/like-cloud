@@ -154,10 +154,8 @@ public class SpuImagesServiceImpl extends ServiceImpl<SpuImagesMapper,SpuImages>
                 SpuImages spuImagesEntity = new SpuImages();
                 spuImagesEntity.setSpuId(id);
                 spuImagesEntity.setImgUrl(img);
-
                 return spuImagesEntity;
             }).collect(Collectors.toList());
-
             this.saveBatch(collect);
         }
     }

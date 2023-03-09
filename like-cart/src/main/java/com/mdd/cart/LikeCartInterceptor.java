@@ -8,6 +8,7 @@ import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.utils.StringUtil;
+import com.mdd.common.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -45,14 +46,14 @@ public class LikeCartInterceptor implements HandlerInterceptor {
 
         // 免登录接口
         String token = request.getHeader("token");
-        token = RedisUtil.getToken(token);
+//        token = RedisUtil.getToken(token);
         List<String> notLoginUri = Arrays.asList(GlobalConfig.notLoginUri);
         if (notLoginUri.contains(request.getRequestURI())) {
             if (StringUtil.isNotEmpty(token)) {
-                Object uid = RedisUtil.get(token);
-                if (uid != null) {
-                    Integer userId = Integer.parseInt(uid.toString());
-                    LikeCartThreadLocal.put("userId", userId);
+                UserVo user = RedisUtil.getUser(token);
+                if (user != null) {
+                    LikeCartThreadLocal.put("userId", user.getId());
+                    LikeCartThreadLocal.put("userType", user.getType());
                 }
             }
             return HandlerInterceptor.super.preHandle(request, response, handler);
@@ -73,11 +74,11 @@ public class LikeCartInterceptor implements HandlerInterceptor {
         }
 
         // 用户信息缓存
-        Object uid = RedisUtil.getUserID(token);
-        Long userId = Long.parseLong(uid.toString());
+        UserVo user = RedisUtil.getUser(token);
 
         // 写入本地线程
-        LikeCartThreadLocal.put("userId", userId);
+        LikeCartThreadLocal.put("userId", user.getId());
+        LikeCartThreadLocal.put("userType", user.getType());
 //        LikeMemberThreadLocal.put("userSn", user.getSn());
 //        LikeMemberThreadLocal.put("username", user.getUsername());
 //        LikeMemberThreadLocal.put("nickname", user.getNickname());

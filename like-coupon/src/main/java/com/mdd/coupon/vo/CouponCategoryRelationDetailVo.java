@@ -8,7 +8,7 @@ import java.io.Serializable;
  * CouponSpuCategoryRelationVo
  */
 @Data
-public class CouponSpuCategoryRelationDetailVo implements Serializable {
+public class CouponCategoryRelationDetailVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

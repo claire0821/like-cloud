@@ -8,6 +8,7 @@ import com.mdd.member.vo.MemberLevelListVo;
 import com.mdd.member.vo.MemberLevelDetailVo;
 import com.mdd.common.core.PageResult;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,4 +55,6 @@ public interface IMemberLevelService extends IService<MemberLevel> {
     void del(Long id);
 
     MemberLevel getDefaultLevel();
+
+    List<MemberLevelListVo> getLevel();
 }

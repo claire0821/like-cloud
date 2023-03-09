@@ -4,17 +4,16 @@ import com.mdd.common.config.aop.Log;
 import com.mdd.order.service.IOrderOperateHistoryService;
 import com.mdd.order.validate.OrderOperateHistoryParam;
 import com.mdd.common.validate.PageParam;
-import com.mdd.order.vo.OrderOperateHistoryListVo;
-import com.mdd.order.vo.OrderOperateHistoryDetailVo;
+import com.mdd.order.vo.OrderOperateHistoryVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
-import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IDLongMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,14 +29,25 @@ public class OrderOperateHistoryController {
     /**
      * 订单操作历史记录列表
      *
+     * @param orderSn 订单编号
+     * @return Object
+     */
+    @GetMapping("/listByOrder")
+    public AjaxResult<List<OrderOperateHistoryVo>> listByOrder(@RequestParam("orderSn") Long orderSn) {
+        List<OrderOperateHistoryVo> list = iOrderOperateHistoryService.listByOrder(orderSn);
+        return AjaxResult.success(list);
+    }
+    /**
+     * 订单操作历史记录列表
+     *
      * @param pageParam 分页参数
      * @param params 搜索参数
      * @return Object
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
-                       @RequestParam Map<String, String> params) {
-        PageResult<OrderOperateHistoryListVo> list = iOrderOperateHistoryService.list(pageParam, params);
+    public AjaxResult<PageResult<OrderOperateHistoryVo>> list(@Validated PageParam pageParam,
+                                                              @RequestParam Map<String, String> params) {
+        PageResult<OrderOperateHistoryVo> list = iOrderOperateHistoryService.list(pageParam, params);
         return AjaxResult.success(list);
     }
     /**
@@ -48,7 +58,7 @@ public class OrderOperateHistoryController {
      */
     @GetMapping("/detail")
     public Object detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
-        OrderOperateHistoryDetailVo detail = iOrderOperateHistoryService.detail(id);
+        OrderOperateHistoryVo detail = iOrderOperateHistoryService.detail(id);
         return AjaxResult.success(detail);
     }
 

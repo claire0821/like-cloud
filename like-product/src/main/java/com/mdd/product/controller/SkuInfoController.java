@@ -5,10 +5,7 @@ import com.mdd.product.entity.SkuInfo;
 import com.mdd.product.service.ISkuInfoService;
 import com.mdd.product.validate.SkuInfoParam;
 import com.mdd.common.validate.PageParam;
-import com.mdd.product.vo.ProductDetaliSkuVo;
-import com.mdd.product.vo.ProductDetaliVo;
-import com.mdd.product.vo.SkuInfoListVo;
-import com.mdd.product.vo.SkuInfoDetailVo;
+import com.mdd.product.vo.*;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.validator.annotation.IDLongMust;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -119,5 +117,16 @@ public class SkuInfoController {
         //获取商品的价格
         BigDecimal price = skuInfo.getPrice();
         return AjaxResult.success(price);
+    }
+
+    /**
+     * 热销商品
+     *
+     * @return Object
+     */
+    @GetMapping("/getHotSale")
+    public AjaxResult<List<ProductDetaliSkuVo>> getHotSale() {
+        List<ProductDetaliSkuVo> list = iSkuInfoService.getHotSale();
+        return AjaxResult.success(list);
     }
 }

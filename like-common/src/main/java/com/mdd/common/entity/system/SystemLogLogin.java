@@ -16,7 +16,7 @@ public class SystemLogLogin implements Serializable {
 
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;       // 主键
-    private Integer adminId;  // 管理员ID
+    private Long adminId;  // 管理员ID
     private String username;  // 登录账号
     private String ip;        // 登录IP
     private String os;        // 操作系统

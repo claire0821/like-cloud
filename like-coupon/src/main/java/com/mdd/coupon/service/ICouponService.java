@@ -18,19 +18,18 @@ public interface ICouponService extends IService<Coupon> {
     /**
      * 优惠券信息列表
      *
-     * @param pageParam 分页参数
      * @param params 搜索参数
      * @return PageResult<CouponVo>
      */
-    PageResult<CouponListVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<CouponListVo> list(Map<String, Object> params);
 
     /**
      * 优惠券信息详情
      *
-     * @param id 主键ID
+     * @param code 优惠码
      * @return Coupon
      */
-    CouponDetailVo detail(Long id);
+    CouponDetailVo detail(String code);
 
     /**
      * 优惠券信息新增

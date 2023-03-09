@@ -1,5 +1,6 @@
 package com.mdd.coupon.validate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mdd.common.validate.BaseParam;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IDLongMust;
@@ -28,8 +29,10 @@ public class SeckillPromotionParam extends BaseParam {
     @Length(max = 255, message = "title参数不能超出255个字符", groups = {create.class, update.class})
     private String title;
     @NotNull(message = "startTime参数缺失", groups = {create.class, update.class})
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
     @NotNull(message = "endTime参数缺失", groups = {create.class, update.class})
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
     @NotNull(message = "status参数缺失", groups = {create.class, update.class})
     @DecimalMin(value = "0", message = "status参数值不能少于0", groups = {create.class, update.class})

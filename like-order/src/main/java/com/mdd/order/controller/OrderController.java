@@ -47,12 +47,12 @@ public class OrderController {
     /**
      * 订单详情
      *
-     * @param id 主键ID
+     * @param orderSn 订单编号
      * @return Object
      */
     @GetMapping("/detail")
-    public Object detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
-        OrderDetailVo detail = iOrderService.detail(id);
+    public AjaxResult<OrderCreateTo> detail(@Validated @IDLongMust() @RequestParam("orderSn") String orderSn) {
+        OrderCreateTo detail = iOrderService.detail(orderSn);
         return AjaxResult.success(detail);
     }
 
@@ -162,5 +162,19 @@ public class OrderController {
     public AjaxResult<OrderVo> getOrderStatus(@RequestParam("orderSn") String orderSn) {
         OrderVo order = iOrderService.getOrderByOrderSn(orderSn);
         return AjaxResult.success(order);
+    }
+
+
+    /**
+     * 更改备注
+     * @param orderParam
+     * @return
+     */
+    @PostMapping(value = "/updateNote")
+    public AjaxResult<Object> updateNote(@Validated(value = OrderParam.update.class) @RequestBody OrderParam orderParam) {
+        final String orderSn = orderParam.getOrderSn();
+        final String note = orderParam.getNote();
+        iOrderService.updateNote(orderSn,note);
+        return AjaxResult.success();
     }
 }

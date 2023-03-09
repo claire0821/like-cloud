@@ -11,6 +11,7 @@ import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.mapper.user.UserMapper;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.utils.StringUtil;
+import com.mdd.common.vo.UserVo;
 import com.mdd.member.entity.Member;
 import com.mdd.member.service.IMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +52,13 @@ public class LikeMemberInterceptor implements HandlerInterceptor {
 
         // 免登录接口
         String token = request.getHeader("token");
-        token = RedisUtil.getToken(token);
+//        token = RedisUtil.getToken(token);
         List<String> notLoginUri = Arrays.asList(GlobalConfig.notLoginUri);
         if (notLoginUri.contains(request.getRequestURI())) {
             if (StringUtil.isNotEmpty(token)) {
-                Object uid = RedisUtil.get(token);
-                if (uid != null) {
-                    Integer userId = Integer.parseInt(uid.toString());
-                    LikeMemberThreadLocal.put("userId", userId);
+                UserVo user = RedisUtil.getUser(token);
+                if (user != null) {
+                    LikeMemberThreadLocal.put("userId", user.getId());
                 }
             }
             return HandlerInterceptor.super.preHandle(request, response, handler);
@@ -79,9 +79,8 @@ public class LikeMemberInterceptor implements HandlerInterceptor {
         }
 
         // 用户信息缓存
-        Object uid = RedisUtil.getUserID(token);
-        Long userId = Long.parseLong(uid.toString());
-        final Member member = iMemberService.getById(userId);
+        UserVo user = RedisUtil.getUser(token);
+        final Member member = iMemberService.getById(user.getId());
 //        User user = userMapper.selectOne(new QueryWrapper<User>()
 //                .select("id,sn,username,nickname,mobile,is_disable,is_delete")
 //                .eq("id", userId)

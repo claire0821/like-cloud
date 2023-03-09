@@ -19,6 +19,7 @@ public enum HttpEnum {
     SAME_USERNAME(336, "存在相同的用户名"),
     ACCOUNT_MOBILE_EMPTY(337, "请输入账号名或者手机号码"),
     LOGIN_ERROR(338, "登录失败"),
+    LOGIN_ACCOUNT_NOT_EXIST(339, "登录账号不存在"),
 
     NO_PERMISSION(403, "无相关权限"),
     REQUEST_404_ERROR(404, "请求接口不存在"),
@@ -26,7 +27,9 @@ public enum HttpEnum {
     SYSTEM_ERROR(500, "系统错误"),
 
     ORDER_ERROR(600, "订单错误"),
-    ORDER_NO_STOCK(601, "商品库存不足");
+    ORDER_NO_STOCK(601, "商品库存不足"),
+
+    TO_MANY_REQUEST(700,"请求流量过大，请稍后再试");
     /**
      * 构造方法
      */

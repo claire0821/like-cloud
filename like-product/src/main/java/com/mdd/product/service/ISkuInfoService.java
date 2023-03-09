@@ -62,4 +62,6 @@ public interface ISkuInfoService extends IService<SkuInfo> {
     ProductDetaliVo productDetail(Long skuId);
 
     ProductDetaliSkuVo getDetial(Long skuId);
+
+    List<ProductDetaliSkuVo> getHotSale();
 }

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mdd.common.constant.OrderStatusEnum;
+import com.mdd.common.constant.OrderConstant;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.BaseException;
@@ -329,8 +329,8 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper,WareSku> imple
             OrderVo orderInfo = result.getData();
 
             //判断订单状态是否已取消或者支付或者订单不存在
-            if (orderInfo == null || orderInfo.getStatus().equals(OrderStatusEnum.CREATE_NEW.getCode())
-            || orderInfo.getStatus().equals(OrderStatusEnum.CANCLED.getCode())) {
+            if (orderInfo == null || orderInfo.getStatus().equals(OrderConstant.OrderStatusEnum.CREATE_NEW.getCode())
+            || orderInfo.getStatus().equals(OrderConstant.OrderStatusEnum.CANCLED.getCode())) {
                 //订单已被取消，才能解锁库存
                 if (taskDetailInfo.getLockStatus() == 1) {
                     //当前库存工作单详情状态1，已锁定，但是未解锁才可以解锁

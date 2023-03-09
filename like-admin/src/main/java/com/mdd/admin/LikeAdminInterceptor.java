@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.system.ISystemAuthAdminService;
 import com.mdd.admin.service.system.ISystemAuthPermService;
+import com.mdd.common.constant.OrderConstant;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.utils.ToolsUtil;
+import com.mdd.common.vo.UserVo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -67,65 +69,66 @@ public class LikeAdminInterceptor implements HandlerInterceptor {
         }
 
         // Token是否过期
-        token = AdminConfig.backstageTokenKey + token;
-        if (!RedisUtil.exists(token)) {
+        if (!RedisUtil.existsToken(token)) {
             AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
 
-        // 用户信息缓存
-        String uid = RedisUtil.get(token).toString();
-        if (!RedisUtil.hExists(AdminConfig.backstageManageKey, uid)) {
-            iSystemAuthAdminService.cacheAdminUserByUid(Integer.parseInt(uid));
-        }
+        UserVo user = RedisUtil.getUser(token);
+        // 管理员信息缓存
+        if (user.getType().equals(OrderConstant.OperateManTypeEnum.ADMINISTRATORS.getCode())) {
+            if(!RedisUtil.hExists(AdminConfig.backstageManageKey, String.valueOf(user.getId()))) {
+                iSystemAuthAdminService.cacheAdminUserByUid(user.getId());
+            }
 
-        // 校验用户被删除
-        Map<String, String> map = ToolsUtil.jsonToMap(RedisUtil.hGet(AdminConfig.backstageManageKey, uid).toString());
-        if (map == null || map.get("isDelete").equals("1")) {
-            RedisUtil.del(token);
-            RedisUtil.hDel(AdminConfig.backstageManageKey, uid);
-            AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
-            response.getWriter().print(JSON.toJSONString(result));
-            return false;
-        }
+            // 校验用户被删除
+            Map<String, String> map = ToolsUtil.jsonToMap(RedisUtil.hGet(AdminConfig.backstageManageKey, user.getId().toString()).toString());
+            if (map == null || map.get("isDelete").equals("1")) {
+                RedisUtil.del(token);
+                RedisUtil.hDel(AdminConfig.backstageManageKey, user.getId());
+                AjaxResult result = AjaxResult.failed(HttpEnum.TOKEN_INVALID.getCode(), HttpEnum.TOKEN_INVALID.getMsg());
+                response.getWriter().print(JSON.toJSONString(result));
+                return false;
+            }
 
-        // 校验用户被禁用
-        if (map.get("isDisable").equals("1")) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
-            response.getWriter().print(JSON.toJSONString(result));
-            return false;
+            // 校验用户被禁用
+            if (map.get("isDisable").equals("1")) {
+                AjaxResult result = AjaxResult.failed(HttpEnum.LOGIN_DISABLE_ERROR.getCode(), HttpEnum.LOGIN_DISABLE_ERROR.getMsg());
+                response.getWriter().print(JSON.toJSONString(result));
+                return false;
+            }
+
+            // 校验角色权限是否存在
+            String roleId = map.get("role");
+            if (!RedisUtil.hExists(AdminConfig.backstageRolesKey, roleId)) {
+                iSystemAuthPermService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
+            }
+            // 写入本地线程
+            LikeAdminThreadLocal.put("adminId", user.getId());
+            LikeAdminThreadLocal.put("roleId", map.get("role"));
+            LikeAdminThreadLocal.put("username", map.get("username"));
+            LikeAdminThreadLocal.put("nickname", map.get("nickname"));
+
+            //TODO 验证是否有权限操作
+//            String menus = RedisUtil.hGet(AdminConfig.backstageRolesKey, roleId).toString();
+//            if (menus.equals("") || !Arrays.asList(menus.split(",")).contains(auths)) {
+//                AjaxResult result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
+//                response.getWriter().print(JSON.toJSONString(result));
+//                return false;
+//            }
         }
 
         // 令牌剩余30分钟自动续签
-        if (RedisUtil.ttl(token) < 1800) {
-            RedisUtil.expire(token, 7200L);
-        }
+        RedisUtil.renewalToken(token);
 
         // 写入本地线程
-        LikeAdminThreadLocal.put("adminId", uid);
-        LikeAdminThreadLocal.put("roleId", map.get("role"));
-        LikeAdminThreadLocal.put("username", map.get("username"));
-        LikeAdminThreadLocal.put("nickname", map.get("nickname"));
+        LikeAdminThreadLocal.put("userId", user.getId());
 
         // 免权限验证接口
         List<String> notAuthUri = Arrays.asList(AdminConfig.notAuthUri);
-        if (notAuthUri.contains(auths) || Integer.parseInt(uid) == 1) {
+        if (notAuthUri.contains(auths)) {
             return HandlerInterceptor.super.preHandle(request, response, handler);
-        }
-
-        // 校验角色权限是否存在
-        String roleId = map.get("role");
-        if (!RedisUtil.hExists(AdminConfig.backstageRolesKey, roleId)) {
-            iSystemAuthPermService.cacheRoleMenusByRoleId(Integer.parseInt(roleId));
-        }
-
-        // 验证是否有权限操作
-        String menus = RedisUtil.hGet(AdminConfig.backstageRolesKey, roleId).toString();
-        if (menus.equals("") || !Arrays.asList(menus.split(",")).contains(auths)) {
-            AjaxResult result = AjaxResult.failed(HttpEnum.NO_PERMISSION.getCode(), HttpEnum.NO_PERMISSION.getMsg());
-            response.getWriter().print(JSON.toJSONString(result));
-            return false;
         }
 
         // 验证通过继续操作

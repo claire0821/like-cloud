@@ -53,7 +53,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
 
         SystemAuthAdmin sysAdmin = iSystemAuthAdminService.findByUsername(username);
         if (sysAdmin == null || sysAdmin.getIsDelete() == 1) {
-            this.recordLoginLog(0, systemLoginParam.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
+            this.recordLoginLog(0L, systemLoginParam.getUsername(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
             throw new LoginException(HttpEnum.LOGIN_ACCOUNT_ERROR.getCode(), HttpEnum.LOGIN_ACCOUNT_ERROR.getMsg());
         }
 
@@ -99,7 +99,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
 
             return response;
         } catch (Exception e) {
-            Integer adminId = StringUtil.isNotNull(sysAdmin.getId()) ? sysAdmin.getId() : 0;
+            Long adminId = StringUtil.isNotNull(sysAdmin.getId()) ? sysAdmin.getId() : 0;
             String error = StringUtil.isEmpty(e.getMessage()) ? "未知错误" : e.getMessage();
             this.recordLoginLog(adminId, systemLoginParam.getUsername(), error);
             throw new OperateException(e.getMessage());
@@ -120,7 +120,7 @@ public class SystemLoginServiceImpl implements ISystemLoginService {
     /**
      * 记录登录日志
      */
-    private void recordLoginLog(Integer adminId, String username, String error) {
+    private void recordLoginLog(Long adminId, String username, String error) {
         try {
             HttpServletRequest request = Objects.requireNonNull(RequestUtil.handler());
             final UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));

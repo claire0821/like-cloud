@@ -1,5 +1,6 @@
 package com.mdd.order.to;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mdd.common.vo.CartItemVo;
 import com.mdd.common.vo.MemberReceiveAddressVo;
 import com.mdd.common.vo.MemberVo;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,8 +64,9 @@ public class OrderCreateTo {
     /** 后台调整订单使用的折扣金额 **/
     private BigDecimal discountAmount;
 
-    /** 支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】 **/
+    /** PayConstant 支付方式【1->支付宝；2->微信；3->余额； 4->线下；】 **/
     private Integer payType;
+    private String strPayType;
 
     /** 订单来源[0->PC订单；1->app订单] **/
     private Integer sourceType;
@@ -92,5 +95,22 @@ public class OrderCreateTo {
 
     private String orderSn;  // 订单号
 
+    private Date cancelTime;//剩余支付时间
+
+    private Integer type;  //TypeEnum 订单类型
+    private String strType;  //TypeEnum 订单类型
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date paymentTime;  // 支付时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date deliveryTime;  // 发货时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date receiveTime;  // 确认收货时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date commentTime;  // 评价时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date modifyTime;  // 修改时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date createTime;//下单时间
 
 }
