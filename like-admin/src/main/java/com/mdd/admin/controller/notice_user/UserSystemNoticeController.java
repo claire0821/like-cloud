@@ -94,5 +94,4 @@ public class UserSystemNoticeController {
         iUserSystemNoticeService.del(userSystemNoticeParam.getId());
         return AjaxResult.success();
     }
-
 }

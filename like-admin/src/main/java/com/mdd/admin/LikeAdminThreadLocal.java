@@ -47,6 +47,17 @@ public class LikeAdminThreadLocal {
         }
         return Long.parseLong(adminId);
     }
+    /**
+     *
+     * 获取用户ID
+     */
+    public static Long getUserId() {
+        Object adminId = LikeAdminThreadLocal.get("userId");
+        if (adminId == null || adminId.toString().equals("")) {
+            return Long.valueOf(0);
+        }
+        return Long.parseLong(adminId.toString());
+    }
 
     /**
      * 获取角色ID
