@@ -42,8 +42,7 @@ public class LoginController {
      */
     @PostMapping("/register")
     public Object register(@Validated @RequestBody RegParam regParam) {
-        memberFeignService.register(regParam);
-        return AjaxResult.success();
+        return memberFeignService.register(regParam);
     }
 
     /**

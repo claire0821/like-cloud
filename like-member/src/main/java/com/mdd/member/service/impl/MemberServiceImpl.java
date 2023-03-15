@@ -118,6 +118,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
 
         MemberVo vo = new MemberVo();
         BeanUtils.copyProperties(model, vo);
+        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()));
         //TODO 距离升级还差
         vo.setNextLevelTips("距离升级还差2000");
         //TODO 未读消息

@@ -25,7 +25,7 @@ public enum HttpEnum {
     REQUEST_404_ERROR(404, "请求接口不存在"),
 
     SYSTEM_ERROR(500, "系统错误"),
-
+    CALL_SERVICE_ERROR(501, "调用服务错误"),
     ORDER_ERROR(600, "订单错误"),
     ORDER_NO_STOCK(601, "商品库存不足"),
 

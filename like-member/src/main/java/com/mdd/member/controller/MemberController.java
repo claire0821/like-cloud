@@ -112,7 +112,7 @@ public class MemberController {
      */
     @Log(title = "会员注册")
     @PostMapping("/register")
-    public Object register(@Validated @RequestBody RegParam regParam) {
+    public AjaxResult<Object> register(@Validated @RequestBody RegParam regParam) {
         iMemberService.register(regParam);
         return AjaxResult.success();
     }

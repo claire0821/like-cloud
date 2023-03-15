@@ -1,4 +1,4 @@
-package com.mdd.common.config;
+package com.mdd.common.config.feign;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.mdd.common.core.AjaxResult;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 /**
  * @program: server
- * @description: Fegin异常返回拦截同一处理
+ * @description: Fegin返回200拦截统一处理
  * @author: Claire
  * @create: 2023-03-03 11:46
  **/

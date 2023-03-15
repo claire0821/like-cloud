@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface MemberFeignService {
 
     @PostMapping(value = "api/member/member/register")
-    Object register(@RequestBody RegParam regParam);
+    AjaxResult<Object> register(@RequestBody RegParam regParam);
 
 
     @PostMapping(value = "api/member/member/login")

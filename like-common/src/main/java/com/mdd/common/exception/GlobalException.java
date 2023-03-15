@@ -1,6 +1,5 @@
 package com.mdd.common.exception;
 
-import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
@@ -23,7 +22,7 @@ import java.util.Objects;
  */
 @Slf4j
 @ControllerAdvice
-@ConditionalOnClass(MybatisPlusException.class)
+//@ConditionalOnClass(MybatisPlusException.class)
 public class GlobalException {
 
     /**
@@ -124,20 +123,6 @@ public class GlobalException {
     @ResponseBody
     public AjaxResult handleIllegalArgumentException(IllegalArgumentException e) {
         Integer code = HttpEnum.ASSERT_ARGUMENT_ERROR.getCode();
-        String msg   = Objects.requireNonNull(e.getMessage());
-        return AjaxResult.failed(code, msg);
-    }
-
-    /**
-     * 拦截MybatisPlus异常
-     */
-    //TODO ConditionalOnClass标记在方法上
-    //@ConditionalOnClass(name = "com.baomidou.mybatisplus.core.exceptions.MybatisPlusException")
-    @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler(MybatisPlusException.class)
-    @ResponseBody
-    public AjaxResult handleMybatisPlusException(MybatisPlusException e) {
-        Integer code = HttpEnum.ASSERT_MYBATIS_ERROR.getCode();
         String msg   = Objects.requireNonNull(e.getMessage());
         return AjaxResult.failed(code, msg);
     }
