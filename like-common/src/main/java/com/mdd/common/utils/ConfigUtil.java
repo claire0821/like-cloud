@@ -1,8 +1,12 @@
 package com.mdd.common.utils;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mdd.common.core.AjaxResult;
 import com.mdd.common.entity.system.SystemConfig;
-import com.mdd.common.mapper.system.SystemConfigMapper;
+import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.feign.ISystemConfigFeignService;
+import com.mdd.common.vo.CartItemVo;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,12 +25,12 @@ public class ConfigUtil {
      * @return Map<String, String>
      */
     public static Map<String, String> get(String type) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
-
-        List<SystemConfig> configs = model.selectList(
-                new QueryWrapper<SystemConfig>()
-                        .select("id", "type", "name", "value")
-                        .eq("type", type));
+        ISystemConfigFeignService iSystemConfigFeignService = SpringUtil.getBean(ISystemConfigFeignService.class);
+        AjaxResult<List<SystemConfig>> result = iSystemConfigFeignService.list(type,"");
+        if(!result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+            return null;
+        }
+        final List<SystemConfig> configs = result.getData();
 
         Map<String, String> map = new LinkedHashMap<>();
         for (SystemConfig config : configs) {
@@ -45,13 +49,12 @@ public class ConfigUtil {
      * @return String
      */
     public static String get(String type, String name) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
-
-        SystemConfig config = model.selectOne(
-                new QueryWrapper<SystemConfig>()
-                        .select("id", "type", "name", "value")
-                        .eq("type", type)
-                        .eq("name", name));
+        ISystemConfigFeignService iSystemConfigFeignService = SpringUtil.getBean(ISystemConfigFeignService.class);
+        AjaxResult<SystemConfig> result = iSystemConfigFeignService.one(type,name);
+        if(!result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+            return null;
+        }
+        SystemConfig config = result.getData();
 
         return config.getValue();
     }
@@ -65,13 +68,12 @@ public class ConfigUtil {
      * @return String
      */
     public static String get(String type, String name, String defaults) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
-
-        SystemConfig config = model.selectOne(
-                new QueryWrapper<SystemConfig>()
-                        .select("id", "type", "name", "value")
-                        .eq("type", type)
-                        .eq("name", name));
+        ISystemConfigFeignService iSystemConfigFeignService = SpringUtil.getBean(ISystemConfigFeignService.class);
+        AjaxResult<SystemConfig> result = iSystemConfigFeignService.one(type,name);
+        if(!result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+            return defaults;
+        }
+        SystemConfig config = result.getData();
 
         if (config == null) {
             return defaults;
@@ -89,14 +91,12 @@ public class ConfigUtil {
      * @return String
      */
     public static Map<String, String> getMap(String type, String name) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
-
-        SystemConfig config = model.selectOne(
-                new QueryWrapper<SystemConfig>()
-                        .select("id", "type", "name", "value")
-                        .eq("type", type)
-                        .eq("name", name));
-
+        ISystemConfigFeignService iSystemConfigFeignService = SpringUtil.getBean(ISystemConfigFeignService.class);
+        AjaxResult<SystemConfig> result = iSystemConfigFeignService.one(type,name);
+        if(!result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+            return null;
+        }
+        SystemConfig config = result.getData();
         if (config == null) {
             return null;
         }
@@ -117,17 +117,16 @@ public class ConfigUtil {
      * @param val 值
      */
     public static void set(String type, String name, String val) {
-        SystemConfigMapper model = SpringUtil.getBean(SystemConfigMapper.class);
-
-        SystemConfig config = model.selectOne(
-                new QueryWrapper<SystemConfig>()
-                        .eq("type", type)
-                        .eq("name", name));
-
+        ISystemConfigFeignService iSystemConfigFeignService = SpringUtil.getBean(ISystemConfigFeignService.class);
+        AjaxResult<SystemConfig> result = iSystemConfigFeignService.one(type,name);
+        if(!result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
+            return;
+        }
+        SystemConfig config = result.getData();
         if (config != null) {
             config.setValue(val);
             config.setUpdateTime(System.currentTimeMillis() / 1000);
-            model.updateById(config);
+            iSystemConfigFeignService.updateById(config);
         } else {
             SystemConfig systemConfig = new SystemConfig();
             systemConfig.setType(type);
@@ -135,8 +134,7 @@ public class ConfigUtil {
             systemConfig.setValue(val);
             systemConfig.setCreateTime(System.currentTimeMillis() / 1000);
             systemConfig.setUpdateTime(System.currentTimeMillis() / 1000);
-            model.insert(systemConfig);
+            iSystemConfigFeignService.insert(systemConfig);
         }
     }
-
 }

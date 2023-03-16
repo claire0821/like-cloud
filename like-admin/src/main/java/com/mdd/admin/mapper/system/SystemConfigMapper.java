@@ -1,4 +1,4 @@
-package com.mdd.common.mapper.system;
+package com.mdd.admin.mapper.system;
 
 import com.mdd.common.core.basics.IBaseMapper;
 import com.mdd.common.entity.system.SystemConfig;

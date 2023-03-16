@@ -26,7 +26,9 @@ public class AdminConfig {
             "smscoupon:member:list",   // 配置接口
             "product:category:list:tree",   // 配置接口
             "front:config",   // 小程序
-            "front:decorate"   // 小程序
+            "front:decorate",   // 小程序
+            "system:config:one",   // 小程序
+            "system:config:list"   // 小程序
     };
 
     // 免权限验证
