@@ -23,5 +23,6 @@ public class MemberLevelDetailVo implements Serializable {
     private Integer priviledgeMemberPrice;  // 是否有会员价格特权
     private Integer priviledgeBirthday;  // 是否有生日特权
     private String note;  // 备注
-
+    private String image;//等级图标
+    private String backgroundImage;//背景图片
 }

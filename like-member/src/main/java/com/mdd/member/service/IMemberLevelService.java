@@ -57,4 +57,6 @@ public interface IMemberLevelService extends IService<MemberLevel> {
     MemberLevel getDefaultLevel();
 
     List<MemberLevelListVo> getLevel();
+
+    List<MemberLevelListVo> listAll();
 }

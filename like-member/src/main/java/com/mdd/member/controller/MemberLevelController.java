@@ -41,6 +41,18 @@ public class MemberLevelController {
         PageResult<MemberLevelListVo> list = iMemberLevelService.list(pageParam, params);
         return AjaxResult.success(list);
     }
+
+    /**
+     * 会员等级列表
+     *
+     * @return Object
+     */
+    @GetMapping("/listAll")
+    public AjaxResult<List<MemberLevelListVo>> listAll() {
+        List<MemberLevelListVo> list = iMemberLevelService.listAll();
+        return AjaxResult.success(list);
+    }
+
     /**
      * 会员等级详情
      *

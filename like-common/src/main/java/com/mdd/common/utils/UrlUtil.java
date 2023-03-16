@@ -66,8 +66,19 @@ public class UrlUtil {
         String engine = ConfigUtil.get("storage", "default", "local");
         engine = engine.equals("") ? "local" : engine;
         if (engine.equals("local")) {
-            return url.replace(RequestUtil.uri(), "")
-                      .replace("/" + uploadPrefix + "/", "");
+            String res = url;
+            if(url.contains(RequestUtil.uri())) {
+                res = url.replace(RequestUtil.uri(), "");
+            } else {
+                if(url.contains("https://") || url.contains("http://")) {
+                    res = url.replace("https://","").replace("http://","");
+                    int startIndex = res.indexOf("/");
+                    res = res.substring(startIndex,res.length());
+                }
+            }
+            return res.replace("/" + uploadPrefix + "/", "");
+//            return url.replace(RequestUtil.uri(), "")
+//                      .replace("/" + uploadPrefix + "/", "");
         }
 
         Map<String, String> config = ConfigUtil.getMap("storage", engine);

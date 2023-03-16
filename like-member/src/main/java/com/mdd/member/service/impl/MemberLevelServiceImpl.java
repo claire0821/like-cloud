@@ -67,6 +67,8 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper,Member
         for(MemberLevel item : iPage.getRecords()) {
             MemberLevelListVo vo = new MemberLevelListVo();
             BeanUtils.copyProperties(item, vo);
+            vo.setImage(UrlUtil.toAbsoluteUrl(item.getImage()));
+            vo.setBackgroundImage(UrlUtil.toAbsoluteUrl(item.getBackgroundImage()));
             list.add(vo);
         }
 
@@ -90,6 +92,8 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper,Member
 
         MemberLevelDetailVo vo = new MemberLevelDetailVo();
         BeanUtils.copyProperties(model, vo);
+        vo.setImage(UrlUtil.toAbsoluteUrl(model.getImage()));
+        vo.setBackgroundImage(UrlUtil.toAbsoluteUrl(model.getBackgroundImage()));
         return vo;
     }
 
@@ -110,6 +114,8 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper,Member
         model.setPriviledgeMemberPrice(memberLevelParam.getPriviledgeMemberPrice());
         model.setPriviledgeBirthday(memberLevelParam.getPriviledgeBirthday());
         model.setNote(memberLevelParam.getNote());
+        model.setImage(UrlUtil.toRelativeUrl(memberLevelParam.getImage()));
+        model.setBackgroundImage(UrlUtil.toRelativeUrl(memberLevelParam.getBackgroundImage()));
         memberLevelMapper.insert(model);
     }
 
@@ -137,6 +143,8 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper,Member
         model.setPriviledgeMemberPrice(memberLevelParam.getPriviledgeMemberPrice());
         model.setPriviledgeBirthday(memberLevelParam.getPriviledgeBirthday());
         model.setNote(memberLevelParam.getNote());
+        model.setImage(UrlUtil.toRelativeUrl(memberLevelParam.getImage()));
+        model.setBackgroundImage(UrlUtil.toRelativeUrl(memberLevelParam.getBackgroundImage()));
         memberLevelMapper.updateById(model);
     }
 
@@ -182,6 +190,20 @@ public class MemberLevelServiceImpl extends ServiceImpl<MemberLevelMapper,Member
             return memberLevelListVo;
         }).collect(Collectors.toList());
         return collect;
+    }
+
+    @Override
+    public List<MemberLevelListVo> listAll() {
+        final List<MemberLevel> memberLevels = memberLevelMapper.selectList(new QueryWrapper<>());
+        List<MemberLevelListVo> list = new LinkedList<>();
+        for(MemberLevel item : memberLevels) {
+            MemberLevelListVo vo = new MemberLevelListVo();
+            BeanUtils.copyProperties(item, vo);
+            vo.setImage(UrlUtil.toAbsoluteUrl(item.getImage()));
+            vo.setBackgroundImage(UrlUtil.toAbsoluteUrl(item.getBackgroundImage()));
+            list.add(vo);
+        }
+        return list;
     }
 
 }

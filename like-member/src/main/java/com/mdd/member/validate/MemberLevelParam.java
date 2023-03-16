@@ -48,4 +48,6 @@ public class MemberLevelParam extends BaseParam {
     @NotNull(message = "note参数缺失", groups = {create.class, update.class})
     @Length(max = 255, message = "note参数不能超出255个字符", groups = {create.class, update.class})
     private String note;
+    private String image;//等级图标
+    private String backgroundImage;//背景图片
 }
