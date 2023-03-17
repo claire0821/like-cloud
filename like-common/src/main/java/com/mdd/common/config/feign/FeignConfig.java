@@ -1,4 +1,4 @@
-package com.mdd.order.config;
+package com.mdd.common.config.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @program: server
- * @description: feign拦截器功能
+ * @description: feign拦截器功能，解决丢失token
  * @author: Claire
  * @create: 2022-12-14 15:49
  **/
@@ -34,7 +34,9 @@ public class FeignConfig {
                         //2、同步请求头的数据（主要是cookie）
                         //把老请求的cookie值放到新请求上来，进行一个同步
                         String token = request.getHeader("token");
-                        template.header("token", token);
+                        if(!token.isEmpty()) {
+                            template.header("token", token);
+                        }
                     }
                 }
             }

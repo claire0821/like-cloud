@@ -404,7 +404,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoMapper,SpuInfo> imple
             return esModel;
         }).collect(Collectors.toList());
 
-        //TODO 5、将数据发给es进行保存：gulimall-search
+        //TODO 5、将数据发给es进行保存：like-search
         final LinkedHashMap res = (LinkedHashMap) searchFeignService.productStatusUp(collect);
         final Integer code = (Integer) res.get("code");
         if (code == HttpEnum.SUCCESS.getCode()) {

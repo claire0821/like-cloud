@@ -28,9 +28,9 @@ public interface ISystemConfigFeignService {
     AjaxResult<SystemConfig> one(@RequestParam(value = "type",required = false) String type,
                                  @RequestParam(value = "name",required = false) String name);
 
-    @PostMapping("/updateById")
+    @PostMapping("/api/system/config/updateById")
     AjaxResult<Object> updateById(@RequestBody SystemConfig SystemConfig);
 
-    @PostMapping("/insert")
+    @PostMapping("api/system/config/insert")
     AjaxResult<Object> insert(@RequestBody SystemConfig SystemConfig);
 }
