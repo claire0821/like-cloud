@@ -34,6 +34,10 @@ public class GlobalConfig {
 
     // 购物车缓存键
     public static final String OrderKey = "order:";
+
+    // role缓存键
+    public static final String RoleKey = "role";
+
     // 短信验证码
     public static String redisSmsCode  = "smsCode:";
 
@@ -55,6 +59,13 @@ public class GlobalConfig {
 
     // 上传视频扩展
     public static String[] uploadVideoExt = new String[] {"mp4", "mp3", "avi", "flv", "rmvb", "mov"};
+
+    // 超级管理员
+    public static final String SuperAdministrator = "admin";
+    /**
+     * loginid构造拼接字符串
+     */
+    public static String LOGINID_JOIN_CODE = ":";
 
     // 免登录验证
     public static String[] notLoginUri = new String[]{

@@ -3,18 +3,20 @@ package com.mdd.admin.service.system.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.config.AdminConfig;
 import com.mdd.admin.service.system.ISystemAuthMenuService;
 import com.mdd.admin.service.system.ISystemAuthPermService;
 import com.mdd.admin.validate.system.SystemAuthMenuParam;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 import com.mdd.common.entity.system.SystemAuthMenu;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.utils.ArrayUtil;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.utils.TimeUtil;
+import com.mdd.common.vo.UserVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +36,9 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
     @Resource
     ISystemAuthPermService iSystemAuthPermService;
 
+    @Autowired
+    AuthFeignService authFeignService;
+
     /**
      * 根据角色ID获取菜单
      *
@@ -43,7 +48,8 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
      */
     @Override
     public JSONArray selectMenuByRoleId(Integer roleId) {
-        Long adminId = LikeAdminThreadLocal.getAdminId();
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Long adminId = userInfo.getId();
         List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleId);
 
         QueryWrapper<SystemAuthMenu> queryWrapper = new QueryWrapper<>();
@@ -73,6 +79,36 @@ public class SystemAuthMenuServiceImpl implements ISystemAuthMenuService {
         JSONArray jsonArray = JSONArray.parseArray(JSONArray.toJSONString(lists));
         return ArrayUtil.listToTree(jsonArray, "id", "pid", "children");
     }
+
+    /**
+     * 根据角色ID获取菜单
+     *
+     * @author fzr
+     * @param roleId 角色ID
+     * @return JSONArray
+     */
+    @Override
+    public List<String> selectMenuPermsByRoleId(Integer roleId) {
+        List<Integer> menuIds = iSystemAuthPermService.selectMenuIdsByRoleId(roleId);
+
+        QueryWrapper<SystemAuthMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("menu_type", Arrays.asList("M", "C"));
+        queryWrapper.eq("is_disable", 0);
+        queryWrapper.orderByDesc("menu_sort");
+        queryWrapper.orderByAsc("id");
+        if(menuIds.size() > 0) {
+            queryWrapper.in("id", menuIds);
+        }
+
+        List<SystemAuthMenu> systemAuthMenus = systemAuthMenuMapper.selectList(queryWrapper);
+
+        List<String> stringList = new ArrayList<>();
+        for (SystemAuthMenu systemAuthMenu : systemAuthMenus) {
+            stringList.add(systemAuthMenu.getPerms());
+        }
+        return stringList;
+    }
+
 
     /**
      * 菜单列表

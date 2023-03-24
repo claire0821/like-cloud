@@ -12,7 +12,7 @@ public class SystemAuthAdminVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer id;            // 主键
+    private Long id;            // 主键
     private Integer deptId;        // 部门ID
     private Integer postId;        // 岗位ID
     private String username;       // 账号

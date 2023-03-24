@@ -4,6 +4,7 @@ import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.config.RedisConfig;
 import com.mdd.common.constant.OrderConstant;
 import com.mdd.common.vo.UserVo;
+import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import lombok.Data;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
@@ -748,12 +749,12 @@ public class RedisUtil {
             final Long id = Long.parseLong(redisTemplate.opsForValue().get(redisPrefix + GlobalConfig.TokenKey + token).toString());
             user = new UserVo();
             user.setId(id);
-            user.setType(OrderConstant.OperateManTypeEnum.USER.getCode());
+            user.setType(OrderConstant.OperateManTypeEnum.USER);
         } else if(redisTemplate.hasKey(redisPrefix + GlobalConfig.backstageTokenKey + token)){
             final Long id = Long.parseLong(redisTemplate.opsForValue().get(redisPrefix + GlobalConfig.backstageTokenKey + token).toString());
             user = new UserVo();
             user.setId(id);
-            user.setType(OrderConstant.OperateManTypeEnum.ADMINISTRATORS.getCode());
+            user.setType(OrderConstant.OperateManTypeEnum.ADMINISTRATORS);
         }
         return user;
     }
@@ -772,5 +773,28 @@ public class RedisUtil {
                 RedisUtil.expire(redisPrefix + GlobalConfig.backstageTokenKey + token, 7200L);
             }
         }
+    }
+
+    /**
+     * 返回一个账号所拥有的权限码集合
+     * @param roles
+     * @return
+     */
+    public static Set<String> getRolePermission(Set<String> roles) {
+        Set<String> permission = new TreeSet<>();
+        for (String role : roles) {
+            final List<String> obj = (List<String>) redisTemplate.opsForHash().get(GlobalConfig.redisPrefix + GlobalConfig.RoleKey, role);
+            permission.addAll(obj);
+        }
+        return permission;
+    }
+
+    /**
+     * 存储一个角色所拥有的权限码集合
+     * @param role
+     * @param permission
+     */
+    public static void setRolePermission(String role, List<String> permission) {
+        redisTemplate.opsForHash().put(GlobalConfig.redisPrefix + GlobalConfig.RoleKey, role,permission);
     }
 }

@@ -1,9 +1,11 @@
 package com.mdd.common.config.feign;
 
+
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,7 +31,6 @@ public class FeignConfig {
                 if (requestAttributes != null) {
                     //老请求
                     HttpServletRequest request = requestAttributes.getRequest();
-
                     if (request != null) {
                         //2、同步请求头的数据（主要是cookie）
                         //把老请求的cookie值放到新请求上来，进行一个同步
@@ -37,6 +38,7 @@ public class FeignConfig {
                         if(!token.isEmpty()) {
                             template.header("token", token);
                         }
+//                        template.header(SaIdUtil.ID_TOKEN, SaIdUtil.getToken());
                     }
                 }
             }

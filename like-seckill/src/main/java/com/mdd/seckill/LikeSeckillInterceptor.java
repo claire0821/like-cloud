@@ -44,7 +44,7 @@ public class LikeSeckillInterceptor implements HandlerInterceptor {
         boolean match = antPathMatcher.match("/kill", uri);
 
         String token = request.getHeader("token");
-        token = RedisUtil.getToken(token);
+        token = "";//RedisUtil.getToken(token);
 
         // Token是否为空
         if (match && StringUtils.isBlank(token)) {
@@ -61,7 +61,7 @@ public class LikeSeckillInterceptor implements HandlerInterceptor {
         }
 
         // 用户信息缓存
-        Object uid = RedisUtil.getUserID(token);
+        Object uid = "";//RedisUtil.getUserID(token);
         Long userId = Long.parseLong(uid.toString());
 
         // 写入本地线程

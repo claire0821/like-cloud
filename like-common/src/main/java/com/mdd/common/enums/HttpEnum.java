@@ -1,5 +1,7 @@
 package com.mdd.common.enums;
 
+import com.mdd.common.constant.OrderConstant;
+
 public enum HttpEnum {
 
     SUCCESS(200, "成功"),
@@ -60,4 +62,13 @@ public enum HttpEnum {
         return this.msg;
     }
 
+    public static String getMsg(Integer code) {
+        final OrderConstant.DeliveryTypeEnum[] values = OrderConstant.DeliveryTypeEnum.values();
+        for (OrderConstant.DeliveryTypeEnum value : values) {
+            if(value.getCode().equals(code)) {
+                return value.getMsg();
+            }
+        }
+        return "";
+    }
 }

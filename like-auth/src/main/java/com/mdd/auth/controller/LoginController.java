@@ -1,19 +1,18 @@
 package com.mdd.auth.controller;
 
-import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.JSONObject;
 import com.mdd.auth.feign.MemberFeignService;
+import com.mdd.auth.service.LoginService;
 import com.mdd.common.core.AjaxResult;
-import com.mdd.common.enums.HttpEnum;
-import com.mdd.common.exception.LoginException;
-import com.mdd.common.utils.RedisUtil;
-import com.mdd.common.validate.member.LoginParam;
-import com.mdd.common.validate.member.RegParam;
-import com.mdd.common.vo.MemberVo;
+import com.mdd.auth.utils.LoginHelper;
+import com.mdd.common.validate.user.LoginParam;
+import com.mdd.common.validate.user.RegParam;
+import com.mdd.common.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -30,9 +29,10 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class LoginController {
 
-    @Resource
+    @Autowired
+    LoginService loginService;
+    @Autowired
     MemberFeignService memberFeignService;
-
     /**
      * 注册账号
      *
@@ -115,33 +115,60 @@ public class LoginController {
     //TODO OAuth2.0
 
     /**
-     * 登录
+     * 用户登录
+     *
+     * @author Claire
+     * @param loginParam 参数
+     * @return Object
+     */
+//    @PostMapping("/login/member")
+//    public Object loginMember(@RequestBody LoginParam loginParam) {
+//        final AjaxResult<MemberVo> res = memberFeignService.login(loginParam);
+//        final Integer code = res.getCode();
+//
+//        if(code != HttpEnum.SUCCESS.getCode()) {
+//            return res;
+//        }
+//
+//        MemberVo data = (MemberVo) res.getData();
+//        Map<String, Object> response = new LinkedHashMap<>();
+//        final Long id = data.getId();
+//        if(id == null) {
+//            throw new LoginException(HttpEnum.LOGIN_ERROR.getCode(), HttpEnum.LOGIN_ERROR.getMsg());
+//        }
+//
+//        final String mobile = data.getMobile();
+//        response.put("isBindMobile", (mobile == null || mobile.isEmpty()) ? false : true);
+//
+//        final String token = RedisUtil.setToken(id);
+//        response.put("token", token);
+//        return AjaxResult.success(response);
+//    }
+
+    /**
+     * 后台管理员登录
      *
      * @author Claire
      * @param loginParam 参数
      * @return Object
      */
     @PostMapping("/login")
-    public Object login(@RequestBody LoginParam loginParam) {
-        final AjaxResult<MemberVo> res = memberFeignService.login(loginParam);
-        final Integer code = res.getCode();
+    public AjaxResult login(@RequestBody @Validated LoginParam loginParam) {
+        final String token = loginService.login(loginParam);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("token",token);
+        return AjaxResult.success(jsonObject);
+    }
 
-        if(code != HttpEnum.SUCCESS.getCode()) {
-            return res;
-        }
-
-        MemberVo data = (MemberVo) res.getData();
-        Map<String, Object> response = new LinkedHashMap<>();
-        final Long id = data.getId();
-        if(id == null) {
-            throw new LoginException(HttpEnum.LOGIN_ERROR.getCode(), HttpEnum.LOGIN_ERROR.getMsg());
-        }
-
-        final String mobile = data.getMobile();
-        response.put("isBindMobile", (mobile == null || mobile.isEmpty()) ? false : true);
-
-        final String token = RedisUtil.setToken(id);
-        response.put("token", token);
-        return AjaxResult.success(response);
+    /**
+     * 获取登录用户信息
+     *
+     * @author Claire
+     * @return Object
+     */
+    @PostMapping("/getUserInfo")
+    public AjaxResult<UserVo> getUserInfo() {
+        UserVo userVo = LoginHelper.getLoginUser();
+        return AjaxResult.success(userVo);
     }
 }

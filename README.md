@@ -21,7 +21,7 @@
 ``` lua
 like-cloud
 ├── mall-admin -- 
-├── mall-auth -- 基于Spring Security Oauth2的统一的认证中心
+├── mall-auth -- 认证中心
 ├── mall-cart -- 购物车模块
 ├── mall-common -- 工具类及通用代码模块
 ├── mall-coupon -- 优惠营销服务
@@ -107,3 +107,35 @@ like-cloud
 
 
 ## 运行效果展示
+
+
+### 集成Sa-Token
+官网：https://sa-token.cc/
+#### 在SpringCloud中使用Sa-Token
+使用网关统一鉴权，网关负责登录校验和权限校验
+##### 配置网关服务
+官网文档：https://sa-token.cc/doc.html#/start/webflux-example
+https://sa-token.cc/doc.html#/micro/gateway-auth
+###### pom.xml 
+底层是WebFlux实现，是基于Reactor模型编程的，所以引入sa-token-reactor-spring-boot-starter
+参考文档
+- [引入Spring WebFlux 集成 Sa-Token 示例](https://sa-token.cc/doc.html#/start/webflux-example?id=spring-webflux-%e9%9b%86%e6%88%90-sa-token-%e7%a4%ba%e4%be%8b)
+![docs/image/20230317113418.png](docs/image/20230317113418.png)
+###### nacos配置sa-token和网关白名单
+![docs/image/20230324104531.png](docs/image/20230324104531.png)
+![docs/image/20230324104718.png](docs/image/20230324104718.png)
+###### 创建全局过滤器
+![docs/image/20230324105343.png](docs/image/20230324105343.png)
+
+###### auth认证中心处理登录并返回token
+
+###### 网关权限认证
+将路由拦截鉴权动态化，把鉴权规则放在配置文档
+![docs/image/20230324114359.png](docs/image/20230324114359.png)
+![docs/image/20230324114322.png](docs/image/20230324114322.png)
+![docs/image/20230324114517.png](docs/image/20230324114517.png)
+参考文档
+- [路由拦截鉴权](https://sa-token.cc/doc.html#/use/route-check)
+- [Sa-Token 集成 Redis](https://sa-token.cc/doc.html#/up/integ-redis)
+- [参考：把路由拦截鉴权动态化](https://sa-token.cc/doc.html#/fun/dynamic-router-check)
+- [参考：将权限数据放在缓存里](https://sa-token.cc/doc.html#/fun/jur-cache)

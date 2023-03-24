@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * 系统角色参数
@@ -24,6 +25,7 @@ public class SystemAuthRoleParam extends BaseParam {
 
     @NotNull(message = "缺少参数name", groups = {create.class, update.class})
     @Length(min = 1, max = 30, message = "角色名称必须在1~30个字符内", groups = {create.class, update.class})
+    @Pattern(message = "不能含有特殊符号:或者;", regexp="[^:;]",groups = {create.class, update.class})
     private String name;
 
     @Max(value = 200, message = "备注信息不能超过200个字符")

@@ -1,17 +1,19 @@
 package com.mdd.admin.controller.system;
 
-import com.mdd.admin.LikeAdminThreadLocal;
+
 import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.system.ISystemAuthAdminService;
 import com.mdd.common.entity.system.SystemAuthAdmin;
-import com.mdd.common.entity.user.User;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthAdminParam;
 import com.mdd.admin.vo.system.SystemAuthAdminVo;
 import com.mdd.admin.vo.system.SystemAuthSelfVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
-import com.mdd.common.validator.annotation.IDMust;
+import com.mdd.common.validator.annotation.IDLongMust;
+import com.mdd.common.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +30,8 @@ public class AuthAdminController {
 
     @Resource
     ISystemAuthAdminService iSystemAuthAdminService;
-
+    @Autowired
+    AuthFeignService authFeignService;
     /**
      * 管理员列表
      *
@@ -62,8 +65,7 @@ public class AuthAdminController {
      */
     @GetMapping("/self")
     public AjaxResult self() {
-        Long adminId = LikeAdminThreadLocal.getAdminId();
-        SystemAuthSelfVo vo = iSystemAuthAdminService.self(adminId);
+        SystemAuthSelfVo vo = iSystemAuthAdminService.self();
         return AjaxResult.success(vo);
     }
 
@@ -75,7 +77,7 @@ public class AuthAdminController {
      * @return AjaxResult
      */
     @GetMapping("/detail")
-    public AjaxResult detail(@Validated @IDMust() @RequestParam("id") Long id) {
+    public AjaxResult detail(@Validated @IDLongMust() @RequestParam("id") Long id) {
         SystemAuthAdminVo vo = iSystemAuthAdminService.detail(id);
         return AjaxResult.success(vo);
     }
@@ -117,7 +119,8 @@ public class AuthAdminController {
     @Log(title = "管理员更新")
     @PostMapping("/upInfo")
     public AjaxResult upInfo(@Validated(value = SystemAuthAdminParam.upInfo.class) @RequestBody SystemAuthAdminParam systemAuthAdminParam) {
-        Long adminId = LikeAdminThreadLocal.getAdminId();
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Long adminId = userInfo.getId();
         iSystemAuthAdminService.upInfo(systemAuthAdminParam, adminId);
         return AjaxResult.success();
     }

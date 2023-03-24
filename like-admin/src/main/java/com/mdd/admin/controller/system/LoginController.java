@@ -5,6 +5,8 @@ import com.mdd.admin.validate.system.SystemLoginParam;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.exception.OperateException;
+import com.mdd.common.validate.user.LoginParam;
+import com.mdd.common.vo.UserVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,19 +31,20 @@ public class LoginController {
      * 登录系统
      *
      * @author fzr
-     * @param systemLoginParam 登录参数
+     * @param loginParam 登录参数
      * @return AjaxResult
      */
     @PostMapping("/login")
-    public AjaxResult login(@Validated() @RequestBody SystemLoginParam systemLoginParam) {
-        try {
-            Map<String, Object> map = iSystemLoginService.login(systemLoginParam);
-            return AjaxResult.success(map);
-        } catch (LoginException e) {
-            return AjaxResult.failed(e.getCode(), e.getMsg());
-        } catch (OperateException e) {
-            return AjaxResult.failed(e.getMsg());
-        }
+    public AjaxResult<UserVo> login(@Validated() @RequestBody LoginParam loginParam) {
+//        try {
+//
+//        } catch (LoginException e) {
+//            return AjaxResult.failed(e.getCode(), e.getMsg());
+//        } catch (OperateException e) {
+//            return AjaxResult.failed(e.getMsg());
+//        }
+        UserVo userVo = iSystemLoginService.login(loginParam);
+        return AjaxResult.success(userVo);
     }
 
     /**

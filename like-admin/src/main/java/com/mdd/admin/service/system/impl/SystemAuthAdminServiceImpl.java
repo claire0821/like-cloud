@@ -7,11 +7,12 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.config.AdminConfig;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.admin.service.system.ISystemAuthAdminService;
 import com.mdd.admin.service.system.ISystemAuthPermService;
 import com.mdd.admin.service.system.ISystemAuthRoleService;
+import com.mdd.common.core.AjaxResult;
 import com.mdd.common.validate.PageParam;
 import com.mdd.admin.validate.system.SystemAuthAdminParam;
 import com.mdd.admin.vo.system.SystemAuthAdminVo;
@@ -25,7 +26,9 @@ import com.mdd.common.exception.OperateException;
 import com.mdd.common.mapper.system.SystemAuthAdminMapper;
 import com.mdd.common.mapper.system.SystemAuthMenuMapper;
 import com.mdd.common.utils.*;
+import com.mdd.common.vo.UserVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -49,6 +52,8 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
     @Resource
     ISystemAuthPermService iSystemAuthPermService;
 
+    @Autowired
+    AuthFeignService authFeignService;
     /**
      * 根据账号查找管理员
      *
@@ -120,7 +125,9 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
      * @return SystemSelfVo
      */
     @Override
-    public SystemAuthSelfVo self(Long adminId) {
+    public SystemAuthSelfVo self() {
+        final AjaxResult<UserVo> userInfo = authFeignService.getUserInfo();
+        Long adminId = userInfo.getData().getId();
         // 管理员信息
         SystemAuthAdmin sysAdmin = systemAuthAdminMapper.selectOne(new QueryWrapper<SystemAuthAdmin>()
                 .select(SystemAuthAdmin.class, info->
@@ -134,6 +141,7 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
 
         SystemAuthAdminVo systemAuthAdminVo = new SystemAuthAdminVo();
         BeanUtils.copyProperties(sysAdmin, systemAuthAdminVo);
+//        systemAuthAdminVo.setId(sysAdmin.getId());
         systemAuthAdminVo.setDept(String.valueOf(sysAdmin.getDeptId()));
         systemAuthAdminVo.setRole(String.valueOf(sysAdmin.getRole()));
         systemAuthAdminVo.setAvatar(UrlUtil.toAbsoluteUrl(sysAdmin.getAvatar()));
@@ -319,7 +327,8 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
         systemAuthAdminMapper.updateById(model);
         this.cacheAdminUserByUid(systemAuthAdminParam.getId());
 
-        Long id = LikeAdminThreadLocal.getAdminId();
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Long id = userInfo.getId();
         if (systemAuthAdminParam.getPassword() != null && systemAuthAdminParam.getId().equals(id)) {
             String token = Objects.requireNonNull(RequestUtil.handler()).getHeader("token");
             RedisUtil.del(AdminConfig.backstageTokenKey + token);
@@ -408,8 +417,9 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
 
         Assert.isFalse(id == 1, "系统管理员不允许删除!");
 
-        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
-        Assert.isFalse(id == adminId, "不能删除自己!");
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Long adminId = userInfo.getId();
+        Assert.isFalse(id.equals(adminId), "不能删除自己!");
 
         SystemAuthAdmin model = new SystemAuthAdmin();
         model.setId(id);
@@ -436,8 +446,9 @@ public class SystemAuthAdminServiceImpl extends ServiceImpl<SystemAuthAdminMappe
 
         Assert.notNull(systemAuthAdmin, "账号已不存在!");
 
-        int adminId = Integer.parseInt(LikeAdminThreadLocal.getAdminId().toString());
-        Assert.isFalse(id == adminId, "不能禁用自己!");
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Long adminId = userInfo.getId();
+        Assert.isFalse(id.equals(adminId), "不能禁用自己!");
 
         Integer disable = systemAuthAdmin.getIsDisable() == 1 ? 0 : 1;
         systemAuthAdmin.setIsDisable(disable);

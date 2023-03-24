@@ -33,7 +33,6 @@ public class ArticleController {
      * @param params 搜索参数
      * @return AjaxResult
      */
-    @GetMapping("/list")
     public AjaxResult list(@Validated PageParam pageParam,
                               @RequestParam Map<String, String> params) {
         PageResult<ArticleListVo> vos = iArticleArchivesService.list(pageParam, params);

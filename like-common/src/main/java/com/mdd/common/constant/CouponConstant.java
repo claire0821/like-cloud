@@ -6,7 +6,7 @@ package com.mdd.common.constant;
  * @author: Claire
  * @create: 2023-01-10 15:03
  **/
-public class CouponConstan {
+public class CouponConstant {
     public enum BoundsWorkEnum{
         BOUNDS_WORK_ENUM_1(1,"无优惠，不赠送成长积分"),
         BOUNDS_WORK_ENUM_2(2,"无优惠，赠送成长积分"),

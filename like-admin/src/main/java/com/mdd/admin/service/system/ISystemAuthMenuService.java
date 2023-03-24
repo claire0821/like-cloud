@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.mdd.admin.validate.system.SystemAuthMenuParam;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 
+import java.util.List;
+
 /**
  * 系统菜单服务接口类
  */
@@ -16,6 +18,8 @@ public interface ISystemAuthMenuService {
      * @return JSONArray
      */
     JSONArray selectMenuByRoleId(Integer roleId);
+
+    List<String> selectMenuPermsByRoleId(Integer roleId);
 
     /**
      * 菜单列表

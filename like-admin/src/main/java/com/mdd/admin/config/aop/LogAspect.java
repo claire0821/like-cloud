@@ -1,13 +1,14 @@
 package com.mdd.admin.config.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.common.config.aop.Log;
 import com.mdd.common.config.aop.RequestType;
 import com.mdd.common.entity.system.SystemLogOperate;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.mapper.system.SystemLogOperateMapper;
 import com.mdd.common.utils.IpUtil;
 import com.mdd.common.utils.RequestUtil;
+import com.mdd.common.vo.UserVo;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -17,6 +18,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -34,6 +36,8 @@ public class LogAspect {
 
     @Resource
     SystemLogOperateMapper systemLogOperateMapper;
+    @Autowired
+    AuthFeignService authFeignService;
 
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
     private Long beginTime = 0L;
@@ -85,7 +89,8 @@ public class LogAspect {
                 HttpServletRequest request = requestAttributes.getRequest();
 
                 // 获取当前的用户
-                Long adminId = LikeAdminThreadLocal.getAdminId();
+                UserVo userInfo = authFeignService.getUserInfo().getData();
+                final Long adminId = userInfo.getId();
 
                 // 获取日志注解
                 ProceedingJoinPoint joinPoint = (ProceedingJoinPoint) joinPointObj;

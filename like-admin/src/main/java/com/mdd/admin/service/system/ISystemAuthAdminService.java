@@ -39,7 +39,7 @@ public interface ISystemAuthAdminService extends IService<SystemAuthAdmin> {
      * @author fzr
      * @return SystemSelfVo
      */
-    SystemAuthSelfVo self(Long adminId);
+    SystemAuthSelfVo self();
 
     /**
      * 管理员详情

@@ -37,6 +37,13 @@ public class GlobalException {
             System.out.println(e.getMessage());
         }
         e.printStackTrace();
+        final Throwable cause = e.getCause();
+        if(cause instanceof BaseException) {
+            BaseException baseException = (BaseException) cause;
+            int code = baseException.getCode();
+            String msg = baseException.getMsg();
+            return AjaxResult.failed(code, msg);
+        }
         log.error("系统异常 {}", e.getMessage());
         return AjaxResult.failed(HttpEnum.SYSTEM_ERROR.getCode(), e.getMessage());
     }
@@ -69,14 +76,14 @@ public class GlobalException {
     /**
      * 拦截路径参数校验PATH
      */
-    @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    @ResponseBody
-    public AjaxResult handlePathException(MissingServletRequestParameterException e) {
-        Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
-        String msg   = Objects.requireNonNull(e.getMessage());
-        return AjaxResult.failed(code, msg);
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @ExceptionHandler(MissingServletRequestParameterException.class)
+//    @ResponseBody
+//    public AjaxResult handlePathException(MissingServletRequestParameterException e) {
+//        Integer code = HttpEnum.PARAMS_VALID_ERROR.getCode();
+//        String msg   = Objects.requireNonNull(e.getMessage());
+//        return AjaxResult.failed(code, msg);
+//    }
 
     /**
      * 拦截JSON参数校验
@@ -106,14 +113,14 @@ public class GlobalException {
     /**
      * 拦截请求方法
      */
-    @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseBody
-    public AjaxResult handleRequestMethodException(HttpRequestMethodNotSupportedException e) {
-        Integer code = HttpEnum.REQUEST_METHOD_ERROR.getCode();
-        String msg   = Objects.requireNonNull(e.getMessage());
-        return AjaxResult.failed(code, msg);
-    }
+//    @ResponseStatus(HttpStatus.OK)
+//    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+//    @ResponseBody
+//    public AjaxResult handleRequestMethodException(HttpRequestMethodNotSupportedException e) {
+//        Integer code = HttpEnum.REQUEST_METHOD_ERROR.getCode();
+//        String msg   = Objects.requireNonNull(e.getMessage());
+//        return AjaxResult.failed(code, msg);
+//    }
 
     /**
      * 拦截断言异常

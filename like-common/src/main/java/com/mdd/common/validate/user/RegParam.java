@@ -1,4 +1,4 @@
-package com.mdd.common.validate.member;
+package com.mdd.common.validate.user;
 
 import com.mdd.common.validate.BaseParam;
 import com.mdd.common.validator.annotation.IntegerContains;

@@ -4,19 +4,22 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJQueryWrapper;
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.admin.service.notice.INoticeRecordService;
 import com.mdd.admin.vo.article.ArticleListVo;
 import com.mdd.admin.vo.notice.NoticeRecordListVo;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.constant.NoticeConstant;
+import com.mdd.common.constant.OrderConstant;
+import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
 import com.mdd.common.entity.article.Article;
 import com.mdd.common.entity.notice.NoticeRecord;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.mapper.notice.NoticeRecordMapper;
 import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.common.validate.PageParam;
+import com.mdd.common.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,17 +38,21 @@ import java.util.List;
 public class NoticeRecordServiceRecordImpl implements INoticeRecordService {
     @Autowired
     NoticeRecordMapper noticeRecordMapper;
+    @Autowired
+    AuthFeignService authFeignService;
+
     @Override
     public List<NoticeRecordListVo> listNotice() {
         int recipientType = -1;
-        final Long userId = LikeAdminThreadLocal.getUserId();
-        if(userId > 0) {
-            recipientType = NoticeConstant.RecipientTypeEnum.MEMBER.getCode();
-        }
-        final Long adminId = LikeAdminThreadLocal.getAdminId();
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Long userId = userInfo.getId();
         //TODO 区分商家和平台
-        if(adminId > 0) {
+        if(userInfo.getType().getCode().equals(OrderConstant.OperateManTypeEnum.USER.getCode())) {
+            recipientType = NoticeConstant.RecipientTypeEnum.MEMBER.getCode();
+        } else if(userInfo.getType().getCode().equals(OrderConstant.OperateManTypeEnum.BUSINESS.getCode())) {
             recipientType = NoticeConstant.RecipientTypeEnum.BUSINESS.getCode();
+        } else {
+            recipientType = NoticeConstant.RecipientTypeEnum.TERRACE.getCode();
         }
 
         List<NoticeRecordListVo> noticeRecordListVos = new ArrayList<>();
@@ -74,14 +81,13 @@ public class NoticeRecordServiceRecordImpl implements INoticeRecordService {
         Integer pageNo   = pageParam.getPageNo();
         Integer pageSize = pageParam.getPageSize();
 
-        int recipientType = -1;
-        final Long userId = LikeAdminThreadLocal.getUserId();
-        if(userId > 0) {
-            recipientType = NoticeConstant.RecipientTypeEnum.MEMBER.getCode();
-        }
-        final Long adminId = LikeAdminThreadLocal.getAdminId();
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Long userId = userInfo.getId();
         //TODO 区分商家和平台
-        if(adminId > 0) {
+        int recipientType = -1;
+        if(userInfo.getType().getCode().equals(OrderConstant.OperateManTypeEnum.USER.getCode())) {
+            recipientType = NoticeConstant.RecipientTypeEnum.MEMBER.getCode();
+        } else if(userInfo.getType().getCode().equals(OrderConstant.OperateManTypeEnum.BUSINESS.getCode())) {
             recipientType = NoticeConstant.RecipientTypeEnum.BUSINESS.getCode();
         }
 

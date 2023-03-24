@@ -1,14 +1,16 @@
 package com.mdd.admin.controller.common;
 
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.common.config.aop.Log;
 import com.mdd.common.config.aop.RequestType;
 import com.mdd.admin.service.common.IAlbumService;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.AlbumEnum;
 import com.mdd.common.exception.OperateException;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.plugin.storage.StorageDriver;
 import com.mdd.common.utils.StringUtil;
+import com.mdd.common.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +31,8 @@ public class UploadController {
 
     @Resource
     IAlbumService iAlbumService;
-
+    @Autowired
+    AuthFeignService authFeignService;
     /**
      * 上传图片
      *
@@ -57,7 +60,9 @@ public class UploadController {
             String cid = StringUtil.isNotEmpty(request.getParameter("cid")) ? request.getParameter("cid") : "0";
 
             Map<String, String> album = new LinkedHashMap<>();
-            album.put("aid", String.valueOf(LikeAdminThreadLocal.getAdminId()));
+            UserVo userInfo = authFeignService.getUserInfo().getData();
+            final Long adminId = userInfo.getId();
+            album.put("aid", String.valueOf(adminId));
             album.put("cid", cid);
             album.put("type", String.valueOf(AlbumEnum.IMAGE.getCode()));
             album.put("size", map.get("size").toString());
@@ -102,7 +107,9 @@ public class UploadController {
 
             Map<String, String> album = new LinkedHashMap<>();
             album.put("cid", cid);
-            album.put("aid", String.valueOf(LikeAdminThreadLocal.getAdminId()));
+            UserVo userInfo = authFeignService.getUserInfo().getData();
+            final Long adminId = userInfo.getId();
+            album.put("aid", String.valueOf(adminId));
             album.put("type", String.valueOf(AlbumEnum.Video.getCode()));
             album.put("ext", map.get("ext").toString());
             album.put("size", map.get("size").toString());

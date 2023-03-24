@@ -2,11 +2,11 @@ package com.mdd.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
-import com.mdd.common.validate.member.LoginParam;
+import com.mdd.common.validate.user.LoginParam;
 import com.mdd.common.vo.MemberVo;
 import com.mdd.member.entity.Member;
 import com.mdd.member.validate.MemberParam;
-import com.mdd.common.validate.member.RegParam;
+import com.mdd.common.validate.user.RegParam;
 import com.mdd.member.vo.MemberListVo;
 import com.mdd.member.vo.MemberDetailVo;
 import com.mdd.common.core.PageResult;

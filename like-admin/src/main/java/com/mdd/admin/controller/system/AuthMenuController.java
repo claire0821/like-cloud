@@ -1,13 +1,15 @@
 package com.mdd.admin.controller.system;
 
 import com.alibaba.fastjson.JSONArray;
-import com.mdd.admin.LikeAdminThreadLocal;
 import com.mdd.common.config.aop.Log;
 import com.mdd.admin.service.system.ISystemAuthMenuService;
 import com.mdd.admin.validate.system.SystemAuthMenuParam;
 import com.mdd.admin.vo.system.SystemAuthMenuVo;
 import com.mdd.common.core.AjaxResult;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.validator.annotation.IDMust;
+import com.mdd.common.vo.UserVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,8 @@ public class AuthMenuController {
 
     @Resource
     ISystemAuthMenuService iSystemAuthMenuService;
+    @Autowired
+    AuthFeignService authFeignService;
 
     /**
      * 获取菜单路由
@@ -31,7 +35,8 @@ public class AuthMenuController {
      */
     @GetMapping("/route")
     public Object route() {
-        Integer roleId = LikeAdminThreadLocal.getRoleId();
+        UserVo userInfo = authFeignService.getUserInfo().getData();
+        final Integer roleId = userInfo.getRole();
         JSONArray lists = iSystemAuthMenuService.selectMenuByRoleId(roleId);
         return AjaxResult.success(lists);
     }

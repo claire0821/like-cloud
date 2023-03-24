@@ -3,6 +3,7 @@ package com.mdd.common.config.feign;
 import com.alibaba.fastjson2.JSONObject;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.exception.BaseException;
 import feign.FeignException;
 import feign.Response;
 import feign.Util;
@@ -49,7 +50,7 @@ public class FeginResponseEntityDecoder implements Decoder, SmartInitializingSin
         if(res.getCode() == HttpEnum.SUCCESS.getCode()) {
             return responseEntityDecoder.decode(response.toBuilder().body(resultStr, StandardCharsets.UTF_8).build(), type);
         } else {
-            return res;
+            throw new BaseException(res.getCode(), res.getMsg());
         }
     }
 }

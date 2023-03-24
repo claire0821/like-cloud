@@ -1,6 +1,5 @@
 package com.mdd.admin.config;
 
-import com.mdd.admin.LikeAdminInterceptor;
 import com.mdd.common.config.GlobalConfig;
 import com.mdd.common.utils.YmlUtil;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +16,8 @@ import javax.annotation.Resource;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Resource
-    LikeAdminInterceptor likeAdminInterceptor;
+//    @Resource
+//    LikeAdminInterceptor likeAdminInterceptor;
 
     /**
      * 配置允许跨域
@@ -37,7 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(likeAdminInterceptor).addPathPatterns("/**");
+//        registry.addInterceptor(likeAdminInterceptor).addPathPatterns("/**");
     }
 
     /**

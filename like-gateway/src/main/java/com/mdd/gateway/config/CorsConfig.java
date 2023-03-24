@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
  * @author: Claire
  * @create: 2022-11-04 16:07
  **/
-@Configuration
+//@Configuration
 public class CorsConfig {
     /**
      * 这里为支持的请求头，如果有自定义的header字段请自己添加

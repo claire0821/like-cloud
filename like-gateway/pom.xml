@@ -58,5 +58,22 @@
             <artifactId>spring-cloud-loadbalancer</artifactId>
         </dependency>
 
+        <!-- Sa-Token 权限认证（Reactor响应式集成），在线文档：https://sa-token.cc -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-reactor-spring-boot-starter</artifactId>
+            <version>1.34.0</version>
+        </dependency>
+        <!-- Sa-Token 整合 Redis （使用 jdk 默认序列化方式） -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dao-redis</artifactId>
+            <version>1.34.0</version>
+        </dependency>
+        <!--Redis依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
 </project>

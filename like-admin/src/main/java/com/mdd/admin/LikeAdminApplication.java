@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * 启动器
  */
-@EnableFeignClients(basePackages = {"com.mdd.member.feign","com.mdd.common.feign"})
+@EnableFeignClients(basePackages = {"com.mdd.common.feign"})
 @EnableDiscoveryClient
 @Configuration
 @ComponentScan(basePackages = {"com.mdd"})

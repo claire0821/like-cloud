@@ -18,7 +18,7 @@ import org.springframework.context.annotation.FilterType;
  **/
 //扫描RedisUtil
 @ComponentScan(basePackages = {"com.mdd"})
-@EnableFeignClients(basePackages = "com.mdd.auth.feign")
+@EnableFeignClients(basePackages = {"com.mdd.auth.feign"})
 @EnableDiscoveryClient
 @SpringBootApplication(exclude = {RedisRepositoriesAutoConfiguration.class})
 public class LikeAuthApplication {

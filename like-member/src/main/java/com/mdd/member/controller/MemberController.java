@@ -2,18 +2,17 @@ package com.mdd.member.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.aop.Log;
-import com.mdd.common.validate.member.LoginParam;
+import com.mdd.common.validate.user.LoginParam;
 import com.mdd.common.vo.MemberVo;
 import com.mdd.member.LikeMemberThreadLocal;
 import com.mdd.member.service.IMemberService;
 import com.mdd.member.validate.MemberParam;
 import com.mdd.common.validate.PageParam;
-import com.mdd.common.validate.member.RegParam;
+import com.mdd.common.validate.user.RegParam;
 import com.mdd.member.vo.MemberListVo;
 import com.mdd.member.vo.MemberDetailVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
-import com.mdd.common.validator.annotation.IDLongMust;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

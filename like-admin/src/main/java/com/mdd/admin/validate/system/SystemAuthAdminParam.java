@@ -1,6 +1,7 @@
 package com.mdd.admin.validate.system;
 
 import com.mdd.common.validate.BaseParam;
+import com.mdd.common.validator.annotation.IDLongMust;
 import com.mdd.common.validator.annotation.IDMust;
 import com.mdd.common.validator.annotation.IntegerContains;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class SystemAuthAdminParam extends BaseParam {
 
     public interface upInfo{}
 
-    @IDMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
+    @IDLongMust(message = "id参数必传且需大于0", groups = {update.class, delete.class})
     private Long id;
 
     @NotNull(message = "请选择角色", groups = {create.class, update.class})

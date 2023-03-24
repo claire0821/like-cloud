@@ -19,9 +19,7 @@
         <module>like-member</module>
         <module>like-order</module>
         <module>like-ware</module>
-        <module>renren-generator</module>
         <module>like-gateway</module>
-        <module>like-ware</module>
         <module>like-auth</module>
         <module>like-search</module>
         <module>like-cart</module>
@@ -46,8 +44,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
         <spring-boot.version>2.7.0</spring-boot.version>
-        <spring-cloud.version>2021.0.3</spring-cloud.version>
-        <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
+        <spring-cloud.version>2021.0.6</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
         <log4j2.version>2.16.0</log4j2.version>
         <mysql-connector.version>5.1.49</mysql-connector.version>
         <mybatis-plus.version>3.4.3.1</mybatis-plus.version>
