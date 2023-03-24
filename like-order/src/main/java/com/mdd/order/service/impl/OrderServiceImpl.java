@@ -15,11 +15,11 @@ import com.mdd.common.constant.PayConstant;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.BaseException;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.to.OrderTo;
 import com.mdd.common.to.mq.SeckillOrderTo;
 import com.mdd.common.utils.RedisUtil;
 import com.mdd.common.vo.*;
-import com.mdd.order.LikeOrderThreadLocal;
 import com.mdd.order.entity.OrderItem;
 import com.mdd.order.entity.OrderOperateHistory;
 import com.mdd.order.entity.PaymentInfo;
@@ -89,6 +89,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
     private BestPayService bestPayService;
     @Autowired
     IOrderOperateHistoryService iOrderOperateHistoryService;
+    @Autowired
+    AuthFeignService authFeignService;
+
     /**
      * 订单列表
      *
@@ -404,7 +407,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
      */
     @Override
     public OrderCreateTo createOrder() {
-        final Long userId = LikeOrderThreadLocal.getUserId();
+        final UserVo data = authFeignService.getUserInfo().getData();
+        final Long userId = data.getId();
         OrderCreateTo createTo = new OrderCreateTo();
 
         //1、生成订单号
@@ -476,7 +480,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
     @Override
     public void submitOrder(OrderSubmitVo orderSubmitVo) {
         //获取当前用户登录的信息
-        final Long userId = LikeOrderThreadLocal.getUserId();
+        final UserVo data = authFeignService.getUserInfo().getData();
+        final Long userId = data.getId();
 
         //1、验证令牌是否合法【令牌的对比和删除必须保证原子性】
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";

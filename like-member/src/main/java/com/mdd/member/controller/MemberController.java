@@ -2,9 +2,10 @@ package com.mdd.member.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.mdd.common.config.aop.Log;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.validate.user.LoginParam;
 import com.mdd.common.vo.MemberVo;
-import com.mdd.member.LikeMemberThreadLocal;
+import com.mdd.common.vo.UserVo;
 import com.mdd.member.service.IMemberService;
 import com.mdd.member.validate.MemberParam;
 import com.mdd.common.validate.PageParam;
@@ -13,6 +14,7 @@ import com.mdd.member.vo.MemberListVo;
 import com.mdd.member.vo.MemberDetailVo;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.core.PageResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +31,8 @@ public class MemberController {
 
     @Resource
     IMemberService iMemberService;
-
+    @Autowired
+    AuthFeignService authFeignService;
     /**
      * 会员列表
      *
@@ -38,9 +41,9 @@ public class MemberController {
      * @return Object
      */
     @GetMapping("/list")
-    public Object list(@Validated PageParam pageParam,
+    public AjaxResult<PageResult<MemberVo>> list(@Validated PageParam pageParam,
                        @RequestParam Map<String, String> params) {
-        PageResult<MemberListVo> list = iMemberService.list(pageParam, params);
+        PageResult<MemberVo> list = iMemberService.list(pageParam, params);
         return AjaxResult.success(list);
     }
     /**
@@ -137,7 +140,8 @@ public class MemberController {
      */
     @GetMapping("/center")
     public Object center() {
-        MemberDetailVo vo = iMemberService.center(LikeMemberThreadLocal.getUserId());
+        final UserVo data = authFeignService.getUserInfo().getData();
+        MemberDetailVo vo = iMemberService.center(data.getId());
         return AjaxResult.success(vo);
     }
 
@@ -153,7 +157,8 @@ public class MemberController {
     public Object edit(@RequestBody Map<String, String> params) {
         Assert.notNull(params.get("field"), "field参数缺失");
         Assert.notNull(params.get("value"), "value参数缺失");
-        iMemberService.edit(params, LikeMemberThreadLocal.getUserId());
+        final UserVo data = authFeignService.getUserInfo().getData();
+        iMemberService.edit(params, data.getId());
         return AjaxResult.success();
     }
 

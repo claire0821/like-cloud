@@ -6,9 +6,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.query.MPJQueryWrapper;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.vo.MemberReceiveAddressVo;
-import com.mdd.member.LikeMemberInterceptor;
-import com.mdd.member.LikeMemberThreadLocal;
+import com.mdd.common.vo.UserVo;
 import com.mdd.member.service.IMemberReceiveAddressService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.member.validate.MemberReceiveAddressParam;
@@ -22,6 +22,7 @@ import com.mdd.common.utils.TimeUtil;
 import com.mdd.common.utils.UrlUtil;
 import com.mdd.common.config.GlobalConfig;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -36,7 +37,8 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
         
     @Resource
     MemberReceiveAddressMapper memberReceiveAddressMapper;
-
+    @Autowired
+    AuthFeignService authFeignService;
     /**
      * 会员收货地址列表
      *
@@ -105,7 +107,8 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
      */
     @Override
     public void add(MemberReceiveAddressParam memberReceiveAddressParam) {
-        final Long userId = LikeMemberThreadLocal.getUserId();
+        final UserVo data = authFeignService.getUserInfo().getData();
+        final Long userId = data.getId();
         MemberReceiveAddress model = new MemberReceiveAddress();
         model.setMemberId(userId);
         model.setName(memberReceiveAddressParam.getName());
@@ -171,7 +174,8 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
 
     @Override
     public List<MemberReceiveAddressVo> listByMember() {
-        final Long userId = LikeMemberThreadLocal.getUserId();
+        final UserVo data = authFeignService.getUserInfo().getData();
+        final Long userId = data.getId();
         List<MemberReceiveAddress> model = memberReceiveAddressMapper.selectList(
                 new QueryWrapper<MemberReceiveAddress>()
                         .eq("member_id", userId));
@@ -188,7 +192,8 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
     @Override
     public MemberReceiveAddressVo getDefaultAddress() {
         //TODO 用户没有登录
-        final Long userId = LikeMemberThreadLocal.getUserId();
+        final UserVo data = authFeignService.getUserInfo().getData();
+        final Long userId = data.getId();
         MemberReceiveAddress model = memberReceiveAddressMapper.selectOne(
                 new QueryWrapper<MemberReceiveAddress>()
                         .eq("member_id", userId)
@@ -205,7 +210,8 @@ public class MemberReceiveAddressServiceImpl extends ServiceImpl<MemberReceiveAd
 
     @Override
     public void setDefaultAddress(Long id) {
-        final Long userId = LikeMemberThreadLocal.getUserId();
+        final UserVo data = authFeignService.getUserInfo().getData();
+        final Long userId = data.getId();
         //清除之前的默认地址
         this.update(new UpdateWrapper<MemberReceiveAddress>()
                 .eq("member_id",userId).eq("default_status",1).set("default_status",0));

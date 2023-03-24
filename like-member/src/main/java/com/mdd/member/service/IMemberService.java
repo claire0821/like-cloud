@@ -25,7 +25,7 @@ public interface IMemberService extends IService<Member> {
      * @param params 搜索参数
      * @return PageResult<MemberVo>
      */
-    PageResult<MemberListVo> list(PageParam pageParam, Map<String, String> params);
+    PageResult<MemberVo> list(PageParam pageParam, Map<String, String> params);
 
     /**
      * 会员详情

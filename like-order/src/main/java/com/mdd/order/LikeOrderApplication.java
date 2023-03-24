@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @create: 2022-11-02 11:32
  **/
 @EnableRabbit
-@EnableFeignClients(basePackages = "com.mdd.order.feign")
+@EnableFeignClients(basePackages = {"com.mdd.order.feign","com.mdd.common.feign"})
 @EnableDiscoveryClient
 @Configuration
 @ComponentScan(basePackages = {"com.mdd"})

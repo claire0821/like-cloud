@@ -2,7 +2,7 @@
 <p>
 <a href="https://github.com/claire0821/like-cloud"><img src="https://img.shields.io/badge/%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE-like--cloud-brightgreen"></a>
 <a href="https://github.com/claire0821/like-cloud-web"><img src="https://img.shields.io/badge/%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE-like--cloud--web-green"></a>
-<a href="https://github.com/claire0821/like-cloud-web"><img src="https://img.shields.io/badge/%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE-like--cloud--web-green"></a>
+<a href="https://github.com/claire0821/like-cloud-web"><img src="https://img.shields.io/badge/uniapp-like--cloud--uniapp-yellowgreen"></a>
 </p>
 
 ## 学习资料 密码（0821）

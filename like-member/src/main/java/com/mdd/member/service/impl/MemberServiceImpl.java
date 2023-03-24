@@ -9,10 +9,11 @@ import com.mdd.common.constant.MemberConstant;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.exception.OperateException;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.utils.*;
 import com.mdd.common.validate.user.LoginParam;
 import com.mdd.common.vo.MemberVo;
-import com.mdd.member.LikeMemberThreadLocal;
+import com.mdd.common.vo.UserVo;
 import com.mdd.member.entity.MemberLevel;
 import com.mdd.member.service.IMemberLevelService;
 import com.mdd.member.service.IMemberService;
@@ -44,7 +45,8 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
     MemberMapper memberMapper;
     @Autowired
     IMemberLevelService iMemberLevelService;
-
+    @Autowired
+    AuthFeignService authFeignService;
     /**
      * 会员列表
      *
@@ -53,7 +55,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
      * @return PageResult<MemberListVo>
      */
     @Override
-    public PageResult<MemberListVo> list(PageParam pageParam, Map<String, String> params) {
+    public PageResult<MemberVo> list(PageParam pageParam, Map<String, String> params) {
         Integer page  = pageParam.getPageNo();
         Integer limit = pageParam.getPageSize();
 
@@ -79,14 +81,26 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
             "=:status:int",
         });
 
+        final String key = params.get("key");
+        final String value = params.get("value");
+        if(!StringUtil.isEmpty(key) && !StringUtil.isEmpty(value)) {
+            queryWrapper.like(key,value);
+        }
+        final String createTimeStart = params.get("createTimeStart");
+        final String createTimeEnd = params.get("createTimeEnd");
+        if(!StringUtil.isEmpty(createTimeStart) && !StringUtil.isEmpty(createTimeEnd)) {
+            queryWrapper.between("create_time",createTimeStart,createTimeEnd);
+        }
+
         IPage<Member> iPage = memberMapper.selectPage(new Page<>(page, limit), queryWrapper);
 
-        List<MemberListVo> list = new LinkedList<>();
+        List<MemberVo> list = new LinkedList<>();
         for(Member item : iPage.getRecords()) {
-            MemberListVo vo = new MemberListVo();
+            MemberVo vo = new MemberVo();
             BeanUtils.copyProperties(item, vo);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            vo.setCreateTime(simpleDateFormat.format(item.getCreateTime()));
+            final MemberLevel byId = iMemberLevelService.getById(vo.getLevelId());
+            vo.setLevelName(byId.getName());
+            vo.setAvatar(UrlUtil.toAbsoluteUrl(vo.getAvatar()));
             list.add(vo);
         }
 
@@ -100,7 +114,8 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
      */
     @Override
     public MemberVo detail() {
-        final Long userId = LikeMemberThreadLocal.getUserId();
+        final UserVo data = authFeignService.getUserInfo().getData();
+        final Long userId = data.getId();
         Member model = memberMapper.selectOne(
                 new QueryWrapper<Member>()
                     .eq("id", userId)
@@ -153,6 +168,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
         BeanUtils.copyProperties(model, vo);
         final MemberLevel byId = iMemberLevelService.getById(vo.getLevelId());
         vo.setLevelName(byId.getName());
+        vo.setAvatar(UrlUtil.toAbsoluteUrl(model.getAvatar()));
         return vo;
     }
 

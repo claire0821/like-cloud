@@ -1,5 +1,6 @@
 package com.mdd.common.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -40,5 +41,6 @@ public class MemberVo implements Serializable {
     private Integer waitComment;//商品评价
     private Integer afterSale;//退款/售后
     private Integer status;  // 启用状态
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date createTime; // 注册时间
 }

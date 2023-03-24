@@ -7,8 +7,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mdd.common.constant.OrderConstant;
 import com.mdd.common.core.AjaxResult;
 import com.mdd.common.enums.HttpEnum;
+import com.mdd.common.feign.AuthFeignService;
 import com.mdd.common.vo.MemberVo;
-import com.mdd.order.LikeOrderThreadLocal;
+import com.mdd.common.vo.UserVo;
 import com.mdd.order.feign.IMemberFeignService;
 import com.mdd.order.service.IOrderOperateHistoryService;
 import com.mdd.common.validate.PageParam;
@@ -36,6 +37,8 @@ public class OrderOperateHistoryServiceImpl extends ServiceImpl<OrderOperateHist
     OrderOperateHistoryMapper orderOperateHistoryMapper;
     @Autowired
     IMemberFeignService iMemberFeignService;
+    @Autowired
+    AuthFeignService authFeignService;
 
     /**
      * 订单操作历史记录列表
@@ -194,9 +197,10 @@ public class OrderOperateHistoryServiceImpl extends ServiceImpl<OrderOperateHist
     public void add(String orderSn, Integer actionType, String note) {
         OrderOperateHistory orderOperateHistory = new OrderOperateHistory();
         orderOperateHistory.setOrderSn(orderSn);
-        orderOperateHistory.setOperateManType(LikeOrderThreadLocal.getUserType());
+        final UserVo data = authFeignService.getUserInfo().getData();
+        orderOperateHistory.setOperateManType(data.getType().getCode());
         if(!orderOperateHistory.getOperateManType().equals(OrderConstant.OperateManTypeEnum.SYSTEM.getCode())) {
-            orderOperateHistory.setOperateManId(LikeOrderThreadLocal.getUserId());
+            orderOperateHistory.setOperateManId(data.getId());
         }
         orderOperateHistory.setActionType(actionType);
         orderOperateHistory.setNote(note);
