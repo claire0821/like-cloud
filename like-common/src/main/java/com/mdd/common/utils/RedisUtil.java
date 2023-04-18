@@ -749,7 +749,7 @@ public class RedisUtil {
             final Long id = Long.parseLong(redisTemplate.opsForValue().get(redisPrefix + GlobalConfig.TokenKey + token).toString());
             user = new UserVo();
             user.setId(id);
-            user.setType(OrderConstant.OperateManTypeEnum.USER);
+            user.setType(OrderConstant.OperateManTypeEnum.MEMBER);
         } else if(redisTemplate.hasKey(redisPrefix + GlobalConfig.backstageTokenKey + token)){
             final Long id = Long.parseLong(redisTemplate.opsForValue().get(redisPrefix + GlobalConfig.backstageTokenKey + token).toString());
             user = new UserVo();

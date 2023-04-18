@@ -1,5 +1,6 @@
 package com.mdd.gateway.config;
 
+import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.reactor.filter.SaReactorFilter;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
@@ -22,6 +23,7 @@ public class SaTokenConfigure {
     IgnoreUrlsConfig ignoreUrlsConfig;
     @Autowired
     RouterConfig routerConfig;
+
     // 注册 Sa-Token全局过滤器
     @Bean
     public SaReactorFilter getSaReactorFilter() {
@@ -32,6 +34,8 @@ public class SaTokenConfigure {
                 .addExclude(ignoreUrlsConfig.getUrls().toArray(new String[0]))
                 // 鉴权方法：每次访问进入
                 .setAuth(obj -> {
+                    //System.out.println(SaHolder.getRequest().getRequestPath());
+
                     // 登录校验 -- 拦截所有路由
                     SaRouter.match("/**", r -> StpUtil.checkLogin());
 
@@ -46,7 +50,8 @@ public class SaTokenConfigure {
                 // 异常处理方法：每次setAuth函数出现异常时进入
                 .setError(e -> {
                     //错误返回
-                    return SaResult.error(e.getMessage());
+                    e.printStackTrace();
+                    return SaResult.code(332);
                 })
                 ;
     }

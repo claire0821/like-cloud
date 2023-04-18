@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mdd.common.validate.PageParam;
 import com.mdd.common.validate.user.LoginParam;
 import com.mdd.common.vo.MemberVo;
+import com.mdd.common.vo.UserVo;
 import com.mdd.member.entity.Member;
 import com.mdd.member.validate.MemberParam;
 import com.mdd.common.validate.user.RegParam;
@@ -68,7 +69,7 @@ public interface IMemberService extends IService<Member> {
 
     void checkUserNameUnique(String userName);
 
-    MemberVo login(LoginParam loginParam);
+    UserVo login(LoginParam loginParam);
 
     MemberDetailVo center(Long userId);
 

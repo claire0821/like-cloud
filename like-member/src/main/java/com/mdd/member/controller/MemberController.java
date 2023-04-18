@@ -127,9 +127,9 @@ public class MemberController {
      */
     @Log(title = "会员登录")
     @PostMapping("/login")
-    public AjaxResult<MemberVo> login(@Validated @RequestBody LoginParam loginParam) {
-        final MemberVo login = iMemberService.login(loginParam);
-        return AjaxResult.success(login);
+    public AjaxResult<UserVo> login(@Validated @RequestBody LoginParam loginParam) {
+        final UserVo userVo = iMemberService.login(loginParam);
+        return AjaxResult.success(userVo);
     }
 
     /**

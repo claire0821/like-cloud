@@ -1,6 +1,7 @@
 package com.mdd.common.config.feign;
 
 
+import com.mdd.common.utils.StringUtil;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,7 @@ public class FeignConfig {
                         //2、同步请求头的数据（主要是cookie）
                         //把老请求的cookie值放到新请求上来，进行一个同步
                         String token = request.getHeader("token");
-                        if(!token.isEmpty()) {
+                        if(!StringUtil.isEmpty(token)) {
                             template.header("token", token);
                         }
 //                        template.header(SaIdUtil.ID_TOKEN, SaIdUtil.getToken());

@@ -29,7 +29,6 @@ public class LoginParam extends BaseParam {
 //    @Pattern(message = "账号应该为3-12位数字、字母组合", regexp="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,12}$")
     private String password;
 
-    private String scene1;
 //    @NotNull(message = "scene参数缺失")
     private String scene;
 

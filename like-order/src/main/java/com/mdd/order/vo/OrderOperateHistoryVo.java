@@ -26,7 +26,7 @@ public class OrderOperateHistoryVo implements Serializable {
 
     public String getTitle() {
         String str = "";
-        if(operateManType.equals(OrderConstant.OperateManTypeEnum.USER.getCode())) {
+        if(operateManType.equals(OrderConstant.OperateManTypeEnum.MEMBER.getCode())) {
             str = "用户" + operateMan + OrderConstant.getActionTypeEnumMsg(this.actionType) + "(" + createTime + ")";
         } else if(operateManType.equals(OrderConstant.OperateManTypeEnum.SYSTEM.getCode())) {
             str = "系统" + OrderConstant.getActionTypeEnumMsg(this.actionType) + "(" + createTime + ")";

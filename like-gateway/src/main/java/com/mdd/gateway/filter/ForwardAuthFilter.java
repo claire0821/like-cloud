@@ -1,6 +1,7 @@
 package com.mdd.gateway.filter;
 
 import cn.dev33.satoken.same.SaSameUtil;
+import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
  **/
 @Component
 public class ForwardAuthFilter implements GlobalFilter, Ordered {
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest newRequest = exchange

@@ -5,17 +5,9 @@
 <a href="https://github.com/claire0821/like-cloud-web"><img src="https://img.shields.io/badge/uniapp-like--cloud--uniapp-yellowgreen"></a>
 </p>
 
-## 学习资料 密码（0821）
-- `netty`：[在线文档](https://www.zhixi.com/view/4b42bbc)
-- `JVM`：[在线文档](https://www.zhixi.com/view/1cf40997)
-- `SpringCloud`：[在线文档](https://www.zhixi.com/view/7b718614)
-- `Redis`：[在线文档](https://www.zhixi.com/view/0e280cff)
-- `Java容器`：[在线文档](https://www.zhixi.com/view/4dc43950)
-- `JUC`：[在线文档](https://www.zhixi.com/view/ee817bb8)
-
 ## 项目介绍
 
-`like-cloud`是一套微服务商城系统，采用了 Spring Cloud 2021 & Alibaba、Spring Boot 2.7、Oauth2、MyBatis、Elasticsearch、Docker、Kubernetes等核心技术，同时提供了基于Vue的管理后台方便快速搭建系统。`like-cloud`在电商业务的基础集成了注册中心、配置中心、监控中心、网关等系统功能。文档齐全，附带全套Spring Cloud教程。
+`like-cloud`是一套微服务商城系统，采用了 Spring Cloud 2021 & Alibaba、Spring Boot 2.7、Oauth2、MyBatis、Elasticsearch、Docker、Kubernetes等核心技术，同时提供了基于Vue的管理后台方便快速搭建系统。`like-cloud`在电商业务的基础集成了注册中心、配置中心、监控中心、网关等系统功能。
 
 ## 组织结构
 ``` lua
@@ -25,7 +17,7 @@ like-cloud
 ├── mall-cart -- 购物车模块
 ├── mall-common -- 工具类及通用代码模块
 ├── mall-coupon -- 优惠营销服务
-├── mall-gateway -- 基于Spring Boot Admin的微服务监控中心
+├── mall-gateway -- 网关服务
 ├── mall-generator -- 代码生成器模块
 ├── mall-member -- 会员服务
 ├── mall-order -- 订单服务
@@ -48,14 +40,12 @@ like-cloud
 | Spring Cloud Alibaba   | 微服务框架           | https://github.com/alibaba/spring-cloud-alibaba      |
 | Spring Boot            | 容器+MVC框架         | https://spring.io/projects/spring-boot               |
 | Spring Security Oauth2 | 认证和授权框架       | https://spring.io/projects/spring-security-oauth     |
-| MyBatis                | ORM框架              | http://www.mybatis.org/mybatis-3/zh/index.html       |
-| MyBatisGenerator       | 数据层代码生成       | http://www.mybatis.org/generator/index.html          |
+| MyBatis                | ORM框架              | http://www.mybatis.org/mybatis-3/zh/index.html       | |
 | PageHelper             | MyBatis物理分页插件  | http://git.oschina.net/free/Mybatis_PageHelper       |
 | Knife4j                | 文档生产工具         | https://github.com/xiaoymin/swagger-bootstrap-ui     |
 | Elasticsearch          | 搜索引擎             | https://github.com/elastic/elasticsearch             |
 | RabbitMq               | 消息队列             | https://www.rabbitmq.com/                            |
-| Redis                  | 分布式缓存           | https://redis.io/                                    |
-| MongoDb                | NoSql数据库          | https://www.mongodb.com/                             |
+| Redis                  | 分布式缓存           | https://redis.io/                                    | |
 | Docker                 | 应用容器引擎         | https://www.docker.com/                              |
 | Druid                  | 数据库连接池         | https://github.com/alibaba/druid                     |
 | OSS                    | 对象存储             | https://github.com/aliyun/aliyun-oss-java-sdk        |
@@ -107,8 +97,14 @@ like-cloud
 
 
 ## 运行效果展示
+部分已完成页面展示
+### 管理平台
 
+### uniapp
+![docs/image/20230324171540.png](docs/image/20230324171540.png)
+![docs/image/20230328114414.png](docs/image/20230328114414.png)
 
+## 文档
 ### 集成Sa-Token
 官网：https://sa-token.cc/
 #### 在SpringCloud中使用Sa-Token

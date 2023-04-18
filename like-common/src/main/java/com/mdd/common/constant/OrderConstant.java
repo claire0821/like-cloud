@@ -96,7 +96,7 @@ public class OrderConstant {
     }
 
     public enum OperateManTypeEnum {
-        USER(1,"用户"),
+        MEMBER(1,"会员"),
         SYSTEM(2,"系统"),
         ADMINISTRATORS(3,"管理员"),
         BUSINESS(4,"商家");

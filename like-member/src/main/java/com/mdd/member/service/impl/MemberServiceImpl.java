@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mdd.common.constant.MemberConstant;
+import com.mdd.common.constant.OrderConstant;
 import com.mdd.common.enums.HttpEnum;
 import com.mdd.common.exception.LoginException;
 import com.mdd.common.exception.OperateException;
@@ -305,7 +306,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
     }
 
     @Override
-    public MemberVo login(LoginParam loginParam) {
+    public UserVo login(LoginParam loginParam) {
         com.baomidou.mybatisplus.core.toolkit.Assert.notNull(loginParam.getScene(), "scene参数缺失!");
         switch (loginParam.getScene()) {
             case "mnp":
@@ -325,6 +326,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
         final Member byId = this.getById(userId);
         MemberDetailVo memberDetailVo = new MemberDetailVo();
         BeanUtils.copyProperties(byId,memberDetailVo);
+        memberDetailVo.setAvatar(UrlUtil.toAbsoluteUrl(memberDetailVo.getAvatar()));
         return memberDetailVo;
     }
 
@@ -336,7 +338,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
      * @param loginParam 参数
      * @return Map<String, Object>
      */
-    public MemberVo accountLogin(LoginParam loginParam) {
+    public UserVo accountLogin(LoginParam loginParam) {
         if((loginParam.getUsername() == null || loginParam.getUsername().length() == 0)) {
             throw new LoginException(HttpEnum.ACCOUNT_MOBILE_EMPTY.getCode(), HttpEnum.ACCOUNT_MOBILE_EMPTY.getMsg());
         }
@@ -358,11 +360,10 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper,Member> implemen
 //        member.setLastLoginTime(System.currentTimeMillis() / 1000);
 //        userMapper.updateById(user);
 
-        MemberVo memberVo = new MemberVo();
-        BeanUtils.copyProperties(member,memberVo);
-        memberVo.setEmail("");
-        memberVo.setMobile("");
-        return memberVo;
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(member,userVo);
+        userVo.setType(OrderConstant.OperateManTypeEnum.MEMBER);
+        return userVo;
     }
 
     /**

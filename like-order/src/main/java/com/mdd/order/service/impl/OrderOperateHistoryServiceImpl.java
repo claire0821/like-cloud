@@ -170,7 +170,7 @@ public class OrderOperateHistoryServiceImpl extends ServiceImpl<OrderOperateHist
             BeanUtils.copyProperties(orderOperateHistory,orderOperateHistoryVo);
 
             //TODO 其他类型用户名获取
-            if(orderOperateHistoryVo.getOperateManType().equals(OrderConstant.OperateManTypeEnum.USER.getCode())) {
+            if(orderOperateHistoryVo.getOperateManType().equals(OrderConstant.OperateManTypeEnum.MEMBER.getCode())) {
                 AjaxResult<MemberVo> result = iMemberFeignService.detailById(orderOperateHistoryVo.getOperateManId());
                 if(result.getCode().equals(HttpEnum.SUCCESS.getCode())) {
                     MemberVo memberVo = result.getData();
